@@ -1,62 +1,90 @@
 import Image from "next/image";
-import indexfinger from "../../Components/fingerVals/indexFinger.json"
-import middle from "../../Components/fingerVals/middle.json"
-import pinky from "../../Components/fingerVals/pinky.json"
-import thumb from "../../Components/fingerVals/thumb.json"
-import sign from "../../Components/fingerVals/newCombined.json"
 import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose'
 import { Libre_Barcode_128 } from "next/font/google";
+import * as fp from "fingerpose"
+import asl_signs from  '../../Components/fs_styles/ASL_fingervals.json'
 
+import Handsigns  from "../../Components/handsigns";
 
-const homeFunc = () => {
+  const signs = async () => {
 
-  const handSigns = () => {
+    const fingerVals = ["Thumb", "Index", "Middle", "Ring", "Pinky"]
+ 
+    const signList = {}
+    let signArr = []
 
-    const fingers = ["Thumb", "Index", "Middle", "Ring", "Pinky"]
+    const letterList = Object.keys(asl_signs) 
 
-    let handSigns = {};
-    const letterList = Object.keys(sign)
+    
+        // if (fingerProps.includes("contrib")) {
+        //   currGesture.addCurl(Finger[currFinger], FingerCurl[curlType], fingerVals[currLetter][currFinger]["contrib"])
+        // }
+
 
     for (let currLetter of letterList) {
 
-      let currGesture = new GestureDescription(currLetter)
+     let currGesture = new GestureDescription(currLetter)
 
-      for (let currFinger of fingers) {
+      for (let currFinger of fingerVals) {
+      
+        const fingerDirection = asl_signs[currLetter][currFinger]["directions"]
+        const curlType = asl_signs[currLetter][currFinger]["curlType"]
 
-        const fingerDirection = sign[currLetter][currFinger]["directions"]
-        const curlType = sign[currLetter][currFinger]["curlType"]
 
-        currGesture.addCurl(Finger[currFinger], FingerCurl[curlType], 1)
-
-        if (currFinger === "indexFinger" && currLetter === "A") {
-          currGesture.addDirection(Finger.Index, FingerDirection.DiagonalUpRight, 0.70);
-          currGesture.addDirection(Finger.Index, FingerDirection.DiagonalDownLeft, 1.0);
-        }
-
-        else {
+        // else {
           for (let direction of [fingerDirection]) {
+            currGesture.addCurl(Finger[currFinger], FingerCurl[curlType], fingerVals[currLetter], 1)
             currGesture.addDirection(Finger[currFinger], FingerDirection[direction], 0.70)
+            
           }
-        }
+        // }
 
-        handSigns[currLetter + "Sign"] = currGesture
-        
+        // handSignsMap.set("gestures", [ "t" {"name", currFinger} ])
+        // console.log(handSignsMap)
+
+       
+
+
+        // gestures: [ t { name: 'thumbs_up', curls: [Object], directions: [Object] } ]
+    
       }
-    }
+      
+    
+      signList[currLetter.toLowerCase() + "Sign"] = currGesture
 
+   
+      
+    
+   }
 
+  
+console.log(Handsigns)
 
+  
+
+  return (
+<div><h1>sdfsd</h1></div>
+  );
 
 
   }
 
-  return (
-    <div>
-      <h1>Sample</h1>
-    </div>
-  );
+  export default signs
 
 
-}
+        
+       
+        
+       
 
-export default homeFunc;
+
+
+        // handSignsMap.set("gestures", [ "t" {"name", currFinger} ])
+        // console.log(handSignsMap)
+
+       
+
+
+        // gestures: [ t { name: 'thumbs_up', curls: [Object], directions: [Object] } ]
+    
+  

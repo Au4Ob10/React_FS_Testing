@@ -33,17 +33,17 @@ export const aSign = new GestureDescription('A');
 //Thumb
 aSign.addCurl(Finger.Thumb, FingerCurl.NoCurl, 1.0);
 aSign.addDirection(Finger.Index, FingerDirection.DiagonalUpRight, 0.70);
-// aSign.addDirection(Finger.Index, FingerDirection.DiagonalUpLeft, 0.70);
+
 
 //Index
 aSign.addCurl(Finger.Index, FingerCurl.FullCurl, 1);
 aSign.addDirection(Finger.Index, FingerDirection.DiagonalDownLeft, 1.0);
-// aSign.addDirection(Finger.Index, FingerDirection.DiagonalUpLeft, 0.70);
+
 
 //Middle
 aSign.addCurl(Finger.Middle, FingerCurl.FullCurl, 1);
 aSign.addDirection(Finger.Middle, FingerDirection.DiagonalDownLeft, 0.70);
-// aSign.addDirection(Finger.Middle, FingerDirection.DiagonalUpLeft, 0.70);
+
 
 //Ring
 aSign.addCurl(Finger.Ring, FingerCurl.FullCurl, 1);

@@ -1,0 +1,628 @@
+{
+    "\\U0041": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "DiagonalDownLeft"
+            ],
+            "contrib": 1
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownLeft"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownLeft"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownLeft"
+        }
+    },
+    "\\U0042": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "DiagonalUpRight",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U0043": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "HalfCurl",
+            "directions": "DiagonalUpRight"
+        },
+        "Ring": {
+            "curlType": "HalfCurl",
+            "directions": "DiagonalUpRight"
+        },
+        "Pinky": {
+            "curlType": "HalfCurl",
+            "directions": "DiagonalUpRight"
+        }
+    },
+    "\\U0044": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "VerticalUp",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U0045": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "VerticalUp",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U0046": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U0047": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "HorizontalRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpRight"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalRight"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalRight"
+        }
+    },
+    "\\U0048": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "HorizontalRight",
+                "HorizontalRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "HorizontalRight"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalRight"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalRight"
+        }
+    },
+    "\\U0049": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U004a": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpRight"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalRight"
+        },
+        "Pinky": {
+            "curlType": "NoCurl",
+            "directions": "HorizontalRight"
+        }
+    },
+    "\\U004b": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U004c": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U004d": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U004e": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U004f": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "HalfCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "HalfCurl",
+            "directions": "DiagonalUpRight"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpRight"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpRight"
+        }
+    },
+    "\\U0050": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "HorizontalRight",
+                "HorizontalRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "HalfCurl",
+            "directions": "DiagonalDownRight"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownRight"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownRight"
+        }
+    },
+    "\\U0051": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "HalfCurl",
+            "directions": [
+                "DiagonalDownRight",
+                "HorizontalRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalRight"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownRight"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalDownRight"
+        }
+    },
+    "\\U0052": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U0053": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "VerticalUp",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U0054": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "VerticalUp",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U0055": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U0056": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U0057": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "DiagonalUpLeft",
+                "DiagonalUpRight"
+            ]
+        },
+        "Middle": {
+            "curlType": "NoCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "NoCurl",
+            "directions": "DiagonalUpLeft"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U0058": {
+        "Thumb": {
+            "curlType": "HalfCurl"
+        },
+        "Index": {
+            "curlType": "HalfCurl",
+            "directions": [
+                "VerticalUp",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        }
+    },
+    "\\U0059": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "FullCurl",
+            "directions": [
+                "DiagonalUpRight",
+                "VerticalUp"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "VerticalUp"
+        },
+        "Pinky": {
+            "curlType": "NoCurl",
+            "directions": "DiagonalUpLeft"
+        }
+    },
+    "\\U005a": {
+        "Thumb": {
+            "curlType": "NoCurl"
+        },
+        "Index": {
+            "curlType": "NoCurl",
+            "directions": [
+                "HorizontalLeft",
+                "DiagonalUpLeft"
+            ]
+        },
+        "Middle": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalLeft"
+        },
+        "Ring": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalLeft"
+        },
+        "Pinky": {
+            "curlType": "FullCurl",
+            "directions": "HorizontalLeft"
+        }
+    }
+}
