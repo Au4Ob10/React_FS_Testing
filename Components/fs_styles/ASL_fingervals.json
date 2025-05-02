@@ -1,5 +1,5 @@
 {
-    "\\U0041": {
+    "U0041": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -24,7 +24,7 @@
             "directions": "DiagonalDownLeft"
         }
     },
-    "\\U0042": {
+    "U0042": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -49,7 +49,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U0043": {
+    "U0043": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -73,7 +73,7 @@
             "directions": "DiagonalUpRight"
         }
     },
-    "\\U0044": {
+    "U0044": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -97,7 +97,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U0045": {
+    "U0045": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -121,7 +121,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U0046": {
+    "U0046": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -145,7 +145,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U0047": {
+    "U0047": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -169,7 +169,7 @@
             "directions": "HorizontalRight"
         }
     },
-    "\\U0048": {
+    "U0048": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -193,7 +193,7 @@
             "directions": "HorizontalRight"
         }
     },
-    "\\U0049": {
+    "U0049": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -217,7 +217,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U004a": {
+    "U004a": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -241,7 +241,7 @@
             "directions": "HorizontalRight"
         }
     },
-    "\\U004b": {
+    "U004b": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -265,7 +265,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U004c": {
+    "U004c": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -289,7 +289,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U004d": {
+    "U004d": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -313,7 +313,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U004e": {
+    "U004e": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -337,7 +337,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U004f": {
+    "U004f": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -361,7 +361,7 @@
             "directions": "DiagonalUpRight"
         }
     },
-    "\\U0050": {
+    "U0050": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -385,7 +385,7 @@
             "directions": "DiagonalDownRight"
         }
     },
-    "\\U0051": {
+    "U0051": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -409,7 +409,7 @@
             "directions": "DiagonalDownRight"
         }
     },
-    "\\U0052": {
+    "U0052": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -433,7 +433,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U0053": {
+    "U0053": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -457,7 +457,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U0054": {
+    "U0054": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -481,7 +481,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U0055": {
+    "U0055": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -505,7 +505,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U0056": {
+    "U0056": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -529,7 +529,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U0057": {
+    "U0057": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -553,7 +553,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U0058": {
+    "U0058": {
         "Thumb": {
             "curlType": "HalfCurl"
         },
@@ -577,7 +577,7 @@
             "directions": "VerticalUp"
         }
     },
-    "\\U0059": {
+    "U0059": {
         "Thumb": {
             "curlType": "NoCurl"
         },
@@ -601,7 +601,7 @@
             "directions": "DiagonalUpLeft"
         }
     },
-    "\\U005a": {
+    "U005a": {
         "Thumb": {
             "curlType": "NoCurl"
         },
