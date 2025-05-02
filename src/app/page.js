@@ -9,74 +9,38 @@ import Handsigns  from "../../Components/handsigns";
 
 const signs = async () => {
 
-  const fingerVals = ["Thumb", "Index", "Middle", "Ring", "Pinky"]
+  let signArr = [];
+ 
 
-  const signList = {}
-  let signArr = []
+Object.values(asl_signs).forEach((letter) => {
 
-  const letterList = Object.keys(asl_signs) 
+  const fingerName = ["Thumb", "Index", "Middle", "Ring", "Pinky"]
 
+   let newGesture = new GestureDescription(letter);
 
-
-
-  
-
-
-
-  
-      // if (fingerProps.includes("contrib")) {
-      //   currGesture.addCurl(Finger[currFinger], FingerCurl[curlType], fingerVals[currLetter][currFinger]["contrib"])
-      // }
-
-
-  for (let currLetter of letterList) {
-
-    const gesture = new fp.GestureDescription(asl_signs[currLetter])
-
-    Object.entries(asl_signs)
-
-  
-  //  let currGesture = new GestureDescription(currLetter)
-
-  //   for (let currFinger of fingerVals) {
-    
-  //     const fingerDirection = asl_signs[currLetter][currFinger]["directions"]
-  //     const curlType = asl_signs[currLetter][currFinger]["curlType"]
-
-  //     // else {
-  //       for (let direction of [fingerDirection]) {
-  //         // if (fingerDirection !== undefined) {
-  //         currGesture.addCurl(Finger[currFinger], FingerCurl[curlType], fingerVals[currLetter], 1)
-
-  //         if (currFinger !== "Thumb") {
-  //         currGesture.addDirection(Finger[currFinger], FingerDirection[direction], 0.70)
-          
-  //         // }
-          
-  //       }
-  //     }
-
-    // }
-  
-    // signList[currLetter] = currGesture
-
-    // signArr.push(currGesture)
-
- }
-
-
- Object.entries(signArr).forEach(([key,value]) => {
-  
+ Object.values(letter.Curls).map((curlType, finger) => {
+    newGesture.addCurl(fingerName[finger], curlType, 1)
  })
 
+ Object.values(letter.directions).map((fDirection, finger) => {
+  if (fDirection.length > 0) {
+  newGesture.addDirection(fingerName[finger], fDirection, 0.7)
+  }
+ })
+
+signArr.push(newGesture)
+
+   })
+
+console.log(signArr)
 
 
   return (
 <div><h1>sdfsd</h1></div>
   );
-
-  // }
 }
+  // }
+
   export default signs
 
 
