@@ -1,911 +1,651 @@
 {
     "U0041": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "DiagonalDownLeft"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalDownLeft"
             ],
-            "3": [
+            "Ring": [
                 "DiagonalDownLeft"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalDownLeft"
             ]
         }
     },
     "U0042": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "NoCurl"
-            ],
-            "4": [
-                "NoCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "NoCurl",
+            "Pinky": "NoCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "DiagonalUpRight",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U0043": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "HalfCurl"
-            ],
-            "3": [
-                "HalfCurl"
-            ],
-            "4": [
-                "HalfCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "HalfCurl",
+            "Ring": "HalfCurl",
+            "Pinky": "HalfCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalUpRight"
             ],
-            "3": [
+            "Ring": [
                 "DiagonalUpRight"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpRight"
             ]
         }
     },
     "U0044": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "NoCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "VerticalUp",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U0045": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "VerticalUp",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U0046": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "NoCurl"
-            ],
-            "4": [
-                "NoCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "FullCurl",
+            "Middle": "NoCurl",
+            "Ring": "NoCurl",
+            "Pinky": "NoCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U0047": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "HorizontalRight"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalUpRight"
             ],
-            "3": [
+            "Ring": [
                 "HorizontalRight"
             ],
-            "4": [
+            "Pinky": [
                 "HorizontalRight"
             ]
         }
     },
     "U0048": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "HorizontalRight",
                 "HorizontalRight"
             ],
-            "2": [
+            "Middle": [
                 "HorizontalRight"
             ],
-            "3": [
+            "Ring": [
                 "HorizontalRight"
             ],
-            "4": [
+            "Pinky": [
                 "HorizontalRight"
             ]
         }
     },
     "U0049": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "NoCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "NoCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U004a": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "NoCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "NoCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalUpRight"
             ],
-            "3": [
+            "Ring": [
                 "HorizontalRight"
             ],
-            "4": [
+            "Pinky": [
                 "HorizontalRight"
             ]
         }
     },
     "U004b": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalUpRight"
             ],
-            "3": [
+            "Ring": [
                 "HorizontalRight"
             ],
-            "4": [
+            "Pinky": [
                 "HorizontalRight"
             ]
         }
     },
     "U004c": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U004d": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U004e": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U004f": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "HalfCurl"
-            ],
-            "2": [
-                "HalfCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "HalfCurl",
+            "Middle": "HalfCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalUpRight"
             ],
-            "3": [
+            "Ring": [
                 "DiagonalUpRight"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpRight"
             ]
         }
     },
     "U0050": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "HalfCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "HalfCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "HorizontalRight",
                 "HorizontalRight"
             ],
-            "2": [
+            "Middle": [
                 "DiagonalDownRight"
             ],
-            "3": [
+            "Ring": [
                 "DiagonalDownRight"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalDownRight"
             ]
         }
     },
     "U0051": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "HalfCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "HalfCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalDownRight",
                 "HorizontalRight"
             ],
-            "2": [
+            "Middle": [
                 "HorizontalRight"
             ],
-            "3": [
+            "Ring": [
                 "DiagonalDownRight"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalDownRight"
             ]
         }
     },
     "U0052": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U0053": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "VerticalUp",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U0054": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "VerticalUp",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U0055": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U0056": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U0057": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "NoCurl"
-            ],
-            "3": [
-                "NoCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "NoCurl",
+            "Middle": "NoCurl",
+            "Ring": "NoCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpLeft",
                 "DiagonalUpRight"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "DiagonalUpLeft"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U0058": {
         "Curls": {
-            "0": [
-                "HalfCurl"
-            ],
-            "1": [
-                "HalfCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "HalfCurl",
+            "Index": "HalfCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "VerticalUp",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "VerticalUp"
             ]
         }
     },
     "U0059": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "FullCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "NoCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "FullCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "NoCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "DiagonalUpRight",
                 "VerticalUp"
             ],
-            "2": [
+            "Middle": [
                 "VerticalUp"
             ],
-            "3": [
+            "Ring": [
                 "VerticalUp"
             ],
-            "4": [
+            "Pinky": [
                 "DiagonalUpLeft"
             ]
         }
     },
     "U005a": {
         "Curls": {
-            "0": [
-                "NoCurl"
-            ],
-            "1": [
-                "NoCurl"
-            ],
-            "2": [
-                "FullCurl"
-            ],
-            "3": [
-                "FullCurl"
-            ],
-            "4": [
-                "FullCurl"
-            ]
+            "Thumb": "NoCurl",
+            "Index": "NoCurl",
+            "Middle": "FullCurl",
+            "Ring": "FullCurl",
+            "Pinky": "FullCurl"
         },
         "directions": {
-            "0": [],
-            "1": [
+            "Thumb": [],
+            "Index": [
                 "HorizontalLeft",
                 "DiagonalUpLeft"
             ],
-            "2": [
+            "Middle": [
                 "HorizontalLeft"
             ],
-            "3": [
+            "Ring": [
                 "HorizontalLeft"
             ],
-            "4": [
+            "Pinky": [
                 "HorizontalLeft"
             ]
         }

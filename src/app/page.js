@@ -1,62 +1,52 @@
-import Image from "next/image";
-import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose'
-import { Libre_Barcode_128 } from "next/font/google";
-import * as fp from "fingerpose"
-import asl_signs from  '../../Components/fs_styles/ASL_fingervals.json'
+import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose';
+import * as fp from "fingerpose";
+import handsigns from '../../Components/handsigns'
+// import handsigns from '../Components/handsigns'
+// import asl_signs from '../components/fs_language/ASL_fingervals.json';
+import asl_signs from '../../Components/fs_styles/ASL_fingervals.json'
+import Handsigns from '../../Components/handsigns';
 
-import Handsigns  from "../../Components/handsigns";
+const signs = () => {
+  let gestureArr = [];
 
 
-const signs = async () => {
+  Object.entries(asl_signs).forEach(([letter, props]) => {
 
-  let signArr = [];
- 
+    let newGesture = new GestureDescription(letter);
 
-Object.values(asl_signs).forEach((letter) => {
+    Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
+      const directionProps = props.directions[fingerName];
 
-  const fingerName = ["Thumb", "Index", "Middle", "Ring", "Pinky"]
+      newGesture.addCurl(Finger[fingerName], FingerCurl[curlType], 1.0);
 
-   let newGesture = new GestureDescription(letter);
+      for (let direction of directionProps) {
 
- Object.values(letter.Curls).map((curlType, finger) => {
-    newGesture.addCurl(fingerName[finger], curlType, 1)
- })
+        if (fingerName !== "Thumb") {
 
- Object.values(letter.directions).map((fDirection, finger) => {
-  if (fDirection.length > 0) {
-  newGesture.addDirection(fingerName[finger], fDirection, 0.7)
-  }
- })
+          if (letter === "U0041" && fingerName === "Index") {
+            newGesture.addDirection(Finger[fingerName], FingerDirection[direction], 1.0);
+          }
 
-signArr.push(newGesture)
+          else {
+            newGesture.addDirection(Finger[fingerName], FingerDirection[direction], 0.7)
+          }
+        }
+      }
+    })
 
-   })
 
-console.log(signArr)
+    gestureArr.push(newGesture);
+
+
+  })
+
+
+console.log(Array.isArray(gestureArr))
 
 
   return (
-<div><h1>sdfsd</h1></div>
+    <div><h1>sdfsd</h1></div>
   );
-}
-  // }
+};
 
-  export default signs
-
-
-        
-       
-        
-       
-
-
-
-        // handSignsMap.set("gestures", [ "t" {"name", currFinger} ])
-        // console.log(handSignsMap)
-
-       
-
-
-        // gestures: [ t { name: 'thumbs_up', curls: [Object], directions: [Object] } ]
-    
-  
+export default signs;
