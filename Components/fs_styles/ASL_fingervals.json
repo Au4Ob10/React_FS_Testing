@@ -22,9 +22,10 @@
             "Pinky": [
                 "DiagonalDownLeft"
             ]
-        }
+        }, 
+        "indexDirectionConf": 1.0
     },
-    "U0042": {
+    "U00D1": {
         "Curls": {
             "Thumb": "HalfCurl",
             "Index": "NoCurl",

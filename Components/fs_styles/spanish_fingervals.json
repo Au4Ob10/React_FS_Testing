@@ -1,474 +1,292 @@
 {
-    "\\U0041": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalRight"
-            ]
-        },
-        "Index": {
-            "curlType": "FullCurl",
-            "directions": [
-                "DiagonalDownRight"
-            ]
-        },
-        "Middle": {
-            "curlType": "FullCurl",
-            "directions": [
-                "DiagonalDownRight"
-            ]
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": [
-                "DiagonalDownRight"
-            ]
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": [
-                "DiagonalDownRight"
-            ]
-        }
+    "U0041": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "FullCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalRight"],
+        "Index": ["DiagonalDownRight"],
+        "Middle": ["DiagonalDownRight"],
+        "Ring": ["DiagonalDownRight"],
+        "Pinky": ["DiagonalDownRight"]
+      }
     },
-    "\\U0042": {
-        "Thumb": {
-            "curlType": "NoCurl"
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalRight"
-            ]
-        },
-        "Middle": {
-            "curlType": "fullCurl",
-            "directions": "horizontalRight"
-        },
-        "Ring": {
-            "curlType": "fullCurl",
-            "directions": "horizontalRight"
-        },
-        "Pinky": {
-            "curlType": "fullCurl",
-            "directions": "horizontalRight"
-        }
+    "U0042": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": [],
+        "Index": ["HorizontalRight"],
+        "Middle": ["horizontalRight"],
+        "Ring": ["horizontalRight"],
+        "Pinky": ["horizontalRight"]
+      }
     },
-    "\\U0043": {
-        "Thumb": {
-            "curlType": "NoCurl"
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpRight",
-                "DiagonalUpRight"
-            ]
-        },
-        "Middle": {
-            "curlType": "HalfCurl",
-            "directions": "DiagonalUpRight"
-        },
-        "Ring": {
-            "curlType": "HalfCurl",
-            "directions": "DiagonalUpRight"
-        },
-        "Pinky": {
-            "curlType": "HalfCurl",
-            "directions": "DiagonalUpRight"
-        }
+    "U0043": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "HalfCurl",
+        "Ring": "HalfCurl",
+        "Pinky": "HalfCurl"
+      },
+  
+      "directions": {
+        "Thumb": [],
+        "Index": ["DiagonalUpRight", "DiagonalUpRight"],
+        "Middle": ["DiagonalUpRight"],
+        "Ring": ["DiagonalUpRight"],
+        "Pinky": ["DiagonalUpRight"]
+      }
     },
-    "\\U0044": {
-        "Thumb": {
-            "curlType": "NoCurl"
-        },
-        "Index": {
-            "curlType": "HalfCurl",
-            "directions": [
-                "DiagonalUpRight",
-                "DiagonalUpRight"
-            ]
-        },
-        "Middle": {
-            "curlType": "HalfCurl",
-            "directions": "DiagonalUpRight"
-        },
-        "Ring": {
-            "curlType": "HalfCurl",
-            "directions": "DiagonalUpRight"
-        },
-        "Pinky": {
-            "curlType": "HalfCurl",
-            "directions": "DiagonalUpRight"
-        }
+    "U0044": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "HalfCurl",
+        "Middle": "HalfCurl",
+        "Ring": "HalfCurl",
+        "Pinky": "HalfCurl"
+      },
+  
+      "directions": {
+        "Thumb": [],
+        "Index": ["DiagonalUpRight", "DiagonalUpRight"],
+        "Middle": ["DiagonalUpRight"],
+        "Ring": ["DiagonalUpRight"],
+        "Pinky": ["DiagonalUpRight"]
+      }
     },
-    "\\U0045": {
-        "Thumb": {
-            "curlType": "NoCurl"
-        },
-        "Index": {
-            "curlType": "FullCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        },
-        "Middle": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        }
+    "U0045": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "FullCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": [],
+        "Index": ["VerticalDown"],
+        "Middle": ["VerticalDown"],
+        "Ring": ["VerticalDown"],
+        "Pinky": ["VerticalDown"]
+      }
     },
-    "\\U0046": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": []
-        },
-        "Index": {
-            "curlType": "FullCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        },
-        "Middle": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        }
+    "U0046": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "FullCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": [],
+        "Index": ["VerticalDown"],
+        "Middle": ["VerticalDown"],
+        "Ring": ["VerticalDown"],
+        "Pinky": ["VerticalDown"]
+      }
     },
-    "\\U0049": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "FullCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        },
-        "Middle": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Pinky": {
-            "curlType": "NoCurl",
-            "directions": "DiagonalUpLeft"
-        }
+    "U0049": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "FullCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "NoCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["VerticalDown"],
+        "Middle": ["VerticalDown"],
+        "Ring": ["VerticalDown"],
+        "Pinky": ["DiagonalUpLeft"]
+      }
     },
-    "\\U004b": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "FullCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": "HorizontalLeft"
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": "HorizontalRight"
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": "HorizontalRight"
-        }
+    "U004b": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "FullCurl",
+        "Middle": "NoCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["HorizontalLeft"],
+        "Middle": ["HorizontalLeft"],
+        "Ring": ["HorizontalRight"],
+        "Pinky": ["HorizontalRight"]
+      }
     },
-    "\\U004c": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "VerticalUp"
-            ]
-        },
-        "Middle": {
-            "curlType": "FullCurl",
-            "directions": "HorizontalRight"
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": "HorizontalRight"
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": "HorizontalRight"
-        }
+    "U004c": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["VerticalUp"],
+        "Middle": ["HorizontalRight"],
+        "Ring": ["HorizontalRight"],
+        "Pinky": ["HorizontalRight"]
+      }
     },
-    "\\U004d": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": "VerticalDown"
-        },
-        "Ring": {
-            "curlType": "NoCurl",
-            "directions": "VerticalDown"
-        },
-        "Pinky": {
-            "curlType": "NoCurl",
-            "directions": "VerticalDown"
-        }
+    "U004d": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "NoCurl",
+        "Pinky": "NoCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["VerticalDown"],
+        "Middle": ["VerticalDown"],
+        "Ring": ["VerticalDown"],
+        "Pinky": ["VerticalDown"]
+      }
     },
-    "\\U004e": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": "VerticalDown"
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": "VerticalDown"
-        }
+    "U004e": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["VerticalDown"],
+        "Middle": ["VerticalDown"],
+        "Ring": ["VerticalDown"],
+        "Pinky": ["VerticalDown"]
+      }
     },
-    "\\U004f": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "HalfCurl",
-            "directions": [
-                "DiagonalDown"
-            ]
-        },
-        "Middle": {
-            "curlType": "HalfCurl",
-            "directions": [
-                "DiagonalDown"
-            ]
-        },
-        "Ring": {
-            "curlType": "HalfCurl",
-            "directions": [
-                "DiagonalDown"
-            ]
-        },
-        "Pinky": {
-            "curlType": "HalfCurl",
-            "directions": [
-                "DiagonalDown"
-            ]
-        }
+    "U004f": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "HalfCurl",
+        "Middle": "HalfCurl",
+        "Ring": "HalfCurl",
+        "Pinky": "HalfCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["DiagonalUpLeft"],
+        "Index": ["DiagonalDown"],
+        "Middle": ["DiagonalDown"],
+        "Ring": ["DiagonalDown"],
+        "Pinky": ["DiagonalDown"]
+      }
     },
-    "\\U0050": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Ring": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Pinky": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        }
+    "U0050": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "NoCurl",
+        "Pinky": "NoCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["HorizontalLeft"],
+        "Middle": ["HorizontalLeft"],
+        "Ring": ["HorizontalLeft"],
+        "Pinky": ["HorizontalLeft"]
+      }
     },
-    "\\U0051": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Ring": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Pinky": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        }
+    "U0051 need to fix": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "NoCurl",
+        "Pinky": "NoCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["HorizontalLeft"],
+        "Middle": ["HorizontalLeft"],
+        "Ring": ["HorizontalLeft"],
+        "Pinky": ["HorizontalLeft"]
+      }
     },
-    "\\U0052": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "FullCurl",
-            "directions": [
-                "HorizontalRight"
-            ]
-        },
-        "Middle": {
-            "curlType": "FullCurl",
-            "directions": [
-                "HorizontalRight"
-            ]
-        },
-        "Ring": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Pinky": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        }
+    "U0052": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "FullCurl",
+        "Middle": "FullCurl",
+        "Ring": "NoCurl",
+        "Pinky": "NoCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["DiagonalUpLeft"],
+        "Index": ["HorizontalRight"],
+        "Middle": ["HorizontalRight"],
+        "Ring": ["DiagonalUpLeft"],
+        "Pinky": ["DiagonalUpLeft"]
+      }
     },
-    "\\U0053": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Ring": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Pinky": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        }
+    "U0053": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "NoCurl",
+        "Pinky": "NoCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["DiagonalUpLeft"],
+        "Index": ["HorizontalLeft"],
+        "Middle": ["DiagonalUpLeft"],
+        "Ring": ["DiagonalUpLeft"],
+        "Pinky": ["DiagonalUpLeft"]
+      }
     },
-    "\\U0054": {
-        "Thumb": {
-            "curlType": "NoCurl",
-            "directions": [
-                "HorizontalLeft"
-            ]
-        },
-        "Index": {
-            "curlType": "NoCurl",
-            "directions": [
-                "DiagonalUpLeft"
-            ]
-        },
-        "Middle": {
-            "curlType": "NoCurl",
-            "directions": [
-                "VerticalUp"
-            ]
-        },
-        "Ring": {
-            "curlType": "FullCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        },
-        "Pinky": {
-            "curlType": "FullCurl",
-            "directions": [
-                "VerticalDown"
-            ]
-        }
+    "U0054": {
+      "curls": {
+        "Thumb": "NoCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      },
+  
+      "directions": {
+        "Thumb": ["HorizontalLeft"],
+        "Index": ["DiagonalUpLeft"],
+        "Middle": ["VerticalUp"],
+        "Ring": ["VerticalDown"],
+        "Pinky": ["VerticalDown"]
+      }
     }
-}
+  }
+  

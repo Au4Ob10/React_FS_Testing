@@ -14,16 +14,19 @@ const signs = () => {
 
     let newGesture = new GestureDescription(letter);
 
+
     Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
       const directionProps = props.directions[fingerName];
+      const idxFingerConf = props.indexDirectionConf
 
       newGesture.addCurl(Finger[fingerName], FingerCurl[curlType], 1.0);
+
 
       for (let direction of directionProps) {
 
         if (fingerName !== "Thumb") {
 
-          if (letter === "U0041" && fingerName === "Index") {
+          if (idxFingerConf && fingerName === "Index") {
             newGesture.addDirection(Finger[fingerName], FingerDirection[direction], 1.0);
           }
 
@@ -41,8 +44,9 @@ const signs = () => {
   })
 
 
-console.log(Array.isArray(gestureArr))
 
+let unicodeVal = "U0041"
+console.log(String.fromCharCode(parseInt(unicodeVal.slice(1), 16)))
 
   return (
     <div><h1>sdfsd</h1></div>
