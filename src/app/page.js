@@ -1,101 +1,56 @@
-'use client';
+import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose';
+import * as fp from "fingerpose";
+import handsigns from '../../Components/handsigns'
+// import handsigns from '../Components/handsigns'
+// import asl_signs from '../components/fs_language/ASL_fingervals.json';
+import asl_signs from '../../Components/fs_styles/ASL_fingervals.json'
+import Handsigns from '../../Components/handsigns';
 
-import React, { useEffect, useRef, useState } from "react";
-import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
-import hand_landmarker_task from "../../public/models/hand_landmarker.task"
+const signs = () => {
+  let gestureArr = [];
 
-const Demo = () => {
-    const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [handPresence, setHandPresence] = useState(null);
 
-    useEffect(() => {
-        let handLandmarker;
-        let animationFrameId;
+  Object.entries(asl_signs).forEach(([letter, props]) => {
 
-        const initializeHandDetection = async () => {
-            try {
-                const vision = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
-                );
-                handLandmarker = await HandLandmarker.createFromOptions(
-                    vision, {
-                        baseOptions: { modelAssetPath: hand_landmarker_task },
-                        numHands: 2,
-                        runningMode: "video"
-                    }
-                );
-                detectHands();
-            } catch (error) {
-                console.error("Error initializing hand detection:", error);
-            }
-        };
+    let newGesture = new GestureDescription(letter);
 
-    const drawLandmarks = (landmarksArray) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'white';
 
-    landmarksArray.forEach(landmarks => {
-        landmarks.forEach(landmark => {
-            const x = landmark.x * canvas.width;
-            const y = landmark.y * canvas.height;
+    Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
+      const directionProps = props.directions[fingerName];
+      const idxFingerConf = props.indexDirectionConf
 
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
-            ctx.fill();
-        });
-    });
+      newGesture.addCurl(Finger[fingerName], FingerCurl[curlType], 1.0);
+
+
+      for (let direction of directionProps) {
+
+        if (fingerName !== "Thumb") {
+
+          if (idxFingerConf && fingerName === "Index") {
+            newGesture.addDirection(Finger[fingerName], FingerDirection[direction], 1.0);
+          }
+
+          else {
+            newGesture.addDirection(Finger[fingerName], FingerDirection[direction], 0.7)
+          }
+        }
+      }
+    })
+
+
+    gestureArr.push(newGesture);
+
+
+  })
+
+
+
+let unicodeVal = "U0041"
+console.log(String.fromCharCode(parseInt(unicodeVal.slice(1), 16)))
+
+  return (
+    <div><h1>sdfsd</h1></div>
+  );
 };
 
-        const detectHands = () => {
-            if (videoRef.current && videoRef.current.readyState >= 2) {
-                const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
-                setHandPresence(detections.handednesses.length > 0);
-
-                // Assuming detections.landmarks is an array of landmark objects
-                if (detections.landmarks) {
-                    drawLandmarks(detections.landmarks);
-                }
-            }
-            requestAnimationFrame(detectHands);
-        };
-
-        const startWebcam = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoRef.current.srcObject = stream;
-                await initializeHandDetection();
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
-            }
-        };
-
-        startWebcam();
-
-        return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-            }
-            if (handLandmarker) {
-                handLandmarker.close();
-            }
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-        };
-    }, []);
-
-    return (
-        <>
-        <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-        <div style={{ position: "relative" }}>
-            <video ref={videoRef} autoPlay playsInline ></video>
-            <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
-        </div>
-    </>
-    );
-};
-
-export default Demo;
+export default signs;
