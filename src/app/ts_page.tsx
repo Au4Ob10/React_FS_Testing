@@ -7,69 +7,123 @@ import {
   GestureRecognizer,
   DrawingUtils,
 } from "@mediapipe/tasks-vision";
-import hand_landmarker_task from '../../public/models/hand_landmarker.task'
 import Webcam from "react-webcam";
 
-const gestureFunc = () => {
 
-  const webcamRef = useRef(null)
-  const canvasRef = useRef(null)
+const gestureDetection = () => {
 
+  const recognizeGestures = async () => {
 
+  const vision = await FilesetResolver.forVisionTasks(
+  // path/to/wasm/root
+  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm "
+);
+const gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+  baseOptions: {
+    modelAssetPath: "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task"
+  },
+  numHands: 2
+});
+ 
 
+  await gestureRecognizer.setOptions({runningMode: "VIDEO"})
 
-  // Set video width
-  const video = webcamRef.current.video
-  webcamRef.current.video.width = videoWidth
-  webcamRef.current.video.height = videoHeight
+  let lastVideoTime = -1
 
-  // Set canvas height and width
-  canvasRef.current.width = videoWidth
-  canvasRef.current.height = videoHeight
+  function renderLoop(): void {
+    const video = document.getElementById("video");
 
+    if (video.currentTime !== lastVideoTime) {
+      const gestureRecognitionResult = gestureRecognizer.recognizeForVideo(video);
+      processResult(gestureRecognitionResult);
+      lastVideoTime = video.currentTime;
+    }
 
-  const canvasContext = canvasRef.current.getContext("2d")
-
-
-  let gestureRecognizer = GestureRecognizer;
-
-
-
-  const createGestureRecognizer = async () => {
-    const vision = await FilesetResolver.forVisionTasks(
-      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-    );
-
-    const gestureRecognizer = await GestureRecognizer.createFromModelPath(vision,
-      "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task"
-    );
-
-    const recognitions = gestureRecognizer.recognizeForVideo(video)
-
-    console.log(recognitions)
-
+    requestAnimationFrame(() => {
+      renderLoop();
+    })
   }
-
-
-
-  const videoWidth = webcamRef.current.video.videoWidth
-  const videoHeight = webcamRef.current.video.videoHeight
-
-  createGestureRecognizer()
-
-
-
-
-
-  return (
-    <div>
-      <Webcam ref={webcamRef} />
-    </div>
-  )
 
 }
 
-export default gestureFunc;
+return (
+  <Webcam id="video"/>
+)
+}
+
+// import {
+//   FilesetResolver,
+//   HandLandmarker,
+//   GestureRecognizer,
+//   DrawingUtils,
+// } from "@mediapipe/tasks-vision";
+// // import hand_landmarker_task from '../../public/models/hand_landmarker.task'
+// import Webcam from "react-webcam";
+
+// const gestureFunc = () => {
+
+//   type refObj = any
+
+//   const webcamRef: refObj = useRef(null)
+//   const canvasRef: refObj = useRef(null)
+
+//   // Set video width
+//   const video = webcamRef?.current?.video
+
+  
+//   const videoWidth = webcamRef.current.video.videoWidth
+//   const videoHeight = webcamRef.current.video.videoHeight
+ 
+//   webcamRef.current.video.width = videoWidth
+//   webcamRef.current.video.height = videoHeight
+
+
+//   // Set canvas height and width
+//   // canvasRef?.current?.width = videoWidth
+//   // canvasRef.current.height = videoHeight
+
+
+//   const canvasContext = canvasRef.current.getContext("2d")
+
+
+//   let gestureRecognizer = GestureRecognizer;
+
+
+
+//   const createGestureRecognizer = async () => {
+//     const vision = await FilesetResolver.forVisionTasks(
+//       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+//     );
+
+//     const gestureRecognizer = await GestureRecognizer.createFromModelPath(vision,
+//       "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task"
+//     );
+
+//     const recognitions = gestureRecognizer.recognize(video)
+
+//     console.log(recognitions)
+
+//   }
+
+
+
+ 
+
+//   createGestureRecognizer()
+
+
+
+
+
+//   return (
+//     <div>
+//       <Webcam ref={webcamRef} />
+//     </div>
+//   )
+
+// }
+
+// export default gestureFunc;
 
 
 // const gestureFunc = () => {
