@@ -13,12 +13,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import motionVals from "../../Components/fs_styles/Mexican_Motion_Vals.json"
-import { transform } from "next/dist/build/swc/generated-native";
+
 
 const Demo = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
+    const [latestDetection, setLatestDetection] = useState(null);
+
+
+   
 
     const hand_landmarker_task = "/models/hand_landmarker.task"
 
@@ -64,11 +68,16 @@ const Demo = () => {
 
 
 
+
+
         const detectHands = () => {
             if (videoRef.current && videoRef.current.readyState >= 2) {
                 const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
-            console.log(detections.worldLandmarks)
+                
+                
                 setHandPresence(detections.handednesses.length > 0);
+                setLatestDetection(detections)
+  
 
 
                 // Assuming detections.landmarks is an array of landmark objects
@@ -106,11 +115,31 @@ const Demo = () => {
         };
     }, []);
 
+    const detectionFunc = () => {
+
+        if (latestDetection) {
+
+         console.log(
+            latestDetection.worldLandmarks[0][5]
+         )
+
+
+        }
+        else {
+            console.log("No hand detection vals")
+        }
+        
+    }
+
+
+
+    
     return (
         <>
         <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
+        <button onClick={detectionFunc}>detect hand</button>
         <div style={{ position: "relative" }}>
-            <video ref={videoRef} autoPlay playsInline></video>
+            <video ref={videoRef} autoPlay playsInline style={{transform: "scaleX(-1)"}}></video>
             <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
         </div>
     </>
