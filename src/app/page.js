@@ -20,19 +20,21 @@ import Webcam from "react-webcam";
 
 
 const Demo = () => {
+    let [idx,setIdx] = useState(0)
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [latestDetection, setLatestDetection] = useState(null);
 
 
-   
 
     const hand_landmarker_task = "/models/hand_landmarker.task"
 
     useEffect(() => {
         let handLandmarker;
         let animationFrameId;
+
+
 
         const initializeHandDetection = async () => {
             try {
@@ -72,16 +74,14 @@ const Demo = () => {
 
 
 
-
-
         const detectHands = () => {
             if (videoRef.current && videoRef.current.readyState >= 2) {
                 /** @type {import("@mediapipe/tasks-vision").HandLandmarkerResult} */
                 const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
+
+
                 
-          
-                
-                setHandPresence(detections.handednesses.length > 0);
+                setHandPresence(detections.handedness.length > 0);
                 setLatestDetection(detections)
   
 
@@ -121,105 +121,6 @@ const Demo = () => {
         };
     }, []);
 
-    const detectionFunc = () => {
-        
-        // const coords = motionVals[0].landmarkMotions[0].positions[0]
-        // const landmarks = detections.globalLandmarks
-        
-
-        // Object.values(coords).forEach((val) => {
-
-        //     let i =5
-
-        // })
-
-        
-
-        // json structure = motionVals.letter.pos.landmark.coord
-
-//     for (const [index, element] of coords.entries()) {
-//         console.log(index, element);
-// }
-       
-         if (latestDetection) {
-
-
-
-           
-
-
-           Object.entries(latestDetection.worldLandmarks[0]).forEach(([lm,coord]) => {
-            console.log(lm)
-             Object.values(coord).slice(0,3).forEach((coordVal) => {
-                console.log(coordVal)
-             })
-            // Object.entries(lm).slice(0,3).forEach(([coord,coordVal]) => {
-
-            //     console.log(coord, ": ", coordVal)
-            // })
-          
-
-
-
-       
-            })
-             
-
-            
-            
-                
-     
-
-          
-            //   latestDetection.worldLandmarks.forEach((val,idx) => {
-              
-            //     // Object.entries(coord).forEach((coordVals, idx) => {
-            //     //     console.log(coordVals)
-            //     //   })
-                
-            //    })
-            // })
-           
-            // let indices = motionVals[0].landmarkMotions[0].landmarkIndex
-
-            // console.log(indices)
-
-           
-
-            // motionVals.forEach((val, idx) => {
-                
-            //     const landmarkvals = val.landmarkMotions
-            //     landmarkvals.forEach((newval, newidx) => {
-
-            //         console.log(val.letter, newval.landmarkIndex)
-            //     })
-            // })
-            
-            // latestDetection.worldLandmarks[0].forEach((val, coord)=> {
-               
-            //     const landmarkVals = motionVals[0]
-
-
-            //     })
-
-            
-        //     // motionVals[0].landmarkMotions[0].positions[0].x
-            
-          
-          
-
-           
-        //         // Object.values(motionVals.J.firstPosition[17].x).forEach((x) => {
-        //         //     console.log(x)
-        //         // })
-            
-
-        }
-        else {
-            console.log("No hand detection vals")
-        }
-        
-    }
 
 
 
@@ -237,6 +138,173 @@ const Demo = () => {
 };
 
 export default Demo;
+
+
+
+
+//     const detectionFunc = () => {
+        
+//         // motionVals.landmarkMotions[0]
+
+//         // motionVals[0].landmarkMotions[0].landmarkIndex
+
+//         motionVals[0].letter
+//         motionVals[0].landmarkMotions
+
+     
+//     motionVals.forEach((letterVal) => {
+
+//         const letter = letterVal.letter
+
+//         Object.values(letterVal.landmarkMotions).forEach((landmarkVal) => {
+
+        
+//             Object.values(landmarkVal.positions).forEach((coordName) => {
+//                 console.log(Object.values(coordName))
+//               })
+        
+
+
+          
+//         })
+
+//     } )
+
+        
+
+//     // Object.values(motionVals).forEach((letter) => {
+
+//     //     Object.entries(letter).forEach(([letter, letterVal]) => {
+        
+//     //         console.log(letterVal[0])
+
+//     //     })
+
+//     // })
+//         // const coords = motionVals[0].landmarkMotions[0].positions[0]
+//         // const landmarks = detections.globalLandmarks
+        
+
+//         // Object.values(coords).forEach((val) => {
+
+//         //     let i =5
+
+//         // })
+
+        
+
+//         // json structure = motionVals.letter.pos.landmark.coord
+
+// //     for (const [index, element] of coords.entries()) {
+// //         console.log(index, element);
+// // }
+       
+//         // motionVals[0].landmarkMotions[0].positions
+//         // motionVals[0].landmarkMotions[0].landmarkIndex
+//         // motionVals[0].letter
+//         // motionVals[0].landmarkMotions
+        
+//         // let idx = 0;
+
+//         // const motionsArr = motionVals[idx].landmarkMotions[idx]
+
+//         // for (let motion of motionsArr)
+//         // {
+//         //     idx++
+//         // }
+//         // console.log(idx)
+    
+//         // Object.values(motionVals).forEach(([val1,val2]) => {
+//         //     console.log(val1,val2)
+//         // })
+
+//         // Object.entries(motionVals).forEach(([letter, letterProps]) => {
+           
+           
+        
+//         // Object.values(letterProps).forEach(([newProps, newProps2])=> {
+//         //     console.log(newProps,newProps2)
+//         // })
+        
+//         // })
+       
+//         //  if (latestDetection) {
+
+//         //    Object.entries(latestDetection.worldLandmarks[0]).forEach(([lm,coord]) => {
+
+//         //     console.log(lm)
+//         //      Object.entries(coord).slice(0,3).forEach(([coordName,coordVal]) => {
+//         //         console.log(coordName, ": ", coordVal)
+//         //      })
+       
+//         //     })
+             
+
+            
+            
+                
+     
+
+          
+//             //   latestDetection.worldLandmarks.forEach((val,idx) => {
+              
+//             //     // Object.entries(coord).forEach((coordVals, idx) => {
+//             //     //     console.log(coordVals)
+//             //     //   })
+                
+//             //    })
+//             // })
+           
+//             // let indices = motionVals[0].landmarkMotions[0].landmarkIndex
+
+//             // console.log(indices)
+
+           
+
+//             // motionVals.forEach((val, idx) => {
+                
+//             //     const landmarkvals = val.landmarkMotions
+//             //     landmarkvals.forEach((newval, newidx) => {
+
+//             //         console.log(val.letter, newval.landmarkIndex)
+//             //     })
+//             // })
+            
+//             // latestDetection.worldLandmarks[0].forEach((val, coord)=> {
+               
+//             //     const landmarkVals = motionVals[0]
+
+
+//             //     })
+
+            
+//         //     // motionVals[0].landmarkMotions[0].positions[0].x
+            
+          
+          
+
+           
+//         //         // Object.values(motionVals.J.firstPosition[17].x).forEach((x) => {
+//         //         //     console.log(x)
+//         //         // })
+            
+
+//         }
+//         // else {
+//         //     console.log("No hand detection vals")
+//         // }
+        
+// // }
+
+
+
+
+
+
+
+
+
+
 
 
 // const motionSigns = () => {
