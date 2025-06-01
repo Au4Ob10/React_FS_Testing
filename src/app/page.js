@@ -14,18 +14,23 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
-import motionVals from "../../Components/fs_styles/Mexican_Motion_Vals.json"
-import Webcam from "react-webcam";
+// import motionVals from "../../Components/fs_styles/Mexican_Motion_Vals.json"
+// import Webcam from "react-webcam";
+
 
 
 
 const Demo = () => {
-    let [idx,setIdx] = useState(0)
+    // let [idx,setIdx] = useState(0)
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [latestDetection, setLatestDetection] = useState(null);
-
+    const [prevHandCoord, setPrevHandCoord] = useState({});
+    const [currHandCoord, setCurrHandCoord] = useState({});
+    const [coordDeltaVals, setCoordDeltaVals] = useState({});
+    const [stateTest, setstateTest] = useState({})
+    
 
 
     const hand_landmarker_task = "/models/hand_landmarker.task"
@@ -79,11 +84,9 @@ const Demo = () => {
                 /** @type {import("@mediapipe/tasks-vision").HandLandmarkerResult} */
                 const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
 
-
                 
                 setHandPresence(detections.handedness.length > 0);
                 setLatestDetection(detections)
-  
 
 
                 // Assuming detections.landmarks is an array of landmark objects
@@ -124,11 +127,102 @@ const Demo = () => {
 
 
 
+    const logHands = async () => {
+
+
+    //        const [prevHandCoord, setPrevHandCoord] = useState({});
+    // const [currHandCoord, setCurrHandCoord]
+
+       
+        if (latestDetection) {
+
+            (await latestDetection.worldLandmarks).forEach((lmVal) => {
+
+                lmVal.slice(7,8).forEach((indexTip) => {
+
+                    const coordList = {}
+                    let coordIdx = 1
+
+                Object.entries(indexTip).slice(0,3).forEach(([coordName,coordVal]) => {
+
+                    coordList[coordName + coordIdx] = coordVal
+                }) 
+                const prevHandObjLen = Object.keys(prevHandCoord).length 
+
+                  if (prevHandObjLen < 3) {
+                    setPrevHandCoord(coordList)
+                }
+                else {
+                    setCurrHandCoord(coordList)
+                }
+
+
+                const deltaVals = Object.values(prevHandCoord).map((prevCoord,idx) => {
+                    const currCoord = Object.values(currHandCoord)[idx]
+                        return (currCoord - prevCoord)
+                    })
+                
+                if (!deltaVals.includes(NaN)) {
+                console.log(deltaVals)
+                }
+                
+                })
+
+                
+
+            }) 
+            
+              
+
+                    
+
+                    // setPrevHandCoord({
+                    //     ...prevHandCoord,
+                    //     [coordName + 1]: coordVal
+                    // })
+
+                
+                    
+                  
+            }
+          
+                        // setPrevHandCoord({
+                        //     ...prevHandCoord,
+                        //     x1 : coordVal,
+                        //     y1 :
+                
+                        // currCoord.set(coordName,coordVal)
+                }
+            
+            
+
+
+                
+          
+
+                   
+
+                
+                    
+
+                       
+
+
+                    
+
+
+            
+                
+            
+            // console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
+        
+    
+
     
     return (
         <>
         <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-        <button onClick={detectionFunc}>detect hand</button>
+        <button onClick={logHands}>detect hand</button>
         <div style={{ position: "relative" }}>
             <video ref={videoRef}  autoPlay playsInline style={{transform: "scaleX(-1)"}}></video>
             <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
