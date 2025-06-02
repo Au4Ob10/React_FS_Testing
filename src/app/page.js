@@ -130,47 +130,68 @@ const Demo = () => {
     const logHands = async () => {
 
 
+       
+
     //        const [prevHandCoord, setPrevHandCoord] = useState({});
     // const [currHandCoord, setCurrHandCoord]
 
        
         if (latestDetection) {
 
-            (await latestDetection.worldLandmarks).forEach((lmVal) => {
 
-                lmVal.slice(7,8).forEach((indexTip) => {
+        const zWristPoints = {
+            
+        "yPoint1": 0.07532834261655807,
 
-                    const coordList = {}
-                    let coordIdx = 1
+        "yPoint2": 0.06799570471048355,
 
-                Object.entries(indexTip).slice(0,3).forEach(([coordName,coordVal]) => {
+        "yPoint3": 0.04702074080705643,
 
-                    coordList[coordName + coordIdx] = coordVal
-                }) 
-                const prevHandObjLen = Object.keys(prevHandCoord).length 
+        "ypoint4": 0.05103735998272896
 
-                  if (prevHandObjLen < 3) {
-                    setPrevHandCoord(coordList)
-                }
-                else {
-                    setCurrHandCoord(coordList)
-                }
+        }
 
 
-                const deltaVals = Object.values(prevHandCoord).map((prevCoord,idx) => {
-                    const currCoord = Object.values(currHandCoord)[idx]
-                        return (currCoord - prevCoord)
-                    })
+            Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
+
+                console.log(lmVal.slice(0,1))
+            })
+
+            //  Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
+                  
+            //     Object.values(lmVal).slice(0,3).forEach((indexTip) => {
+                    
+            //         const coordList = {}
+            //         let coordIdx = 1
+
+            //     Object.entries(indexTip).slice(0,3).forEach(([coordName,coordVal]) => {
+
+            //         coordList[coordName + coordIdx] = coordVal
+            //     }) 
+            //     const prevHandObjLen = Object.keys(prevHandCoord).length 
+
+            //       if (prevHandObjLen < 3) {
+            //         setPrevHandCoord(coordList)
+            //     }
+            //     else {
+            //         setCurrHandCoord(coordList)
+            //     }
+
+
+            //     const deltaVals = Object.values(prevHandCoord).map((prevCoord,idx) => {
+            //         const currCoord = Object.values(currHandCoord)[idx]
+            //             return (currCoord - prevCoord)
+            //         })
                 
-                if (!deltaVals.includes(NaN)) {
-                console.log(deltaVals)
-                }
+            //     if (!deltaVals.includes(NaN)) {
+            //     let i = 5
+            //     }
                 
-                })
+            //     })
 
                 
 
-            }) 
+            // })
             
               
 
