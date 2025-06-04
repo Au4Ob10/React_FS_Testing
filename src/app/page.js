@@ -16,8 +16,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker} from "@mediapipe/tasks-vision";
 import * as fp from "fingerpose"
 import fsl_gestures from "../../components/generateSigns"
+import Webcam from "react-webcam";
 
-
+import { RiCameraFill, RiCameraOffFill } from "react-icons/ri"
 
 import {
   Text,
@@ -45,6 +46,7 @@ const Demo = () => {
     const [currHandCoord, setCurrHandCoord] = useState({});
     const [coordDeltaVals, setCoordDeltaVals] = useState({});
     const [stateTest, setstateTest] = useState({})
+     const [camState, setCamState] = useState("on")
     
 
 
@@ -249,7 +251,9 @@ const Demo = () => {
             // console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
         
     
-
+const turnOffCamera = () => {
+    console.log("test")
+}
     
     return (
    
@@ -281,41 +285,12 @@ const Demo = () => {
 
           <Box id="webcam-container">
             {camState === "on" ? (
-              <Webcam id="webcam" ref={webcamRef} style={{transform: "scaleX(-1)"}} />
+              <Webcam id="webcam" ref={videoRef} style={{transform: "scaleX(-1)"}} />
             ) : (
               <div id="webcam" background="black"></div>
             )}
 
-            {sign ? (
-              <div
-                style={{
-                  position: "absolute",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  right: "calc(50% - 50px)",
-                  bottom: 100,
-                  textAlign: "-webkit-center",
-                }}
-              >
-                <Text color="white" fontSize="sm" mb={1}>
-                  detected gestures
-                </Text>
-                <Text>{messageBody}</Text>
-                <img
-                  alt="signImage"
-                  src={
-                    Signimage[sign]?.src
-                      ? Signimage[sign].src
-                      : "/loveyou_emoji.svg"
-                  }
-                  style={{
-                    height: 30,
-                  }}
-                />
-              </div>
-            ) : (
-              " "
-            )}
+           
           </Box>
 
           <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
@@ -359,6 +334,37 @@ const Demo = () => {
 
 export default Demo;
 
+
+//  {sign ? (
+//               <div
+//                 style={{
+//                   position: "absolute",
+//                   marginLeft: "auto",
+//                   marginRight: "auto",
+//                   right: "calc(50% - 50px)",
+//                   bottom: 100,
+//                   textAlign: "-webkit-center",
+//                 }}
+//               >
+//                 <Text color="white" fontSize="sm" mb={1}>
+//                   detected gestures
+//                 </Text>
+//                 <Text>{messageBody}</Text>
+//                 <img
+//                   alt="signImage"
+//                   src={
+//                     Signimage[sign]?.src
+//                       ? Signimage[sign].src
+//                       : "/loveyou_emoji.svg"
+//                   }
+//                   style={{
+//                     height: 30,
+//                   }}
+//                 />
+//               </div>
+//             ) : (
+//               " "
+//             )}
 //  <Button onClick={() => gestureFunc()}>title</Button>
     //  <>
     //     <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
