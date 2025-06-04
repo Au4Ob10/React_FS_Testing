@@ -11,13 +11,11 @@
 
 // detection.landmark_idx.globallandmarks.landmarkcoor
 
-
 import React, { useEffect, useRef, useState } from "react";
-import { FilesetResolver, HandLandmarker} from "@mediapipe/tasks-vision";
-import * as fp from "fingerpose"
-import fsl_gestures from "../../components/generateSigns"
-
-
+import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
+import * as fp from "fingerpose";
+import fsl_gestures from "../../components/generateSigns";
+import Webcam from "react-webcam";
 
 import {
   Text,
@@ -29,232 +27,138 @@ import {
   Box,
   VStack,
   ChakraProvider,
-} from "@chakra-ui/react"
+  background,
+} from "@chakra-ui/react";
 
-import { Signimage, Signpass } from "../../components/handimage"
-
-
+import { Signimage, Signpass } from "../../components/handimage";
+import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
 
 const Demo = () => {
-    // let [idx,setIdx] = useState(0)
-    const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [handPresence, setHandPresence] = useState(null);
-    const [latestDetection, setLatestDetection] = useState(null);
-    const [prevHandCoord, setPrevHandCoord] = useState({});
-    const [currHandCoord, setCurrHandCoord] = useState({});
-    const [coordDeltaVals, setCoordDeltaVals] = useState({});
-    const [stateTest, setstateTest] = useState({})
-    
+  // let [idx,setIdx] = useState(0)
+  const webcamRef = useRef(null);
+  const canvasRef = useRef(null);
+  const detectionRef = useRef(null)
+  const [handPresence, setHandPresence] = useState(null);
+  const [latestDetection, setLatestDetection] = useState(null);
+  const [prevHandCoord, setPrevHandCoord] = useState({});
+  const [currHandCoord, setCurrHandCoord] = useState({});
+  const [coordDeltaVals, setCoordDeltaVals] = useState({});
+  const [stateTest, setstateTest] = useState({});
+  const [sign, setSign] = useState(null);
+  const [camState, setCamState] = useState("on");
+  const [messageBody, setMessageBody] = useState("");
 
+  const hand_landmarker_task = "/models/hand_landmarker.task";
 
-    const hand_landmarker_task = "/models/hand_landmarker.task"
+  useEffect(() => {
+    let animationFrameId;
 
-    useEffect(() => {
-        let handLandmarker;
-        let animationFrameId;
-
-        const initializeHandDetection = async () => {
-            try {
-                const vision = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
-                );
-                handLandmarker = await HandLandmarker.createFromOptions(
-                    vision, {
-                        baseOptions: { modelAssetPath: hand_landmarker_task },
-                        numHands: 1,
-                        runningMode: "VIDEO"
-                    }
-                );
-                detectHands();
-            } catch (error) {
-                console.error("Error initializing hand detection:", error);
-            }
-        };
-
-    const drawLandmarks = (landmarksArray) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'white';
-
-    landmarksArray.forEach(landmarks => {
-        landmarks.forEach(landmark => {
-            const x = landmark.x * canvas.width;
-            const y = landmark.y * canvas.height;
-
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
-            ctx.fill();
+    const initializeHandDetection = async () => {
+      try {
+        const vision = await FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+        );
+        const handLandmarker = await HandLandmarker.createFromOptions(vision, {
+          baseOptions: { modelAssetPath: hand_landmarker_task },
+          numHands: 1,
+          runningMode: "VIDEO",
         });
-    });
-};
+        detectHands(handLandmarker);
+      } catch (error) {
+        console.error("Error initializing hand detection:", error);
+      }
+    };
 
+        const drawLandmarks = (landmarksArray: { x: number; y: number; }[][]) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
 
-        const detectHands = async () => {
-            if (videoRef.current && videoRef.current.readyState >= 2) {
-                /** @type {import("@mediapipe/tasks-vision").HandLandmarkerResult} */
-                const detections = await handLandmarker.detectForVideo(videoRef.current, performance.now());
+        landmarksArray.forEach((landmarks: { x: number; y: number; }[]) => {
+            landmarks.forEach((landmark: { x: number; y: number; }) => {
+                const x = landmark.x * canvas.width;
+                const y = landmark.y * canvas.height;
 
-                setHandPresence(detections.handedness.length > 0);
-                setLatestDetection(detections)
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
+                ctx.fill();
+            });
+        });
+    };
+    const detectHands = async (landmarker: HandLandmarker) => {
+      // if (webcamRef.current && webcamRef.current.readyState >= 2) {
+        // /** @type {import("@mediapipe/tasks-vision").HandLandmarkerResult} */
+        // setHandPresence(detections.handedness.length > 0);
+        // setLatestDetection(detections);
 
+        if (
+          typeof webcamRef.current !== "undefined" &&
+          webcamRef.current !== null &&
+          webcamRef.current.video.readyState === 4
+        ) {
+          const video = webcamRef.current.video;
+          const videoWidth = webcamRef.current.video.videoWidth;
+          const videoHeight = webcamRef.current.video.videoHeight;
 
-                // Assuming detections.landmarks is an array of landmark objects
-                if (detections.landmarks) {
-                    drawLandmarks(detections.landmarks);
-                    const GE = new fp.GestureEstimator(fsl_gestures,)
-                    const estimatedGestures = await GE.estimate(detections.landmarks,6.5)
-                }
-            }
-            requestAnimationFrame(detectHands);
-        };
+          // Set video width
+          webcamRef.current.video.width = videoWidth;
+          webcamRef.current.video.height = videoHeight;
 
-        
+          // Set canvas height and width
+          canvasRef.current.width = videoWidth;
+          canvasRef.current.height = videoHeight;
 
-        const startWebcam = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoRef.current.srcObject = stream;
-                await initializeHandDetection();
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
-            }
-        };
+          const detections = await landmarker.detectForVideo(
+          video,
+          performance.now()
+        );
 
-        startWebcam();
+        await initializeHandDetection();
 
-        return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-            }
-            if (handLandmarker) {
-                handLandmarker.close();
-            }
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-        };
-    }, []);
-
-
-
-
-    const logHands = async () => {
-
-
-    //        const [prevHandCoord, setPrevHandCoord] = useState({});
-    // const [currHandCoord, setCurrHandCoord]
-
-       
-        if (latestDetection) {
-
-
-        const zWristPoints = {
-            
-        "yPoint1": 0.07532834261655807,
-
-        "yPoint2": 0.06799570471048355,
-
-        "yPoint3": 0.04702074080705643,
-
-        "ypoint4": 0.05103735998272896
-
+        detectionRef.current = detections
         }
+        if (detectionRef.current.landmarks) {
+          // Assuming detections.landmarks is an array of landmark objects
+          drawLandmarks(detectionRef.current.landmarks);
+          const GE = new fp.GestureEstimator(fsl_gestures);
+          const estimatedGestures = GE.estimate(detectionRef.current.landmarks[0], 6.5);
+        }
+      // }
+      // requestAnimationFrame(detectHands);
+    };
 
+    // const startWebcam = async () => {
+    //     try {
+    //         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    //         webcamRef.current.srcObject = stream;
+    //         await initializeHandDetection();
+    //     } catch (error) {
+    //         console.error("Error accessing webcam:", error);
+    //     }
+    // };
 
-            Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
+    // startWebcam();
 
-                console.log(lmVal[20])
-            })
+    // return () => {
+    //     if (webcamRef.current && webcamRef.current.srcObject) {
+    //         webcamRef.current.srcObject.getTracks().forEach(track => track.stop());
+    //     }
+    //     if (handLandmarker) {
+    //         handLandmarker.close();
+    //     }
+    //     if (animationFrameId) {
+    //         cancelAnimationFrame(animationFrameId);
+    //     }
+    // };
+  }, []);
 
-            //  Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
-                  
-            //     Object.values(lmVal).slice(0,3).forEach((indexTip) => {
-                    
-            //         const coordList = {}
-            //         let coordIdx = 1
+  const turnOffCamera = () => {
+    console.log("turned off camera")
+  }
 
-            //     Object.entries(indexTip).slice(0,3).forEach(([coordName,coordVal]) => {
-
-            //         coordList[coordName + coordIdx] = coordVal
-            //     }) 
-            //     const prevHandObjLen = Object.keys(prevHandCoord).length 
-
-            //       if (prevHandObjLen < 3) {
-            //         setPrevHandCoord(coordList)
-            //     }
-            //     else {
-            //         setCurrHandCoord(coordList)
-            //     }
-
-
-            //     const deltaVals = Object.values(prevHandCoord).map((prevCoord,idx) => {
-            //         const currCoord = Object.values(currHandCoord)[idx]
-            //             return (currCoord - prevCoord)
-            //         })
-                
-            //     if (!deltaVals.includes(NaN)) {
-            //     let i = 5
-            //     }
-                
-            //     })
-
-                
-
-            // })
-            
-              
-
-                    
-
-                    // setPrevHandCoord({
-                    //     ...prevHandCoord,
-                    //     [coordName + 1]: coordVal
-                    // })
-
-                
-                    
-                  
-            }
-          
-                        // setPrevHandCoord({
-                        //     ...prevHandCoord,
-                        //     x1 : coordVal,
-                        //     y1 :
-                
-                        // currCoord.set(coordName,coordVal)
-                }
-            
-            
-
-
-                
-          
-
-                   
-
-                
-                    
-
-                       
-
-
-                    
-
-
-            
-                
-            
-            // console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
-        
-    
-
-    
-    return (
-   
-
- <ChakraProvider>
+  return (
+    <ChakraProvider>
       <Box bgColor="#5784BA">
         <Container centerContent maxW="xl" height="100vh" pt="0" pb="0">
           <VStack spacing={4} align="center">
@@ -281,9 +185,13 @@ const Demo = () => {
 
           <Box id="webcam-container">
             {camState === "on" ? (
-              <Webcam id="webcam" ref={webcamRef} style={{transform: "scaleX(-1)"}} />
+              <Webcam
+                id="webcam"
+                ref={webcamRef}
+                style={{ transform: "scaleX(-1)" }}
+              />
             ) : (
-              <div id="webcam" background="black"></div>
+              <div id="webcam" style={{ background: "black" }}></div>
             )}
 
             {sign ? (
@@ -294,7 +202,7 @@ const Demo = () => {
                   marginRight: "auto",
                   right: "calc(50% - 50px)",
                   bottom: 100,
-                  textAlign: "-webkit-center",
+                  textAlign: "center",
                 }}
               >
                 <Text color="white" fontSize="sm" mb={1}>
@@ -348,29 +256,97 @@ const Demo = () => {
           >
             Camera
           </Button>
-
-         
-  
         </Stack>
       </Box>
     </ChakraProvider>
-    );
+  );
 };
 
 export default Demo;
 
+// const logHands = async () => {
+
+//   //        const [prevHandCoord, setPrevHandCoord] = useState({});
+//   // const [currHandCoord, setCurrHandCoord]
+
+//       if (latestDetection) {
+
+//       const zWristPoints = {
+
+//       "yPoint1": 0.07532834261655807,
+
+//       "yPoint2": 0.06799570471048355,
+
+//       "yPoint3": 0.04702074080705643,
+
+//       "ypoint4": 0.05103735998272896
+
+//       }
+
+//           Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
+
+//               console.log(lmVal[20])
+//           })
+
+//  Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
+
+//     Object.values(lmVal).slice(0,3).forEach((indexTip) => {
+
+//         const coordList = {}
+//         let coordIdx = 1
+
+//     Object.entries(indexTip).slice(0,3).forEach(([coordName,coordVal]) => {
+
+//         coordList[coordName + coordIdx] = coordVal
+//     })
+//     const prevHandObjLen = Object.keys(prevHandCoord).length
+
+//       if (prevHandObjLen < 3) {
+//         setPrevHandCoord(coordList)
+//     }
+//     else {
+//         setCurrHandCoord(coordList)
+//     }
+
+//     const deltaVals = Object.values(prevHandCoord).map((prevCoord,idx) => {
+//         const currCoord = Object.values(currHandCoord)[idx]
+//             return (currCoord - prevCoord)
+//         })
+
+//     if (!deltaVals.includes(NaN)) {
+//     let i = 5
+//     }
+
+//     })
+
+// })
+
+// setPrevHandCoord({
+//     ...prevHandCoord,
+//     [coordName + 1]: coordVal
+// })
+
+// setPrevHandCoord({
+//     ...prevHandCoord,
+//     x1 : coordVal,
+//     y1 :
+
+// currCoord.set(coordName,coordVal)
+
+// console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
+
 //  <Button onClick={() => gestureFunc()}>title</Button>
-    //  <>
-    //     <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-    //     <button onClick={logHands}>detect hand</button>
-    //     <div style={{ position: "relative" }}>
-    //         <video ref={videoRef}  autoPlay playsInline style={{transform: "scaleX(-1)"}}></video>
-    //         <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
-    //     </div>
-    // </>
+//  <>
+//     <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
+//     <button onClick={logHands}>detect hand</button>
+//     <div style={{ position: "relative" }}>
+//         <video ref={webcamRef}  autoPlay playsInline style={{transform: "scaleX(-1)"}}></video>
+//         <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
+//     </div>
+// </>
 
 //     const detectionFunc = () => {
-        
+
 //         // motionVals.landmarkMotions[0]
 
 //         // motionVals[0].landmarkMotions[0].landmarkIndex
@@ -378,31 +354,24 @@ export default Demo;
 //         motionVals[0].letter
 //         motionVals[0].landmarkMotions
 
-     
 //     motionVals.forEach((letterVal) => {
 
 //         const letter = letterVal.letter
 
 //         Object.values(letterVal.landmarkMotions).forEach((landmarkVal) => {
 
-        
 //             Object.values(landmarkVal.positions).forEach((coordName) => {
 //                 console.log(Object.values(coordName))
 //               })
-        
 
-
-          
 //         })
 
 //     } )
 
-        
-
 //     // Object.values(motionVals).forEach((letter) => {
 
 //     //     Object.entries(letter).forEach(([letter, letterVal]) => {
-        
+
 //     //         console.log(letterVal[0])
 
 //     //     })
@@ -410,7 +379,6 @@ export default Demo;
 //     // })
 //         // const coords = motionVals[0].landmarkMotions[0].positions[0]
 //         // const landmarks = detections.globalLandmarks
-        
 
 //         // Object.values(coords).forEach((val) => {
 
@@ -418,19 +386,17 @@ export default Demo;
 
 //         // })
 
-        
-
 //         // json structure = motionVals.letter.pos.landmark.coord
 
 // //     for (const [index, element] of coords.entries()) {
 // //         console.log(index, element);
 // // }
-       
+
 //         // motionVals[0].landmarkMotions[0].positions
 //         // motionVals[0].landmarkMotions[0].landmarkIndex
 //         // motionVals[0].letter
 //         // motionVals[0].landmarkMotions
-        
+
 //         // let idx = 0;
 
 //         // const motionsArr = motionVals[idx].landmarkMotions[idx]
@@ -440,21 +406,19 @@ export default Demo;
 //         //     idx++
 //         // }
 //         // console.log(idx)
-    
+
 //         // Object.values(motionVals).forEach(([val1,val2]) => {
 //         //     console.log(val1,val2)
 //         // })
 
 //         // Object.entries(motionVals).forEach(([letter, letterProps]) => {
-           
-           
-        
+
 //         // Object.values(letterProps).forEach(([newProps, newProps2])=> {
 //         //     console.log(newProps,newProps2)
 //         // })
-        
+
 //         // })
-       
+
 //         //  if (latestDetection) {
 
 //         //    Object.entries(latestDetection.worldLandmarks[0]).forEach(([lm,coord]) => {
@@ -463,86 +427,57 @@ export default Demo;
 //         //      Object.entries(coord).slice(0,3).forEach(([coordName,coordVal]) => {
 //         //         console.log(coordName, ": ", coordVal)
 //         //      })
-       
+
 //         //     })
-             
 
-            
-            
-                
-     
-
-          
 //             //   latestDetection.worldLandmarks.forEach((val,idx) => {
-              
+
 //             //     // Object.entries(coord).forEach((coordVals, idx) => {
 //             //     //     console.log(coordVals)
 //             //     //   })
-                
+
 //             //    })
 //             // })
-           
+
 //             // let indices = motionVals[0].landmarkMotions[0].landmarkIndex
 
 //             // console.log(indices)
 
-           
-
 //             // motionVals.forEach((val, idx) => {
-                
+
 //             //     const landmarkvals = val.landmarkMotions
 //             //     landmarkvals.forEach((newval, newidx) => {
 
 //             //         console.log(val.letter, newval.landmarkIndex)
 //             //     })
 //             // })
-            
-//             // latestDetection.worldLandmarks[0].forEach((val, coord)=> {
-               
-//             //     const landmarkVals = motionVals[0]
 
+//             // latestDetection.worldLandmarks[0].forEach((val, coord)=> {
+
+//             //     const landmarkVals = motionVals[0]
 
 //             //     })
 
-            
 //         //     // motionVals[0].landmarkMotions[0].positions[0].x
-            
-          
-          
 
-           
 //         //         // Object.values(motionVals.J.firstPosition[17].x).forEach((x) => {
 //         //         //     console.log(x)
 //         //         // })
-            
 
 //         }
 //         // else {
 //         //     console.log("No hand detection vals")
 //         // }
-        
+
 // // }
-
-
-
-
-
-
-
-
-
-
-
 
 // const motionSigns = () => {
 
-
-//   const videoRef = useRef(null)
+//   const webcamRef = useRef(null)
 
 //   // const modelPath = '/models/hand_landmarker.task';
 
 //   const gestureDetect = async () => {
-
 
 //     const processResult = (result) => {
 //       if (!result.gestures || result.gestures.length === 0) return;
@@ -569,7 +504,7 @@ export default Demo;
 //     let lastVideoTime = -1
 
 //     function renderLoop(): void {
-//       const video = videoRef.current?.video
+//       const video = webcamRef.current?.video
 //       if (video.currentTime !== lastVideoTime) {
 //         const gestureRecognitionResult = gestureRecognizer.recognizeForVideo(video, performance.now())
 //         processResult(video)
@@ -589,23 +524,13 @@ export default Demo;
 //   }
 
 //   gestureDetect();
-//   return (<Webcam ref={videoRef} style={{ transform: "scaleX(-1)" }} />)
+//   return (<Webcam ref={webcamRef} style={{ transform: "scaleX(-1)" }} />)
 // }
 
-
-
-
-
-
-
-
-
-
 // export default motionSigns;
-// const videoFrame = videoRef.current.video
+// const videoFrame = webcamRef.current.video
 // const videoHeight = "360px";
 // const videoWidth = "480px";
-
 
 // const handLandmarker = await HandLandmarker.createFromOptions(
 //   filesetResolver,
@@ -619,31 +544,22 @@ export default Demo;
 //   }
 // );
 
-
-
-
-
 // const detectGesture = () => {
 
 //   let gestureRecognizer: GestureRecognizer;
 
-
-//   const videoRef = useRef(null)
+//   const webcamRef = useRef(null)
 
 //   const gestureOutputRef = useRef(null)
 //   const [webcamRunning, setWebcamRunning] = useState(false);
 
 //   const canvasElement = document.getElementById("output_canvas");
 
-
-//   const video = videoRef.current
+//   const video = webcamRef.current
 //   const videoHeight = "360px";
 //   const videoWidth = "480px";
 
 //   const canvasCtx = canvasElement.getContext('2d')
-
-
-
 
 //   // const video = document.getElementById("webcam");
 //   // const canvasElement = document.getElementById("output_canvas");
@@ -666,7 +582,6 @@ export default Demo;
 
 //   // Enable the live webcam view and start detection.
 
-
 //   const createGestureRecognizer = async () => {
 //     const vision = await FilesetResolver.forVisionTasks(
 //       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
@@ -679,8 +594,6 @@ export default Demo;
 //       },
 //       runningMode: "VIDEO"
 //     });
-
-
 
 //     createGestureRecognizer();
 //     function enableCam(event) {
@@ -728,7 +641,6 @@ export default Demo;
 //       canvasCtx.clearRect(0, 0, canvasElement.current.width, canvasElement.current.height);
 //       const drawingUtils = new DrawingUtils(canvasCtx);
 
-
 //       canvasElement.current.style.height = videoHeight;
 //       webcamElement.style.height = videoHeight;
 //       canvasElement.current.style.width = videoWidth;
@@ -750,7 +662,6 @@ export default Demo;
 //           });
 //         }
 //       }
-
 
 //       const gestureOutput = gestureOutputRef.current;
 
@@ -776,7 +687,7 @@ export default Demo;
 
 //   return (
 //     <div>
-//     <Webcam ref={videoRef}/>
+//     <Webcam ref={webcamRef}/>
 //     <canvas id="output_canvas"/>
 //     </div>
 //   )
@@ -791,10 +702,6 @@ export default Demo;
 // };
 
 // detect()
-
-
-
-
 
 // import React, { useRef, useState, useEffect } from "react"
 // import * as tf from "@tensorflow/tfjs"
@@ -848,9 +755,8 @@ export default Demo;
 //   let currentSign = 0
 
 //   let gamestate = "started"
- 
 
-  // let net;
+// let net;
 
 //   async function runHandpose() {
 
@@ -864,8 +770,6 @@ export default Demo;
 // await gestureRecognizer.setOptions({runningMode: "VIDEO"})
 
 // setGestureDetect(gestureRecognizer)
-
-
 
 // detect();
 
@@ -934,8 +838,6 @@ export default Demo;
 //         // document.querySelector('.pose-data').innerHTML =JSON.stringify(estimatedGestures.poseData, null, 2);
 
 //         // console.log(estimatedGestures.poseData)
-
-      
 
 //         if (gamestate === "started") {
 //           document.querySelector("#app-title").innerText =
