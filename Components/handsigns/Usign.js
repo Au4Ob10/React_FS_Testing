@@ -35,7 +35,7 @@ uSign.addDirection(Finger.Index, FingerDirection.DiagonalUpLeft, 0.70);
 
 //Index
 uSign.addCurl(Finger.Index, FingerCurl.NoCurl, 1);
-uSign.addDirection(Finger.Index, FingerDirection, 0.70);
+uSign.addDirection(Finger.Index, FingerDirection.VerticalUp, 0.70);
 
 //Middle
 uSign.addCurl(Finger.Middle, FingerCurl.NoCurl, 1);

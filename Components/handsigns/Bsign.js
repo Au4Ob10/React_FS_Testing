@@ -1,6 +1,5 @@
 import {Finger, FingerCurl, FingerDirection, GestureDescription} from 'fingerpose';
 
-
 export const bSign = new GestureDescription('B');
 // [
 //     [

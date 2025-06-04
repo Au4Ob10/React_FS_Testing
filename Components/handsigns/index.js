@@ -26,35 +26,6 @@ import {ySign} from './Ysign';
 import {zSign} from './Zsign';
 
 
-import {Finger, FingerCurl, FingerDirection, GestureDescription} from 'fingerpose';
-
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-
-
-// aSign.addCurl(Finger.Thumb, FingerCurl.NoCurl, 1.0);
-// aSign.addDirection(Finger.Index, FingerDirection.DiagonalUpRight, 0.70);
-// // aSign.addDirection(Finger.Index, FingerDirection.DiagonalUpLeft, 0.70);
-
-// //Index
-// aSign.addCurl(Finger.Index, FingerCurl.FullCurl, 1);
-// aSign.addDirection(Finger.Index, FingerDirection.DiagonalDownLeft, 1.0);
-// // aSign.addDirection(Finger.Index, FingerDirection.DiagonalUpLeft, 0.70);
-
-// //Middle
-// aSign.addCurl(Finger.Middle, FingerCurl.FullCurl, 1);
-// aSign.addDirection(Finger.Middle, FingerDirection.DiagonalDownLeft, 0.70);
-// // aSign.addDirection(Finger.Middle, FingerDirection.DiagonalUpLeft, 0.70);
-
-// //Ring
-// aSign.addCurl(Finger.Ring, FingerCurl.FullCurl, 1);
-// aSign.addDirection(Finger.Ring, FingerDirection.DiagonalDownLeft, 0.70);
-
-// //Pinky
-// aSign.addCurl(Finger.Pinky, FingerCurl.FullCurl, 1);
-// aSign.addDirection(Finger.Pinky, FingerDirection.DiagonalDownLeft, 0.70);
-
-
 
 const Handsigns = {
     aSign,

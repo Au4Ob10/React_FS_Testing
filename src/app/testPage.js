@@ -14,24 +14,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker} from "@mediapipe/tasks-vision";
-import * as fp from "fingerpose"
-import fsl_gestures from "../../components/generateSigns"
+// import motionVals from "../../Components/fs_styles/Mexican_Motion_Vals.json"
+// import Webcam from "react-webcam";
 
-
-
-import {
-  Text,
-  Heading,
-  Button,
-  Image,
-  Stack,
-  Container,
-  Box,
-  VStack,
-  ChakraProvider,
-} from "@chakra-ui/react"
-
-import { Signimage, Signpass } from "../../components/handimage"
 
 
 
@@ -53,6 +38,8 @@ const Demo = () => {
     useEffect(() => {
         let handLandmarker;
         let animationFrameId;
+
+
 
         const initializeHandDetection = async () => {
             try {
@@ -91,11 +78,13 @@ const Demo = () => {
 };
 
 
-        const detectHands = async () => {
+
+        const detectHands = () => {
             if (videoRef.current && videoRef.current.readyState >= 2) {
                 /** @type {import("@mediapipe/tasks-vision").HandLandmarkerResult} */
-                const detections = await handLandmarker.detectForVideo(videoRef.current, performance.now());
+                const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
 
+                
                 setHandPresence(detections.handedness.length > 0);
                 setLatestDetection(detections)
 
@@ -103,8 +92,6 @@ const Demo = () => {
                 // Assuming detections.landmarks is an array of landmark objects
                 if (detections.landmarks) {
                     drawLandmarks(detections.landmarks);
-                    const GE = new fp.GestureEstimator(fsl_gestures,)
-                    const estimatedGestures = await GE.estimate(detections.landmarks,6.5)
                 }
             }
             requestAnimationFrame(detectHands);
@@ -252,122 +239,21 @@ const Demo = () => {
 
     
     return (
-   
-
- <ChakraProvider>
-      <Box bgColor="#5784BA">
-        <Container centerContent maxW="xl" height="100vh" pt="0" pb="0">
-          <VStack spacing={4} align="center">
-            <Box h="20px"></Box>
-            <Heading
-              as="h3"
-              size="md"
-              className="tutor-text"
-              color="white"
-              textAlign="center"
-            ></Heading>
-            <Box h="20px"></Box>
-          </VStack>
-
-          <Heading
-            as="h1"
-            size="lg"
-            id="app-title"
-            color="white"
-            textAlign="center"
-          >
-            🧙‍♀️ Loading the Magic 🧙‍♂️
-          </Heading>
-
-          <Box id="webcam-container">
-            {camState === "on" ? (
-              <Webcam id="webcam" ref={webcamRef} style={{transform: "scaleX(-1)"}} />
-            ) : (
-              <div id="webcam" background="black"></div>
-            )}
-
-            {sign ? (
-              <div
-                style={{
-                  position: "absolute",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  right: "calc(50% - 50px)",
-                  bottom: 100,
-                  textAlign: "-webkit-center",
-                }}
-              >
-                <Text color="white" fontSize="sm" mb={1}>
-                  detected gestures
-                </Text>
-                <Text>{messageBody}</Text>
-                <img
-                  alt="signImage"
-                  src={
-                    Signimage[sign]?.src
-                      ? Signimage[sign].src
-                      : "/loveyou_emoji.svg"
-                  }
-                  style={{
-                    height: 30,
-                  }}
-                />
-              </div>
-            ) : (
-              " "
-            )}
-          </Box>
-
-          <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
-
-          <Box
-            id="singmoji"
-            style={{
-              zIndex: 9,
-              position: "fixed",
-              top: "50px",
-              right: "30px",
-            }}
-          ></Box>
-
-          <Image h="150px" objectFit="cover" id="emojimage" />
-          {/* <pre className="pose-data" color="white" style={{position: 'fixed', top: '150px', left: '10px'}} >Pose data</pre> */}
-        </Container>
-
-        <Stack id="start-button" spacing={4} direction="row" align="center">
-          <Button
-            leftIcon={
-              camState === "on" ? (
-                <RiCameraFill size={20} />
-              ) : (
-                <RiCameraOffFill size={20} />
-              )
-            }
-            onClick={turnOffCamera}
-            colorScheme="orange"
-          >
-            Camera
-          </Button>
-
-         
-  
-        </Stack>
-      </Box>
-    </ChakraProvider>
+        <>
+        <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
+        <button onClick={logHands}>detect hand</button>
+        <div style={{ position: "relative" }}>
+            <video ref={videoRef}  autoPlay playsInline style={{transform: "scaleX(-1)"}}></video>
+            <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
+        </div>
+    </>
     );
 };
 
 export default Demo;
 
-//  <Button onClick={() => gestureFunc()}>title</Button>
-    //  <>
-    //     <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-    //     <button onClick={logHands}>detect hand</button>
-    //     <div style={{ position: "relative" }}>
-    //         <video ref={videoRef}  autoPlay playsInline style={{transform: "scaleX(-1)"}}></video>
-    //         <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
-    //     </div>
-    // </>
+
+
 
 //     const detectionFunc = () => {
         
@@ -791,348 +677,3 @@ export default Demo;
 // };
 
 // detect()
-
-
-
-
-
-// import React, { useRef, useState, useEffect } from "react"
-// import * as tf from "@tensorflow/tfjs"
-// import * as fp from "fingerpose"
-// import * as handpose from "@tensorflow-models/handpose"
-// import { FilesetResolver, HandLandmarker, GestureRecognizer} from "@mediapipe/tasks-vision";
-// import Webcam from "react-webcam"
-// import { drawHand } from "../components/handposeutil"
-// import Handsigns from "../components/handsigns"
-// import fsl_gestures from "../components/generateSigns"
-
-// import {
-//   Text,
-//   Heading,
-//   Button,
-//   Image,
-//   Stack,
-//   Container,
-//   Box,
-//   VStack,
-//   ChakraProvider,
-// } from "@chakra-ui/react"
-
-// import { Signimage, Signpass } from "../components/handimage"
-
-// import About from "../components/about"
-// import Metatags from "../components/metatags"
-
-// // import "../styles/App.css"
-
-// // import "@tensorflow/tfjs-backend-webgl"
-
-// import { RiCameraFill, RiCameraOffFill } from "react-icons/ri"
-
-// export default function Home() {
-//   const webcamRef = useRef(null)
-//   const canvasRef = useRef(null)
-//   const [messageBody, setMessageBody] = useState("")
-//   const [gestureData, setGestureData] = useState(null)
-//   const [gestureDetect,setGestureDetect] = useState(null)
-//   const [lastVideoTime, setLastVideoTime] = useState(-1)
-//   const [gestureFunc, setGestureFunc] = useState(() => () => {
-//     console.log("no gesture set yet")
-//   })
-
-//   const [camState, setCamState] = useState("on")
-
-//   const [sign, setSign] = useState(null)
-
-//   let signList = []
-//   let currentSign = 0
-
-//   let gamestate = "started"
- 
-
-  // let net;
-
-//   async function runHandpose() {
-
-//     const vision = await FilesetResolver.forVisionTasks(
-//     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm",
-// );
-//   const gestureRecognizer = await GestureRecognizer.createFromModelPath(vision,
-//     "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task"
-// );
-
-// await gestureRecognizer.setOptions({runningMode: "VIDEO"})
-
-// setGestureDetect(gestureRecognizer)
-
-
-
-// detect();
-
-// // const image = document.getElementById("image");
-// // const recognitions = gestureRecognizer.recognize();
-
-//     // const net = await handpose.load()
-
-//     _signList()
-
-//     // window.requestAnimationFrame(loop);
-
-//     setInterval(() => {
-//       detect(gestureDetect)
-//     }, 1000)
-//   }
-
-//   function _signList() {
-//     signList = generateSigns()
-//   }
-
-//   function shuffle(a) {
-//     for (let i = a.length - 1; i > 0; i--) {
-//       const j = Math.floor(Math.random() * (i + 1))
-//       ;[a[i], a[j]] = [a[j], a[i]]
-//     }
-//     return a
-//   }
-
-//   function generateSigns() {
-//     const password = shuffle(Signpass)
-//     return password
-//   }
-
-//   async function detect() {
-//     // Check data is available
-//     if (
-//       typeof webcamRef.current !== "undefined" &&
-//       webcamRef.current !== null &&
-//       webcamRef.current.video.readyState === 4
-//     ) {
-//       // Get Video Properties
-//       const video = webcamRef.current.video
-//       const videoWidth = webcamRef.current.video.videoWidth
-//       const videoHeight = webcamRef.current.video.videoHeight
-
-//       // Set video width
-//       webcamRef.current.video.width = videoWidth
-//       webcamRef.current.video.height = videoHeight
-
-//       // Set canvas height and width
-//       canvasRef.current.width = videoWidth
-//       canvasRef.current.height = videoHeight
-
-//       // Make Detections
-//       gestureRecognize
-//       const hand = gestureDetect.recognizeForVideo(video)
-//       gestureRe
-//       // const hand = await net.estimateHands(video)
-
-//       if (hand.length > 0) {
-//         //loading the fingerpose model
-//         const GE = new fp.GestureEstimator(fsl_gestures)
-
-//         const estimatedGestures = await GE.estimate(hand[0].landmarks, 6.5)
-//         // document.querySelector('.pose-data').innerHTML =JSON.stringify(estimatedGestures.poseData, null, 2);
-
-//         // console.log(estimatedGestures.poseData)
-
-      
-
-//         if (gamestate === "started") {
-//           document.querySelector("#app-title").innerText =
-//             "Make a 👍 gesture with your hand to start"
-//         }
-
-//         if (
-//           estimatedGestures.gestures !== undefined &&
-//           estimatedGestures.gestures.length > 0
-//         ) {
-//           const confidence = estimatedGestures.gestures.map(p => p.confidence)
-//           const maxConfidence = confidence.indexOf(
-//             Math.max.apply(undefined, confidence)
-//           )
-
-//           //setting up game state, looking for thumb emoji
-//           if (
-//             estimatedGestures.gestures[maxConfidence].name === "thumbs_up" &&
-//             gamestate !== "played"
-//           ) {
-//             _signList()
-//             gamestate = "played"
-//             document.getElementById("emojimage").classList.add("play")
-//             document.querySelector(".tutor-text").innerText =
-//               "make a hand gesture based on letter shown below"
-//           } else if (gamestate === "played") {
-//             document.querySelector("#app-title").innerText = ""
-
-//             //looping the sign list
-//             if (currentSign === signList.length) {
-//               _signList()
-//               currentSign = 0
-//               return
-//             }
-
-//             // console.log(signList[currentSign].src.src)
-
-//             //game play state
-
-//             if (
-//               typeof signList[currentSign].src.src === "string" ||
-//               signList[currentSign].src.src instanceof String
-//             ) {
-//               document
-//                 .getElementById("emojimage")
-//                 .setAttribute("src", signList[currentSign].src.src)
-//               if (
-//                 signList[currentSign].alt ===
-//                 estimatedGestures.gestures[maxConfidence].name
-//               ) {
-//                 currentSign++
-//               }
-//               setSign(estimatedGestures.gestures[maxConfidence].name)
-
-//               let currLetter = estimatedGestures.gestures[maxConfidence].name
-//               let gestureProps = estimatedGestures.poseData
-
-//               setGestureFunc(() => () => {
-//                 console.log(gestureProps)
-//               })
-
-//               if (currLetter !== "thumbs_up") {
-//                 setMessageBody(messageBody => messageBody + currLetter)
-//               }
-//             }
-//           } else if (gamestate === "finished") {
-//             return
-//           }
-//         }
-//       }
-//       // Draw hand lines
-//       const ctx = canvasRef.current.getContext("2d")
-//       drawHand(hand, ctx)
-//     }
-//   }
-
-//   //   if (sign) {
-//   //     console.log(sign, Signimage[sign])
-//   //   }
-
-//   useEffect(() => {
-//     runHandpose()
-//   }, [])
-
-//   const turnOffCamera = () => {
-//     if (camState === "on") {
-//       setCamState("off")
-//     } else {
-//       setCamState("on")
-//     }
-//   }
-
-//   const testFunc = () => {
-//     console.log("test")
-//   }
-
-//   return (
-//     <ChakraProvider>
-//       <Metatags />
-//       <Box bgColor="#5784BA">
-//         <Container centerContent maxW="xl" height="100vh" pt="0" pb="0">
-//           <VStack spacing={4} align="center">
-//             <Box h="20px"></Box>
-//             <Heading
-//               as="h3"
-//               size="md"
-//               className="tutor-text"
-//               color="white"
-//               textAlign="center"
-//             ></Heading>
-//             <Box h="20px"></Box>
-//           </VStack>
-
-//           <Heading
-//             as="h1"
-//             size="lg"
-//             id="app-title"
-//             color="white"
-//             textAlign="center"
-//           >
-//             🧙‍♀️ Loading the Magic 🧙‍♂️
-//           </Heading>
-
-//           <Box id="webcam-container">
-//             {camState === "on" ? (
-//               <Webcam id="webcam" ref={webcamRef} />
-//             ) : (
-//               <div id="webcam" background="black"></div>
-//             )}
-
-//             {sign ? (
-//               <div
-//                 style={{
-//                   position: "absolute",
-//                   marginLeft: "auto",
-//                   marginRight: "auto",
-//                   right: "calc(50% - 50px)",
-//                   bottom: 100,
-//                   textAlign: "-webkit-center",
-//                 }}
-//               >
-//                 <Text color="white" fontSize="sm" mb={1}>
-//                   detected gestures
-//                 </Text>
-//                 <Text>{messageBody}</Text>
-//                 <img
-//                   alt="signImage"
-//                   src={
-//                     Signimage[sign]?.src
-//                       ? Signimage[sign].src
-//                       : "/loveyou_emoji.svg"
-//                   }
-//                   style={{
-//                     height: 30,
-//                   }}
-//                 />
-//               </div>
-//             ) : (
-//               " "
-//             )}
-//           </Box>
-
-//           <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
-
-//           <Box
-//             id="singmoji"
-//             style={{
-//               zIndex: 9,
-//               position: "fixed",
-//               top: "50px",
-//               right: "30px",
-//             }}
-//           ></Box>
-
-//           <Image h="150px" objectFit="cover" id="emojimage" />
-//           {/* <pre className="pose-data" color="white" style={{position: 'fixed', top: '150px', left: '10px'}} >Pose data</pre> */}
-//         </Container>
-
-//         <Stack id="start-button" spacing={4} direction="row" align="center">
-//           <Button
-//             leftIcon={
-//               camState === "on" ? (
-//                 <RiCameraFill size={20} />
-//               ) : (
-//                 <RiCameraOffFill size={20} />
-//               )
-//             }
-//             onClick={turnOffCamera}
-//             colorScheme="orange"
-//           >
-//             Camera
-//           </Button>
-
-//           <Button onClick={() => gestureFunc()}>title</Button>
-//           <About />
-//         </Stack>
-//       </Box>
-//     </ChakraProvider>
-//   )
-// }
