@@ -14,7 +14,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import * as fp from "fingerpose";
-import fsl_gestures from "../../components/generateSigns";
+import fsl_gestures from "../../../components/generateSigns";
 import Webcam from "react-webcam";
 
 import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
@@ -31,7 +31,7 @@ import {
   ChakraProvider,
 } from "@chakra-ui/react";
 
-import { Signimage, Signpass } from "../../components/handimage";
+import { Signimage, Signpass } from "../../../components/handimage";
 
 const Demo = () => {
   // let [idx,setIdx] = useState(0)
