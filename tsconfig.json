@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "baseUrl": ".",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -9,11 +10,14 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src"]
+    },
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -29,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/page.tsx"
+    "src/app/page.js"
   ],
   "exclude": [
     "node_modules"

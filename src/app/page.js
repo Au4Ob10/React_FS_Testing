@@ -1,25 +1,21 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
-import type { HandLandmarkerResult } from "@mediapipe/tasks-vision";
 import * as fp from "fingerpose";
 import fsl_gestures from "../../components/generateSigns";
-import Webcam from "react-webcam";
 
-import {
-  Text,
-  Heading,
-  Button,
-  Image,
-  Stack,
-  Container,
-  Box,
-  VStack,
-  ChakraProvider,
-} from "@chakra-ui/react";
+// import {
+//   Text,
+//   Heading,
+//   Button,
+//   Stack,
+//   Container,
+//   Box,
+//   VStack,
+//   ChakraProvider
+// } from "@chakra-ui/react"
 
-import { Signimage, Signpass } from "../../components/handimage";
+import { Signimage } from "../../components/handimage";
 import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
 
 const Demo = () => {
@@ -31,13 +27,8 @@ const Demo = () => {
   const [sign, setSign] = useState(null);
   const [messageBody, setMessageBody] = useState("");
   const [currentSign, setCurrentSign] = useState(0);
-  const [textTitle, setTextTitle] = useState("🧙‍♀️ Loading the Magic 🧙‍♂️")
-  const [tutorText, setTutorText] = useState("")
-
-  const imageRef = useRef<HTMLImageElement>(null);
-
-  let signList = [];
-  const hand_landmarker_task = "/models/hand_landmarker.task";
+  const [textTitle, setTextTitle] = useState("🧙‍♀️ Loading the Magic 🧙‍♂️");
+  const [tutorText, setTutorText] = useState("");
 
   useEffect(() => {
     let handLandmarker;
@@ -51,30 +42,13 @@ const Demo = () => {
         handLandmarker = await HandLandmarker.createFromOptions(vision, {
           baseOptions: { modelAssetPath: hand_landmarker_task },
           numHands: 2,
-          runningMode: "VIDEO",
+          runningMode: "video",
         });
         detectHands();
       } catch (error) {
         console.error("Error initializing hand detection:", error);
       }
     };
-
-    // const _signList = () => {
-    //   signList = generateSigns();
-    // };
-
-    // const shuffle = (a) => {
-    //   for (let i = a.length - 1; i > 0; i--) {
-    //     const j = Math.floor(Math.random() * (i + 1));
-    //     [a[i], a[j]] = [a[j], a[i]];
-    //   }
-    //   return a;
-    // };
-
-    // const generateSigns = () => {
-    //   const password = shuffle(Signpass);
-    //   return password;
-    // };
 
     const drawLandmarks = (landmarksArray) => {
       const canvas = canvasRef.current;
@@ -94,94 +68,18 @@ const Demo = () => {
       });
     };
 
-    const detectHands = async () => {
+    const detectHands = () => {
       if (videoRef.current && videoRef.current.readyState >= 2) {
-        const detections: HandLandmarkerResult =
-          await handLandmarker.detectForVideo(
-            videoRef.current,
-            performance.now()
-          );
-
+        const detections = handLandmarker.detectForVideo(
+          videoRef.current,
+          performance.now()
+        );
         setHandPresence(detections.handedness.length > 0);
 
-        const landmarks = detections.landmarks;
 
         // Assuming detections.landmarks is an array of landmark objects
-        if (landmarks) {
-          drawLandmarks(landmarks);
-          const GE = new fp.GestureEstimator(fsl_gestures);
-          const estimatedGestures = GE.estimate(detections.landmarks[0], 6.5);
-          setGameState("started")
-
-          if (gameState === "started") {
-            setTextTitle("Make a 👍 gesture with your hand to start")
-          } 
-
-          if (
-            estimatedGestures.gestures !== undefined &&
-            estimatedGestures.gestures.length > 0
-          ) {
-            const confidence = estimatedGestures.gestures.map((p) => p.score);
-            const maxConfidence = confidence.indexOf(
-              Math.max.apply(undefined, confidence)
-            );
-
-            //setting up game state, looking for thumb emoji
-            if (
-              estimatedGestures.gestures[maxConfidence].name === "thumbs_up" &&
-              gameState !== "played"
-            ) {
-              // _signList();
-              setGameState("played");
-              imageRef.current.classList.add("play");
-              setTutorText("make a hand gesture based on letter shown below")
-            } else if (gameState === "played") {
-              setTextTitle("")
-
-              //looping the sign list
-              // if (currentSign === signList.length) {
-              //   _signList();
-
-              //   if (currentSign !== 0) {
-              //     setCurrentSign(0);
-              //   }
-              //   return;
-              // }
-
-              // console.log(signList[currentSign].src.src)
-
-              //game play state
-
-              if (
-                typeof signList[currentSign].src.src === "string" ||
-                signList[currentSign].src.src instanceof String
-              ) {
-                document
-                  .getElementById("emojimage")
-                  .setAttribute("src", signList[currentSign].src.src);
-                if (
-                  signList[currentSign].alt ===
-                  estimatedGestures.gestures[maxConfidence].name
-                ) {
-                  setCurrentSign(currentSign + 1);
-                }
-                setSign(estimatedGestures.gestures[maxConfidence].name);
-
-                let currLetter = estimatedGestures.gestures[maxConfidence].name;
-                let gestureProps = estimatedGestures.poseData;
-
-                // setGestureFunc(() => () => {
-                //   console.log(gestureProps)
-                // })
-
-                if (currLetter !== "thumbs_up") {
-                  setMessageBody((messageBody) => messageBody + currLetter);
-                }
-              }
-            } else if (gameState === "finished") {
-              return;
-            }
-          }
+        if (detections.landmarks) {
+          drawLandmarks(detections.landmarks);
         }
       }
       requestAnimationFrame(detectHands);
@@ -203,9 +101,7 @@ const Demo = () => {
 
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
-        videoRef.current.srcObject
-          .getTracks()
-          .forEach((track: { stop: () => any }) => track.stop());
+        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       }
       if (handLandmarker) {
         handLandmarker.close();
@@ -216,112 +112,17 @@ const Demo = () => {
     };
   }, []);
 
-  const turnOffCamera = () => {
-    camState === "on" ? setCamState("off") : setCamState("on");
-  };
-
   return (
-    <ChakraProvider>
-      <Box bgColor="#5784BA">
-        <Container centerContent maxW="xl" height="100vh" pt="0" pb="0">
-          <VStack spacing={4} align="center">
-            <Box h="20px"></Box>
-            <Heading
-              as="h3"
-              size="md"
-              className="tutor-text"
-              color="white"
-              textAlign="center"
-            ></Heading>
-            {tutorText}
-            <Box h="20px"></Box>
-          </VStack>
-
-          <Heading
-            as="h1"
-            size="lg"
-            id="app-title"
-            color="white"
-            textAlign="center"
-          ></Heading>
-            {textTitle}
-          <Box id="webcam-container">
-            {camState === "on" ? (
-              <video
-                id="webcam"
-                autoPlay
-                playsInline
-                style={{ transform: "scaleX(-1)" }}
-                ref={videoRef}
-              />
-            ) : (
-              <div id="webcam" style={{ background: "black" }}></div>
-            )}
-
-            {sign ? (
-              <div
-                style={{
-                  position: "absolute",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  right: "calc(50% - 50px)",
-                  bottom: 100,
-                  textAlign: "center",
-                }}
-              >
-                <Text color="white" fontSize="sm" mb={1}>
-                  detected gestures
-                </Text>
-                <img
-                  alt="signImage"
-                  ref={imageRef}
-                  src={
-                    Signimage[sign]?.src
-                      ? Signimage[sign].src
-                      : "/loveyou_emoji.svg"
-                  }
-                  style={{
-                    height: 30,
-                  }}
-                />
-              </div>
-            ) : (
-              " "
-            )}
-          </Box>
-
-          <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
-
-          <Box
-            id="singmoji"
-            style={{
-              zIndex: 9,
-              position: "fixed",
-              top: "50px",
-              right: "30px",
-            }}
-          ></Box>
-
-          {/* <pre className="pose-data" color="white" style={{position: 'fixed', top: '150px', left: '10px'}} >Pose data</pre> */}
-        </Container>
-
-        <Stack id="start-button" spacing={4} direction="row" align="center">
-          <Button
-            leftIcon={
-              camState === "on" ? (
-                <RiCameraFill size={20} />
-              ) : (
-                <RiCameraOffFill size={20} />
-              )
-            }
-            onClick={turnOffCamera}
-            colorScheme="orange"
-          >
-            Toggle Camera
-          </Button>
-        </Stack>
-      </Box>
-    </ChakraProvider>
+    <>
+      <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
+      <div style={{ position: "relative" }}>
+        <video ref={videoRef} autoPlay playsInline></video>
+        <canvas
+          ref={canvasRef}
+          style={{ backgroundColor: "black", width: "600px", height: "480px" }}
+        ></canvas>
+      </div>
+    </>
   );
 };
 
