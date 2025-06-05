@@ -12,12 +12,21 @@
 // detection.landmark_idx.globallandmarks.landmarkcoor
 
 import React, { useEffect, useRef, useState } from "react";
+<<<<<<< HEAD:src/app/old_js/page.tsx
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import * as fp from "fingerpose";
 import fsl_gestures from "../../../components/generateSigns";
 import Webcam from "react-webcam";
 
 import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
+=======
+import { FilesetResolver, HandLandmarker} from "@mediapipe/tasks-vision";
+import * as fp from "fingerpose"
+import fsl_gestures from "../../components/generateSigns"
+import Webcam from "react-webcam";
+
+import { RiCameraFill, RiCameraOffFill } from "react-icons/ri"
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
 
 import {
   Text,
@@ -34,6 +43,7 @@ import {
 import { Signimage, Signpass } from "../../../components/handimage";
 
 const Demo = () => {
+<<<<<<< HEAD:src/app/old_js/page.tsx
   // let [idx,setIdx] = useState(0)
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -43,6 +53,19 @@ const Demo = () => {
   const [gameState, setGameState] = useState("started");
   const handLandmarkerRef = useRef(null);
   // const [currDetections, setCurrDetections] = useState(null);
+=======
+    // let [idx,setIdx] = useState(0)
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [handPresence, setHandPresence] = useState(null);
+    const [latestDetection, setLatestDetection] = useState(null);
+    const [prevHandCoord, setPrevHandCoord] = useState({});
+    const [currHandCoord, setCurrHandCoord] = useState({});
+    const [coordDeltaVals, setCoordDeltaVals] = useState({});
+    const [stateTest, setstateTest] = useState({})
+     const [camState, setCamState] = useState("on")
+    
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
 
   // const [handPresence, setHandPresence] = useState(null);
   // const [latestDetection, setLatestDetection] = useState(null);
@@ -231,8 +254,26 @@ const Demo = () => {
     }
   };
 
+<<<<<<< HEAD:src/app/old_js/page.tsx
   return (
     <ChakraProvider>
+=======
+
+            
+                
+            
+            // console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
+        
+    
+const turnOffCamera = () => {
+    console.log("test")
+}
+    
+    return (
+   
+
+ <ChakraProvider>
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
       <Box bgColor="#5784BA">
         <Container centerContent maxW="xl" height="100vh" pt="0" pb="0">
           <VStack spacing={4} align="center">
@@ -260,15 +301,20 @@ const Demo = () => {
 
           <Box id="webcam-container">
             {camState === "on" ? (
+<<<<<<< HEAD:src/app/old_js/page.tsx
               <Webcam
                 id="webcam"
                 ref={videoRef}
                 style={{ transform: "scaleX(-1)" }}
               />
+=======
+              <Webcam id="webcam" ref={videoRef} style={{transform: "scaleX(-1)"}} />
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
             ) : (
               <div id="webcam" style={{ color: "black" }}></div>
             )}
 
+<<<<<<< HEAD:src/app/old_js/page.tsx
             {sign ? (
               <div
                 style={{
@@ -301,6 +347,9 @@ const Demo = () => {
             ) : (
               " "
             )}
+=======
+           
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
           </Box>
 
           <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
@@ -341,6 +390,7 @@ const Demo = () => {
 
 export default Demo;
 
+<<<<<<< HEAD:src/app/old_js/page.tsx
 // const drawLandmarks = (landmarksArray) => {
 //   const canvas = canvasRef.current;
 //   const ctx = canvas.getContext("2d");
@@ -453,6 +503,8 @@ export default Demo;
 // currCoord.set(coordName,coordVal)
 
 // console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
+=======
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
 
 //  {sign ? (
 //               <div
