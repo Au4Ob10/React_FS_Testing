@@ -13,7 +13,10 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+<<<<<<< HEAD
     "chakra-ui": "^0.3.9",
+=======
+>>>>>>> parent of 9b2aa84 (Revert "working chakraprovider")
     "framer-motion": "^12.16.0",
     "next": "15.3.1",
     "react": "18.2.0",

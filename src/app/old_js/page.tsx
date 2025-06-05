@@ -26,7 +26,6 @@ import fsl_gestures from "../../components/generateSigns"
 import Webcam from "react-webcam";
 
 import { RiCameraFill, RiCameraOffFill } from "react-icons/ri"
->>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
 
 import {
   Text,
@@ -65,19 +64,9 @@ const Demo = () => {
     const [stateTest, setstateTest] = useState({})
      const [camState, setCamState] = useState("on")
     
->>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
 
-  // const [handPresence, setHandPresence] = useState(null);
-  // const [latestDetection, setLatestDetection] = useState(null);
-  // const [prevHandCoord, setPrevHandCoord] = useState({});
-  // const [currHandCoord, setCurrHandCoord] = useState({});
-  // const [coordDeltaVals, setCoordDeltaVals] = useState({});
-  // const [stateTest, setstateTest] = useState({})
-  const [camState, setCamState] = useState("on");
-  const [sign, setSign] = useState(null);
-  const [messageBody, setMessageBody] = useState("");
 
-  const hand_landmarker_task = "/models/hand_landmarker.task";
+    const hand_landmarker_task = "/models/hand_landmarker.task"
 
   let signList = [];
   let currentSign = 0;
@@ -301,55 +290,12 @@ const turnOffCamera = () => {
 
           <Box id="webcam-container">
             {camState === "on" ? (
-<<<<<<< HEAD:src/app/old_js/page.tsx
-              <Webcam
-                id="webcam"
-                ref={videoRef}
-                style={{ transform: "scaleX(-1)" }}
-              />
-=======
               <Webcam id="webcam" ref={videoRef} style={{transform: "scaleX(-1)"}} />
->>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
             ) : (
-              <div id="webcam" style={{ color: "black" }}></div>
+              <div id="webcam" background="black"></div>
             )}
 
-<<<<<<< HEAD:src/app/old_js/page.tsx
-            {sign ? (
-              <div
-                style={{
-                  position: "absolute",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  right: "calc(50% - 50px)",
-                  bottom: 100,
-                  textAlign: "center",
-
-                  //  textAlign: "-webkit-center",
-                }}
-              >
-                <Text color="white" fontSize="sm" mb={1}>
-                  detected gestures
-                </Text>
-                <Text>{messageBody}</Text>
-                <img
-                  alt="signImage"
-                  src={
-                    Signimage[sign]?.src
-                      ? Signimage[sign].src
-                      : "/loveyou_emoji.svg"
-                  }
-                  style={{
-                    height: 30,
-                  }}
-                />
-              </div>
-            ) : (
-              " "
-            )}
-=======
            
->>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
           </Box>
 
           <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
@@ -390,121 +336,6 @@ const turnOffCamera = () => {
 
 export default Demo;
 
-<<<<<<< HEAD:src/app/old_js/page.tsx
-// const drawLandmarks = (landmarksArray) => {
-//   const canvas = canvasRef.current;
-//   const ctx = canvas.getContext("2d");
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
-//   ctx.fillStyle = "white";
-
-//   landmarksArray.forEach((landmarks) => {
-//     landmarks.forEach((landmark) => {
-//       const x = landmark.x * canvas.width;
-//       const y = landmark.y * canvas.height;
-
-//       ctx.beginPath();
-//       ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
-//       ctx.fill();
-//     });
-//   });
-// };
-
-// const startWebcam = async () => {
-//     try {
-//         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-//         videoRef.current.srcObject = stream;
-//         await initializeHandDetection();
-//     } catch (error) {
-//         console.error("Error accessing webcam:", error);
-//     }
-// };
-
-// startWebcam();
-
-// return () => {
-//     if (videoRef.current && videoRef.current.srcObject) {
-//         videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-//     }
-//     if (handLandmarker) {
-//         handLandmarker.close();
-//     }
-//     if (animationFrameId) {
-//         cancelAnimationFrame(animationFrameId);
-//     }
-// };
-// }, []);
-
-// const logHands = async () => {
-//        const [prevHandCoord, setPrevHandCoord] = useState({});
-// const [currHandCoord, setCurrHandCoord]
-
-// if (latestDetection) {
-
-//       const zWristPoints = {
-
-//       "yPoint1": 0.07532834261655807,
-
-//       "yPoint2": 0.06799570471048355,
-
-//       "yPoint3": 0.04702074080705643,
-
-//       "ypoint4": 0.05103735998272896
-
-//       }
-
-//           Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
-
-//               console.log(lmVal[20])
-//           })
-
-//  Object.values(latestDetection.worldLandmarks).forEach((lmVal) => {
-
-//     Object.values(lmVal).slice(0,3).forEach((indexTip) => {
-
-//         const coordList = {}
-//         let coordIdx = 1
-
-//     Object.entries(indexTip).slice(0,3).forEach(([coordName,coordVal]) => {
-
-//         coordList[coordName + coordIdx] = coordVal
-//     })
-//     const prevHandObjLen = Object.keys(prevHandCoord).length
-
-//       if (prevHandObjLen < 3) {
-//         setPrevHandCoord(coordList)
-//     }
-//     else {
-//         setCurrHandCoord(coordList)
-//     }
-
-//     const deltaVals = Object.values(prevHandCoord).map((prevCoord,idx) => {
-//         const currCoord = Object.values(currHandCoord)[idx]
-//             return (currCoord - prevCoord)
-//         })
-
-//     if (!deltaVals.includes(NaN)) {
-//     let i = 5
-//     }
-
-//     })
-
-// })
-
-// setPrevHandCoord({
-//     ...prevHandCoord,
-//     [coordName + 1]: coordVal
-// })
-
-// setPrevHandCoord({
-//     ...prevHandCoord,
-//     x1 : coordVal,
-//     y1 :
-
-// currCoord.set(coordName,coordVal)
-
-// console.log(latestDetection.worldLandmarks[0].slice(7,9).slice(0,2))
-=======
->>>>>>> parent of 9b2aa84 (Revert "working chakraprovider"):src/app/page.js
 
 //  {sign ? (
 //               <div
