@@ -17,6 +17,7 @@ import fsl_gestures from "../../components/generateSigns";
 
 import { Signimage } from "../../components/handimage";
 import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
+import { number } from "framer-motion";
 
 const Demo = () => {
   const videoRef = useRef(null);
@@ -29,9 +30,10 @@ const Demo = () => {
   const [currentSign, setCurrentSign] = useState(0);
   const [textTitle, setTextTitle] = useState("🧙‍♀️ Loading the Magic 🧙‍♂️");
   const [tutorText, setTutorText] = useState("");
-  
- const hand_landmarker_task = "/models/hand_landmarker.task";
+  const [handDetections, setHandDetections] = useState(null)
 
+  const hand_landmarker_task = "/models/hand_landmarker.task";
+        
   useEffect(() => {
     let handLandmarker;
     let animationFrameId;
@@ -43,8 +45,8 @@ const Demo = () => {
         );
         handLandmarker = await HandLandmarker.createFromOptions(vision, {
           baseOptions: { modelAssetPath: hand_landmarker_task },
-          numHands: 2,
-          runningMode: "video",
+          numHands: 1,
+          runningMode: "VIDEO",
         });
         detectHands();
       } catch (error) {
@@ -52,117 +54,81 @@ const Demo = () => {
       }
     };
 
-  
-    const drawLandmarks = (prediction) => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-  
-      const fingerLandmarks = {
-    thumb:[0,1,2,3,4],
-    index:[0,5,6,7,8],
-    mid:[0,9,10,11,12],
-    ring:[0,13,14,15,16],
-    pinky:[0,17,18,19,20]
-  };
+const drawLandmarks = (landmarksArray: any) => {
+  const canvas = canvasRef.current;
+  const video = videoRef.current;
+  const ctx = canvas.getContext('2d');
 
-  if(prediction.length > 0){
-        //loop to the preditions
-        prediction.forEach((prediction) =>{
-            //grab landmarks
-            const landmarks = prediction.landmarks;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            //loop the finger joints
-            for(let j = 0; j<Object.keys(fingerJoints).length; j++){
-                let finger = Object.keys(fingerJoints)[j];
-                for(let k=0; k<fingerJoints[finger].length -1; k++){
-                    const firstJointIndex = fingerJoints[finger][k];
-                    const secondJointIndex = fingerJoints[finger][k+1];
+  if (!ctx || !landmarksArray || landmarksArray.length === 0) return;
 
-                    //draw joints
-                    ctx.beginPath();
-                    ctx.moveTo(
-                        landmarks[firstJointIndex][0],
-                        landmarks[firstJointIndex][1]);
-                        ctx.lineTo(
-                            landmarks[secondJointIndex][0],
-                            landmarks[secondJointIndex][1]
-                        );
-                    ctx.strokeStyle = "gold";
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                }
-            }
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = "green";
+  ctx.lineWidth = 2;
 
-            //loop to landmarks and draw them
-            for(let i = 0; i<landmarks.length; i++){
-                //get x point
-                const x = landmarks[i][0];
+  const handJoints = {
+    "thumb": [0, 1, 2, 3, 4],
+    "index": [5, 6, 7, 8],
+    "middle": [9, 10, 11, 12],
+    "ring": [13, 14, 15, 16],
+    "pinky": [17, 18, 19, 20],
+    "palm": [5, 9, 13, 17, 0, 5]
+  }
 
-                //get y point
-                const y = landmarks[i][1];
-
-                //start drawing
-                ctx.beginPath();
-                ctx.arc(x,y, 5, 0, 3*Math.PI);
-
-                //set line color
-                ctx.fillStyle = "navy";
-                ctx.fill();
-            }
-        })
-    }
+  Object.values(handJoints).forEach((jointArr) => {
 
 
+    const arrLen = jointArr.length
+      const lineStartArr = jointArr.slice(0, arrLen-1);
+      const lineEndArr = jointArr.slice(1);
 
-      // landmarksArray.forEach((landmarks) => {
-      //   landmarks.forEach((landmark) => {
+    lineStartArr.forEach((startIdx, i) => {
 
-          // Object.keys(fingerLandmarks).forEach((finger) => {
-          //   Object.keys(finger).forEach((fingerjoint) => {
-              
-          //     const firstJointIndex = fingerLandmarks[finger][fingerjoint]
-          //     const secondJointIndex = fingerLandmarks[finger][fingerjoint + 1]
+      const lineStart = landmarksArray[0][startIdx];
+      const lineEnd = landmarksArray[0][lineEndArr[i]];
 
-          //      ctx.beginPath();
-          //      ctx.moveTo(
-          //       fingerLandmarks[firstJointIndex][0],
-          //       fingerLandmarks[firstJointIndex][1]
-          //      )
-          //      ctx.lineTo(
-          //       fingerLandmarks[secondJointIndex][0],
-          //       fingerLandmarks[secondJointIndex][1]
-          //      );
-          //      ctx.strokeStyle = "gold";
-          //      ctx.lineWidth = 2;
-          //      ctx.stroke()
+      ctx.beginPath()
+      ctx.moveTo(lineStart.x * canvas.width, lineStart.y * canvas.height);
+      ctx.lineTo(lineEnd.x * canvas.width, lineEnd.y * canvas.height);
+      ctx.stroke();
+    });
+  });
 
-          //   })
-          // })
-          // const x = landmark.x * canvas.width;
-          // const y = landmark.y * canvas.height;
+  ctx.fillStyle = 'red';
+  landmarksArray.forEach(landmarks => {
+    landmarks.forEach(landmark => {
+      const x = landmark.x * canvas.width;
+      const y = landmark.y * canvas.height;
 
-         
-          // ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
-          // ctx.fill();
-        }
-      // );
-    //   });
-    // };
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+  });
+    
+};
 
     const detectHands = () => {
+     
       if (videoRef.current && videoRef.current.readyState >= 2) {
         const detections = handLandmarker.detectForVideo(
           videoRef.current,
           performance.now()
         );
+        
+ 
+      
         setHandPresence(detections.handedness.length > 0);
 
+        if (detections) {
+          setHandDetections(detections)
+        }
 
         // Assuming detections.landmarks is an array of landmark objects
-        // if (detections.landmarks) {
-          // drawLandmarks(detections.landmarks);
-          drawLandmarks(detections);
-        // }
+        if (detections.landmarks) {
+          drawLandmarks(detections.landmarks);
+        }
       }
       requestAnimationFrame(detectHands);
     };
@@ -194,14 +160,42 @@ const Demo = () => {
     };
   }, []);
 
+  const detectHand = () => {
+    if (handDetections) {
+      console.log(handDetections)
+    }
+  }
+
   return (
     <>
       <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-      <div style={{ position: "relative" }}>
-        <video ref={videoRef} autoPlay playsInline></video>
+      <div>
+        <button onClick={detectHand}>detect hand</button>
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+            transform: "scaleX(-1)",
+          }}
+        ></video>
         <canvas
           ref={canvasRef}
-          // style={{ backgroundColor: "black", width: "600px", height: "480px" }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            zIndex: 2,
+            width: "100%",
+            height: "100%",
+            transform: "scaleX(-1)",
+          }}
         ></canvas>
       </div>
     </>
