@@ -15,9 +15,8 @@ import fsl_gestures from "../../components/generateSigns";
 //   ChakraProvider
 // } from "@chakra-ui/react"
 
-import { Signimage } from "../../components/handimage";
-import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
-import { number } from "framer-motion";
+// import { Signimage } from "../../components/handimage";
+// import { RiCameraFill, RiCameraOffFill } from "react-icons/ri";
 
 const Demo = () => {
   const videoRef = useRef(null);
@@ -49,12 +48,16 @@ const Demo = () => {
           runningMode: "VIDEO",
         });
         detectHands();
+
+
+
       } catch (error) {
         console.error("Error initializing hand detection:", error);
       }
     };
 
 const drawLandmarks = (landmarksArray: any) => {
+  
   const canvas = canvasRef.current;
   const video = videoRef.current;
   const ctx = canvas.getContext('2d');
@@ -77,7 +80,6 @@ const drawLandmarks = (landmarksArray: any) => {
   }
 
   Object.values(handJoints).forEach((jointArr) => {
-
 
     const arrLen = jointArr.length
       const lineStartArr = jointArr.slice(0, arrLen-1);
@@ -110,24 +112,47 @@ const drawLandmarks = (landmarksArray: any) => {
 };
 
     const detectHands = () => {
+
+      const video = videoRef.current
      
-      if (videoRef.current && videoRef.current.readyState >= 2) {
+      if (video && video.readyState >= 2) {
         const detections = handLandmarker.detectForVideo(
-          videoRef.current,
+          video,
           performance.now()
         );
         
- 
-      
         setHandPresence(detections.handedness.length > 0);
-
-        if (detections) {
-          setHandDetections(detections)
-        }
 
         // Assuming detections.landmarks is an array of landmark objects
         if (detections.landmarks) {
           drawLandmarks(detections.landmarks);
+          setHandDetections(detections)
+
+
+        const detectSign = async (handLandmarker) => {
+
+
+        const GE = new fp.GestureEstimator(fsl_gestures)
+
+        const detector = await handLandmarker;
+
+        const hand = await detector.estimateHands(video, {flipHorizontal: true})
+
+        const est = GE.estimate(hand.keypoints3D, 9)
+
+        if (est.gestures.length > 0) {
+
+          let result = est.gestures.reduce((gest1,gest2) => {
+            return (gest1.score > gest2.score) ? gest1 : gest2
+          })
+
+          const chosenHand = hand.handedness.toLowerCase();
+
+          setMessageBody(m => m + result.name)
+        }
+
+          }
+
         }
       }
       requestAnimationFrame(detectHands);
@@ -197,6 +222,9 @@ const drawLandmarks = (landmarksArray: any) => {
             transform: "scaleX(-1)",
           }}
         ></canvas>
+        <div style={{zIndex: 3}}>
+          sosdf
+        </div>
       </div>
     </>
   );
