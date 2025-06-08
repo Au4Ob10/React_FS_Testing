@@ -3,6 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import * as fp from "fingerpose";
 import fsl_gestures from "../../components/generateSigns";
+import * as tf from '@tensorflow/tfjs-core';
+import '@tensorflow/tfjs-backend-webgl';
+import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
+import type { Hand } from "@tensorflow-models/hand-pose-detection";
+import '@tensorflow/tfjs-backend-cpu';
+
 
 // import {
 //   Text,
@@ -29,32 +35,73 @@ const Demo = () => {
   const [currentSign, setCurrentSign] = useState(0);
   const [textTitle, setTextTitle] = useState("🧙‍♀️ Loading the Magic 🧙‍♂️");
   const [tutorText, setTutorText] = useState("");
-  const [handDetections, setHandDetections] = useState(null)
+  const [handResults, sethandResults] = useState(null)
+  const [handDetection, setHandDetections] = useState(null)
+  
 
   const hand_landmarker_task = "/models/hand_landmarker.task";
         
   useEffect(() => {
-    let handLandmarker;
+    let detector;
     let animationFrameId;
 
-    const initializeHandDetection = async () => {
-      try {
-        const vision = await FilesetResolver.forVisionTasks(
-          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-        );
-        handLandmarker = await HandLandmarker.createFromOptions(vision, {
-          baseOptions: { modelAssetPath: hand_landmarker_task },
-          numHands: 1,
-          runningMode: "VIDEO",
-        });
-        detectHands();
+  
+  const initializeHandDetection = async () => {
+
+    await tf.setBackend('cpu');
+    await tf.ready();
+
+
+    const model =  handPoseDetection.SupportedModels.MediaPipeHands;
+    const detectorConfig: handPoseDetection.MediaPipeHandsTfjsModelConfig = {
+        runtime: 'tfjs', 
+  // solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
+  maxHands: 1,
+  modelType: 'full'
+    }
+
+    detector = await handPoseDetection.createDetector(model, detectorConfig)
+
+    
+    detectHands();
+
+  }
+    //  const detector = await handPoseDetection.createDetector(
+    //    handPoseDetection.SupportedModels.MediaPipeHands,
+    //     {
+    //       runtime: "mediapipe",
+    //       modelType: "full",
+    //       maxHands: 2,
+    //       solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915`,
+          
+    //     }
+    
+
+  
+    
+
+      
+   
+
+
+    // const initializeHandDetection = async () => {
+    //   try {
+    //     const vision = await FilesetResolver.forVisionTasks(
+    //       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    //     );
+    //     handLandmarker = await HandLandmarker.createFromOptions(vision, {
+    //       baseOptions: { modelAssetPath: hand_landmarker_task },
+    //       numHands: 1,
+    //       runningMode: "VIDEO",
+    //     });
+    //     detectHands();
 
 
 
-      } catch (error) {
-        console.error("Error initializing hand detection:", error);
-      }
-    };
+    //   } catch (error) {
+    //     console.error("Error initializing hand detection:", error);
+    //   }
+    // };
 
 const drawLandmarks = (landmarksArray: any) => {
   
@@ -64,7 +111,7 @@ const drawLandmarks = (landmarksArray: any) => {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (!ctx || !landmarksArray || landmarksArray.length === 0) return;
+  // if (!ctx || !landmarksArray || landmarksArray.length === 0) return;
 
   ctx.fillStyle = 'white';
   ctx.strokeStyle = "green";
@@ -87,8 +134,8 @@ const drawLandmarks = (landmarksArray: any) => {
 
     lineStartArr.forEach((startIdx, i) => {
 
-      const lineStart = landmarksArray[0][startIdx];
-      const lineEnd = landmarksArray[0][lineEndArr[i]];
+      const lineStart = landmarksArray[startIdx];
+      const lineEnd = landmarksArray[lineEndArr[i]];
 
       ctx.beginPath()
       ctx.moveTo(lineStart.x * canvas.width, lineStart.y * canvas.height);
@@ -98,8 +145,8 @@ const drawLandmarks = (landmarksArray: any) => {
   });
 
   ctx.fillStyle = 'red';
-  landmarksArray.forEach(landmarks => {
-    landmarks.forEach(landmark => {
+  landmarksArray.forEach(landmark => {
+
       const x = landmark.x * canvas.width;
       const y = landmark.y * canvas.height;
 
@@ -107,53 +154,54 @@ const drawLandmarks = (landmarksArray: any) => {
       ctx.arc(x, y, 5, 0, 2 * Math.PI);
       ctx.fill();
     });
-  });
+  
     
 };
 
-    const detectHands = () => {
+    const detectHands = async () => {
 
       const video = videoRef.current
      
       if (video && video.readyState >= 2) {
-        const detections = handLandmarker.detectForVideo(
-          video,
-          performance.now()
-        );
+
+        const hands: Hand[] = await detector.estimatehands(video)
+        const hand: Hand = hands[0]
+
         
-        setHandPresence(detections.handedness.length > 0);
-
+        
+      //  const hand = await detector.estimateHands(video, {flipHorizontal: true})
+       
+        setHandPresence(hand.handedness.length > 0);
         // Assuming detections.landmarks is an array of landmark objects
-        if (detections.landmarks) {
-          drawLandmarks(detections.landmarks);
-          setHandDetections(detections)
-
-
-        const detectSign = async (handLandmarker) => {
-
-
-        const GE = new fp.GestureEstimator(fsl_gestures)
-
-        const detector = await handLandmarker;
-
-        const hand = await detector.estimateHands(video, {flipHorizontal: true})
-
-        const est = GE.estimate(hand.keypoints3D, 9)
-
-        if (est.gestures.length > 0) {
-
-          let result = est.gestures.reduce((gest1,gest2) => {
-            return (gest1.score > gest2.score) ? gest1 : gest2
-          })
-
-          const chosenHand = hand.handedness.toLowerCase();
-
-          setMessageBody(m => m + result.name)
-        }
-
+        if (hand) {
+          drawLandmarks(hand.keypoints);
+          sethandResults(hand.keypoints)
           }
+          
 
-        }
+
+        // const detectSign = async (handDetector) => {
+
+
+        // const GE = new fp.GestureEstimator(fsl_gestures)
+
+    
+        // const est = GE.estimate(hand.keypoints, 9)
+
+        // if (est.gestures.length > 0) {
+
+        //   let result = est.gestures.reduce((gest1,gest2) => {
+        //     return (gest1.score > gest2.score) ? gest1 : gest2
+        //   })
+
+        //   const chosenHand = hand.handedness.toLowerCase();
+
+        //   setMessageBody(m => m + result.name)
+        // }
+
+        //   }
+
+        
       }
       requestAnimationFrame(detectHands);
     };
@@ -164,7 +212,7 @@ const drawLandmarks = (landmarksArray: any) => {
           video: true,
         });
         videoRef.current.srcObject = stream;
-        await initializeHandDetection();
+        initializeHandDetection();
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
@@ -176,9 +224,9 @@ const drawLandmarks = (landmarksArray: any) => {
       if (videoRef.current && videoRef.current.srcObject) {
         videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       }
-      if (handLandmarker) {
-        handLandmarker.close();
-      }
+      // if (handLandmarker) {
+      //   handLandmarker.close();
+      // }
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
@@ -186,8 +234,8 @@ const drawLandmarks = (landmarksArray: any) => {
   }, []);
 
   const detectHand = () => {
-    if (handDetections) {
-      console.log(handDetections)
+    if (handResults) {
+      console.log(handResults)
     }
   }
 
