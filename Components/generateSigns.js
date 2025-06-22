@@ -9,7 +9,7 @@ const signs = (signsJSON) => {
 
   let gestureArr = [];
 
-  // gestureArr.push(fp.Gestures.ThumbsUpGesture)
+  gestureArr.push(fp.Gestures.ThumbsUpGesture)
 
   Object.entries(signsJSON).forEach(([unicodeVal, props]) => {
 

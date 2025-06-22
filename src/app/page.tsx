@@ -20,8 +20,8 @@ const Demo = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarksRef = useRef(null);
-  const [myPoseData, setmyPoseData] = useState(null);
-  const poseRef = useRef(null);
+  const [myPoseData, setmyPoseData] = useState(null)
+  const poseRef = useRef(null)
   const [landmarksState, setLandmarksState] = useState(null);
   const gestureRef = useRef(null);
   const [handPresence, setHandPresence] = useState(null);
@@ -37,6 +37,7 @@ const Demo = () => {
   const hand_landmarker_task = '/models/hand_landmarker.task';
   let handLandmarker;
   let animationFrameId;
+
 
   useEffect(() => {
     const initializeHandDetection = async () => {
@@ -85,11 +86,14 @@ const Demo = () => {
   }, []);
 
   const detectHands = () => {
+
+
     if (videoRef.current && videoRef.current.readyState >= 2) {
       const detections: HandLandmarkerResult = handLandmarker.detectForVideo(
         videoRef.current,
         performance.now()
       );
+
 
       setHandPresence(detections.handedness.length > 0);
 
@@ -100,22 +104,18 @@ const Demo = () => {
       if (detections.landmarks && detections.landmarks.length > 0) {
         const { x, y, z } = detections.landmarks[0][0];
 
-        const flippedLandmarks = detections.landmarks[0].map((point) => ({
-          x: 1 - point.x,
-          y: point.y,
-          z: point.z,
-        }));
-
-         landmarksRef.current = flippedLandmarks
-
-   
-
+        landmarksRef.current = detections.landmarks[0];
         gestureRef.current = detections.landmarks;
+
+        
 
         setLandmarksState(detections.landmarks);
 
         drawLandmarks(detections.landmarks);
 
+     
+
+        
         // recognizeGestures(detections.landmarks[0]);
       }
     } else {
@@ -133,7 +133,7 @@ const Demo = () => {
   };
 
   const drawLandmarks = (landmarksArray: any) => {
-    const canvas = canvasRef.current;
+     const canvas = canvasRef.current;
     const video = videoRef.current;
     const ctx = canvas.getContext('2d');
 
@@ -181,19 +181,17 @@ const Demo = () => {
         ctx.fill();
       });
     });
+
   };
 
-  //   if (gestureRef.current) {
-  //     drawLandmarks(gestureRef.current);
-  //   }
+
+//   if (gestureRef.current) {
+//     drawLandmarks(gestureRef.current);
+//   }
 
   const recognizeGestures = async (landmarks) => {
-
-
     const GE = new fp.GestureEstimator(gestArray);
-    const est = GE.estimate(landmarks, 9);
-
-
+    const est = GE.estimate(landmarks, 9); 
     console.log(est.poseData)
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
@@ -202,78 +200,75 @@ const Demo = () => {
     }
   };
 
-//   useEffect(() => {
-//     const gestureInterval = setInterval(() => {
-//       if (landmarksRef.current) {
-//         recognizeGestures(landmarksRef.current);
-//       }
-//     }, 1000);
-//     return () => {
-//       clearInterval(gestureInterval);
-//     };
-//   }, []);
+  useEffect(() => {
+     const gestureInterval = setInterval(() => {
+     if (landmarksRef.current) {
+      recognizeGestures(landmarksRef.current);
+        }
+    }, 500);
+    return () => {
+      clearInterval(gestureInterval);
+    };
+  }, []);
 
-  //   poseRef.current
-  //   const detectHand = () => {
-  //     if (
-  //       console.log(poseRef.current);
-  //     }
 
-  return (
-    <>
-      <h1>Is there a Hand? 
-           {handPresence ? 'Yes' : 'No'}
-         {/* {handPresence ? 'Yes' : 'No'} */}
-         </h1>
 
-      <button onClick={() => {
-  if (landmarksRef.current) {
-    recognizeGestures(landmarksRef.current);
-  } else {
-    console.warn("No landmarks available.");
-  }
-}}>Detect Hand</button>
 
-      <div
+ 
+//   poseRef.current
+  const detectHand = () => {
+    if (poseRef.current)
+      console.log(poseRef.current);
+    }
+  
+
+return (
+  <>
+    <h1>Is there a Hand? {handPresence ? 'Yes' : 'No'}</h1>
+
+    <button onClick={detectHand}>Detect Hand</button>
+
+    <div
+      style={{
+        position: 'relative',
+        width: '640px',     // or % or responsive values
+        height: '480px',    // match your desired aspect ratio
+        margin: '1rem auto', // center and add spacing
+        border: '1px solid #ccc',
+      }}
+    >
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
         style={{
-          position: 'relative',
-          width: '640px', // or % or responsive values
-          height: '480px', // match your desired aspect ratio
-          margin: '1rem auto', // center and add spacing
-          border: '1px solid #ccc',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 1,
+          transform: 'scaleX(-1)',
         }}
-      >
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 1,
-            transform: 'scaleX(-1)',
-          }}
-        />
+      />
 
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 2,
-            transform: 'scaleX(-1)',
-            pointerEvents: 'none', // prevents canvas from blocking clicks
-          }}
-        />
-      </div>
-    </>
-  );
-};
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 2,
+          transform: 'scaleX(-1)',
+          pointerEvents: 'none', // prevents canvas from blocking clicks
+        }}
+      />
+    </div>
+  </>
+);
+
+}
 
 export default Demo;
