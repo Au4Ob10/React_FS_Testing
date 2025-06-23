@@ -115,7 +115,7 @@ const Demo = () => {
       const video = videoRef.current;
       const ctx = canvas.getContext('2d');
 
-      if (videoRef.current && videoRef.current.readyState >= 2) {
+      if (videoRef.current && videoRef.current.readyState === 4) {
         const detections: HandLandmarkerResult = handLandmarker.detectForVideo(
           videoRef.current,
           performance.now()
@@ -163,7 +163,6 @@ const Demo = () => {
     const recognizeGestures = async (landmarks) => {
       const GE = new fp.GestureEstimator(gestArray);
       const est = GE.estimate(landmarks, 9);
-       console.log(est.poseData)
       if (est.gestures.length > 0) {
         let result = est.gestures.reduce((c1, c2) => {
           return c1.score > c2.score ? c1 : c2;

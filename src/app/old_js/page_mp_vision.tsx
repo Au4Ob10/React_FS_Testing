@@ -111,14 +111,17 @@ const Demo = () => {
 
         const lmVals = detections.landmarks[0]
 
-    
-        const pixelVals = lmVals.map(({x,y,z})  => ([
-           x * canvasWidth,  y * canvasHeight, z
-        ]))
+
 
        
 
-     
+        const pixelVals = lmVals.map(({x,y,z}, pt)  => ({
+          x: x * canvasWidth,
+          y: y * canvasHeight,
+          z: z
+        }))
+
+        console.log(pixelVals)
         // const flippedLandmarks = detections.landmarks[0].map((point) => ({
         //   x: 1 - point.x,
         //   y: point.y,
@@ -126,6 +129,7 @@ const Demo = () => {
         // }));
 
          landmarksRef.current = detections.landmarks[0]
+
 
         gestureRef.current = detections.landmarks;
 
@@ -194,7 +198,7 @@ const Demo = () => {
         const y = landmark.y * canvas.height;
 
         ctx.beginPath();
-        ctx.arc(x, y, 2, 0, 2 * Math.PI);
+        ctx.arc(x, y, 4, 0, 2 * Math.PI);
         ctx.fill();
       });
     });
@@ -205,19 +209,14 @@ const Demo = () => {
 
 
     const GE = new fp.GestureEstimator(gestArray);
-    const est = GE.estimate(landmarks, 6.5);
+    const est = GE.estimate(landmarks, 9);
 
-    console.log(est.poseData)
-
+    console.log(est)
+  
     if (est.gestures.length > 0) {
-
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
       });
-
-      console.log(result.name)
-      
-     
     }
   };
 
@@ -250,7 +249,7 @@ const Demo = () => {
             top: 0,
             left: 0,
             zIndex: 1,
-            transform: 'scaleX(-1)',
+            // transform: 'scaleX(-1)',
           }}
         />
 
@@ -263,7 +262,7 @@ const Demo = () => {
             top: 0,
             left: 0,
             zIndex: 2,
-            transform: 'scaleX(-1)',
+            // transform: 'scaleX(-1)',
             pointerEvents: 'none', // prevents canvas from blocking clicks
           }}
         />
