@@ -20,18 +20,13 @@ const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarksRef = useRef(null);
-  const [myPoseData, setmyPoseData] = useState(null);
-  const poseRef = useRef(null);
-  const [landmarksState, setLandmarksState] = useState(null);
   const gestureRef = useRef(null);
   const [handPresence, setHandPresence] = useState(null);
-  const [gameState, setGameState] = useState('started');
+  const wristAnglesRef = useRef(null)
+ const pixelRef = useRef(null)
   const [camState, setCamState] = useState('on');
-  const [sign, setSign] = useState(null);
   const [messageBody, setMessageBody] = useState('');
-  const [currentSign, setCurrentSign] = useState(0);
-  const [textTitle, setTextTitle] = useState('Now Loading...');
-  const [tutorText, setTutorText] = useState('');
+ const [landmarkstate, setLandmarksState] = useState(null)
   const [handDetections, setHandDetections] = useState(null);
 
   const hand_landmarker_task = '/models/hand_landmarker.task';
@@ -100,25 +95,55 @@ const Demo = () => {
       const canvas = canvasRef.current
 
     
-      const canvasWidth = canvas.clientWidth
+        const canvasWidth = canvas.clientWidth
       const canvasHeight = canvas.clientHeight
     
 
       if (detections.landmarks && detections.landmarks.length > 0) {
 
         const video = videoRef.current
-
-
         const lmVals = detections.landmarks[0]
+
 
     
         const pixelVals = lmVals.map(({x,y,z})  => ([
            x * canvasWidth,  y * canvasHeight, z
         ]))
 
-       
 
-     
+   
+
+       const {x,y} = detections.landmarks[0][0]
+
+       const wristVal =  Math.atan2((y * canvasHeight), (x * canvasWidth)) * (180/Math.PI)
+
+       pixelRef.current = pixelVals
+       wristAnglesRef.current = wristVal
+
+    //          const pixelVals2 = lmVals.map(({x,y})  => ([
+
+    //        Math.atan2((y * canvasHeight), (x * canvasWidth)) * (180/Math.PI)
+    //   ]))
+
+
+
+
+
+
+
+      
+
+
+
+
+
+    //     const pixelV
+    // als2 = lmVals.map(({x,y,z})  => ({
+    //       x: x * canvasWidth,  y: y * canvasHeight
+    //   }))
+
+
+
         // const flippedLandmarks = detections.landmarks[0].map((point) => ({
         //   x: 1 - point.x,
         //   y: point.y,
@@ -129,25 +154,15 @@ const Demo = () => {
 
         gestureRef.current = detections.landmarks;
 
-        setLandmarksState(detections.landmarks);
+
 
         drawLandmarks(detections.landmarks);
 
         recognizeGestures(pixelVals);
       }
-    } else {
-      const canvas = canvasRef.current;
-      const ctx = canvas?.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-      landmarksRef.current = null;
-      gestureRef.current = null;
-      setLandmarksState(null);
-      setHandPresence(false);
-    }
-    requestAnimationFrame(detectHands);
-  };
+    }}
+    
+
 
   const drawLandmarks = (landmarksArray: any) => {
     const canvas = canvasRef.current;
@@ -202,12 +217,12 @@ const Demo = () => {
 
 
   const recognizeGestures = async (landmarks) => {
-
-
     const GE = new fp.GestureEstimator(gestArray);
     const est = GE.estimate(landmarks, 6.5);
 
-    console.log(est.poseData)
+     if (wristAnglesRef.current) {
+        console.log(wristAnglesRef.current)
+    }
 
     if (est.gestures.length > 0) {
 
@@ -215,12 +230,19 @@ const Demo = () => {
         return c1.score > c2.score ? c1 : c2;
       });
 
-      console.log(result.name)
-      
+     
+    
      
     }
   };
 
+
+
+  const returnWristAngle = () => {
+    if (wristAnglesRef.current) {
+        console.log(wristAnglesRef.current)
+    }
+  }
 
   return (
     <>
@@ -229,15 +251,7 @@ const Demo = () => {
          {/* {handPresence ? 'Yes' : 'No'} */}
          </h1>
 
-      <button onClick={() => {
-  if (landmarksRef.current) {
-    recognizeGestures(landmarksRef.current);
-  } else {
-    console.warn("No landmarks available.");
-  }
-}}>Detect Hand</button>
-
-   
+      <button onClick={returnWristAngle}>Detect Hand</button>
         <video
           ref={videoRef}
           autoPlay
@@ -245,8 +259,8 @@ const Demo = () => {
     
           style={{
             position: 'absolute',
-            height: "100%",
-             width: "100%",
+            height: "75%",
+             width: "75%",
             top: 0,
             left: 0,
             zIndex: 1,
@@ -258,8 +272,8 @@ const Demo = () => {
           ref={canvasRef}
           style={{
             position: 'absolute',
-            height: "100%",
-             width: "100%",
+            height: "75%",
+             width: "75%",
             top: 0,
             left: 0,
             zIndex: 2,

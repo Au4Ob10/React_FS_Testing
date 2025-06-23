@@ -1,0 +1,19 @@
+{
+    "U005A": {
+        "Curls": {
+          "Thumb": "HalfCurl",
+          "Index": "NoCurl",
+          "Middle": "FullCurl",
+          "Ring": "FullfCurl",
+          "Pinky": "FullCurl"
+        },
+        "curlConf": {
+          "Thumb": 0.9,
+          "Index": 0.9,
+          "Middle": 0.9,
+          "Ring": 0.9,
+          "Pinky": 0.9
+        }
+    }
+    }
+}
