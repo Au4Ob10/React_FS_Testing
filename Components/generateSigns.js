@@ -1,6 +1,6 @@
 import * as fp from 'fingerpose'
 import aslSigns from '../components/fs_language/ASL_fingervals.json';
-import mslSigns from '../components/fs_language/Mexican_fingervals_static.json'
+import mslSigns from '../components/fs_language/Mexican_fingervals.json'
 // import sslSigns from '../components/fs_language/spanish_fingervals.json';
 // import fslSigns from '../components/fs_language/French_fingervals.json';
 
