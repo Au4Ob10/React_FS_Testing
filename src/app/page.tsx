@@ -17,14 +17,26 @@ import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
 // } from "@chakra-ui/react"
 
 const Demo = () => {
+  const SMOOTHING_WINDOW = 5;
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const landmarksRef = useRef(null);
+  const indexFingerRef = useRef(null);
+  const indexArrRef = useRef([]);
+  const timeStartRef = useRef(null);
+  const zCheck = useRef([]);
+  const gestureRef = useRef<String | null>(null);
+  const gestPos = useRef<String | null>(null);
+  const [deltaYArr, setDeltaYArr] = useState([]);
+  const [deltaXArr, setDeltaXArr] = useState([]);
+  const [validZ, setValidZ] = useState(false);
+  const [frameLandmarks, setFrameLandmarks] = useState([]);
   const [handPresence, setHandPresence] = useState(null);
   const [camState, setCamState] = useState('on');
   const [sign, setSign] = useState(null);
   const [messageBody, setMessageBody] = useState('');
   const [handDetections, setHandDetections] = useState(null);
+  const landmarkBuffer = useRef<{ x: number; y: number; z: number }[]>([]);
+  const [smoothedIndex, setSmoothedIndex] = useState({ x: 0, y: 0, z: 0 });
 
   const hand_landmarker_task = '/models/hand_landmarker.task';
   let handLandmarker;
@@ -133,34 +145,38 @@ const Demo = () => {
         animationFrameId = requestAnimationFrame(renderLoop);
         return;
       }
-        if (videoRef.current && videoRef.current.readyState === 4) {
+      if (videoRef.current && videoRef.current.readyState === 4) {
+        const results = handLandmarker.detectForVideo(
+          videoRef.current,
+          performance.now()
+        );
 
-      const results = handLandmarker.detectForVideo(
-        videoRef.current,
-        performance.now()
-      );
+        const canvas = canvasRef.current;
 
-      const canvas = canvasRef.current;
+        const canvasWidth = canvas.clientWidth;
+        const canvasHeight = canvas.clientHeight;
 
-      const canvasWidth = canvas.clientWidth;
-      const canvasHeight = canvas.clientHeight;
-      
-      if (results.landmarks && results.landmarks.length > 0) {
-         const lmVals = results.landmarks[0];
+        if (results.landmarks && results.landmarks.length > 0) {
+          const lmVals = results.landmarks[0];
 
-        const pixelVals = lmVals.map(({ x, y, z }) => [
-          x * canvasWidth,
-          y * canvasHeight,
-          z,
-        ]);
+          const pixelVals = lmVals.map(({ x, y, z }) => [
+            x * canvasWidth,
+            y * canvasHeight,
+            z,
+          ]);
 
-        
-        drawLandmarks(results.landmarks);
-        recognizeGestures(pixelVals);
+          const indexVals = results.landmarks[0][8];
+          indexFingerRef.current = indexVals;
+
+          drawLandmarks(results.landmarks);
+
+          recognizeGestures(pixelVals);
+
+          // zGestures();
+        }
+
+        animationFrameId = requestAnimationFrame(renderLoop);
       }
-
-      animationFrameId = requestAnimationFrame(renderLoop);
-    }
     };
 
     renderLoop();
@@ -168,19 +184,120 @@ const Demo = () => {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
+  useEffect(() => {
+    const zGestures = () => {
+      const indexVals = indexFingerRef.current;
+      if (indexVals) {
+        landmarkBuffer.current.push(indexVals);
+
+        if (landmarkBuffer.current.length >= 2) {
+          const x1: any = landmarkBuffer.current[0].x;
+          const y1 = landmarkBuffer.current[0].y;
+          const x2: any = landmarkBuffer.current.at(-1).x;
+          const y2 = landmarkBuffer.current.at(-1).y;
+          const deltaX = x2 - x1;
+          const deltaY = y2 - y1;
+          const slope = Math.abs(y2 - y1) / Math.abs(x2 - x1);
+          const gesture = gestureRef.current
+
+          // console.log("xVal", x2)
+          // console.log("yVal", y2)
+            //  console.log("xVal2:", x2 * 100)
+            // console.log("deltaX", deltaX * 100)
+
+          setTimeout(() => {
+         
+            if (x2 > 0.6 && y2 < 5 && gestureRef.current === null) {
+              gestureRef.current = 'gestureStart'
+              console.log(gestureRef.current)
+            }
+              
+              if (x2 < 0.5 && y2 < 5 && gestureRef.current === 'gestureStart') {
+                gestureRef.current = 'firstGesture';
+                 console.log(gestureRef.current)
+                landmarkBuffer.current = [];
+              }
+            
+
+            // else {
+            //   console.log("adjust x2 val by", Math.abs(x2-0.7))
+            //   console.log("adjust deltaX val by", Math.abs(deltaX - 0.3))
+            // }
+          }, 300);
+
+          setTimeout(() => {
+            if (x2 < 0.7 && y2 > 0.7 && gestureRef.current === "firstGesture") {
+                gestureRef.current = 'secondGesture';
+                console.log(gestureRef.current)
+                 landmarkBuffer.current = [];
+            }
+          }, 100);
+
+          setTimeout(() => {
+            if (x2 < 0.5 && gestureRef.current === 'secondGesture' ) {
+                gestureRef.current = 'thirdGesture';
+                console.log(gestureRef.current)
+                console.log("Z")
+                landmarkBuffer.current = [];
+            }
+          }, 100);
+
+          // console.log('gest 1 x:', x1);
+          // console.log('deltaX:', deltaX);
+
+          // console.log(`Execution time: ${endTime - startTime} ms`);
+        }
+      }
+      requestAnimationFrame(zGestures);
+    };
+
+    requestAnimationFrame(zGestures);
+    // requestAnimationFrame(zGestures);
+  }, []);
+
+  const zRecognize = () => {
+    const indexVals = indexFingerRef.current;
+
+    if (indexVals) {
+      indexArrRef.current.push({ x: indexVals.x, y: indexVals.y });
+
+      if (indexArrRef.current.length >= 1) {
+        const x1 = indexArrRef.current[0].x;
+        const y1 = indexArrRef.current[0].y;
+        // const z1 = indexArrRef.current[0].z;
+        const x2 = indexArrRef.current.at(-1).x;
+        const y2 = indexArrRef.current.at(-1).y;
+
+        const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1)) * 100;
+        const deltaX = x2 - x1;
+        const deltaY = y2 - y1;
+        const slope = (y2 - y1) / (x2 - x1);
+
+        // console.log('distance:', distance);
+
+      
+        console.log('Current X:', x2);
+        // console.log('Current Y:', y2);
+        console.log(deltaX);
+        // console.log(deltaY);
+
+      
+     
+      }
+      // console.log("Current Y", y2)
+      // console.log('slope:', slope);
+      indexFingerRef.current = [];
+    }
+  };
 
   const recognizeGestures = async (landmarks) => {
     const GE = new fp.GestureEstimator(gestArray);
     const est = GE.estimate(landmarks, 6.5);
 
-    console.log(est.poseData);
-
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
       });
-
-      console.log(result.name);
     }
   };
 
@@ -194,11 +311,12 @@ const Demo = () => {
 
       <button
         onClick={() => {
-          if (landmarksRef.current) {
-            recognizeGestures(landmarksRef.current);
-          } else {
-            console.warn('No landmarks available.');
-          }
+          zRecognize();
+          // if (landmarksRef.current) {
+          //   animatedSigns()
+          // } else {
+          //   console.warn('No landmarks available.');
+          // }
         }}
       >
         Detect Hand
@@ -216,6 +334,7 @@ const Demo = () => {
           left: 0,
           zIndex: 1,
           transform: 'scaleX(-1)',
+          pointerEvents: 'none',
         }}
       />
 
