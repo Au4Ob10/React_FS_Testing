@@ -46,7 +46,7 @@ const signs = (signsJSON) => {
 
 }
 
-const gestArray = signs(mslSigns)
+const gestArray = signs(aslSigns)
 
 export default gestArray
 

@@ -292,35 +292,35 @@ const Demo = () => {
 
        
 
-        setTimeout(() => {
-          if (x2 < -0.01 && y2 < -0.06) {
-            gesturePtRef.current = 'first point';
-            console.log(gesturePtRef.current);
-          }
-        }, 300);
+        // setTimeout(() => {
+        //   if (x2 < -0.01 && y2 < -0.06) {
+        //     gesturePtRef.current = 'first point';
+        //     console.log(gesturePtRef.current);
+        //   }
+        // }, 300);
 
-        setTimeout(() => {
-          if (
-            x2 > -0.001 &&
-            y2 < -0.01 &&
-            gesturePtRef.current === 'first point'
-          ) {
-            gesturePtRef.current = 'second point';
-            console.log(gesturePtRef.current);
-          }
-        }, 300);
+        // setTimeout(() => {
+        //   if (
+        //     x2 > -0.001 &&
+        //     y2 < -0.01 &&
+        //     gesturePtRef.current === 'first point'
+        //   ) {
+        //     gesturePtRef.current = 'second point';
+        //     console.log(gesturePtRef.current);
+        //   }
+        // }, 300);
 
-        setTimeout(() => {
-          if (
-            x2 > 0.07 &&
-            y2 < -0.02 &&
-            gesturePtRef.current === 'second point'
-          ) {
-            gesturePtRef.current = 'third point';
-            console.log(gesturePtRef.current);
-            console.log("J")
-          }
-        }, 300);
+        // setTimeout(() => {
+        //   if (
+        //     x2 > 0.07 &&
+        //     y2 < -0.02 &&
+        //     gesturePtRef.current === 'second point'
+        //   ) {
+        //     gesturePtRef.current = 'third point';
+        //     console.log(gesturePtRef.current);
+        //     console.log("J")
+        //   }
+        // }, 300);
 
 
       }
@@ -337,11 +337,14 @@ const Demo = () => {
   const recognizeGestures = async (landmarks) => {
     const GE = new fp.GestureEstimator(gestArray);
     const est = GE.estimate(landmarks, 6.5);
+   console.log(est.poseData)
+   
 
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
       });
+      console.log(result)
     }
   };
 
