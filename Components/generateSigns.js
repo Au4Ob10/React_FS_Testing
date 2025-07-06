@@ -1,6 +1,6 @@
 import * as fp from 'fingerpose'
-import aslSigns from '../components/fs_language/ASL_fingervals.json';
-import mslSigns from '../components/fs_language/Mexican_fingervals.json'
+import aslSignJSON from '../components/fs_language/ASL_fingervals.json';
+import mslSignJSON from '../components/fs_language/Mexican_fingervals.json'
 // import sslSigns from '../components/fs_language/spanish_fingervals.json';
 // import fslSigns from '../components/fs_language/French_fingervals.json';
 
@@ -14,9 +14,9 @@ const signs = (signsJSON) => {
   Object.entries(signsJSON).forEach(([unicodeVal, props]) => {
 
 
-    let letter = String.fromCharCode(parseInt(unicodeVal.slice(1), 16))
+    // let letter = String.fromCharCode(parseInt(unicodeVal.slice(1), 16))
 
-    const newGesture = new fp.GestureDescription(letter);
+    const newGesture = new fp.GestureDescription(unicodeVal);
 
   Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
       const directionProps = props.directions[fingerName];
@@ -46,9 +46,11 @@ const signs = (signsJSON) => {
 
 }
 
-const gestArray = signs(aslSigns)
+const aslSigns = signs(aslSignJSON)
 
-export default gestArray
+const mslSigns = signs(mslSignJSON)
+
+export {aslSigns,mslSigns}
 
 
 
