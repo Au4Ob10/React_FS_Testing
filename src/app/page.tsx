@@ -2,33 +2,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
-import gestArray from '../../components/generateSigns';
+import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
 import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
 import { useTimeout } from '@chakra-ui/react';
-
-// import {
-//   Text,
-//   Heading,
-//   Button,
-//   Stack,
-//   Container,
-//   Box,
-//   VStack,
-//   ChakraProvider
-// } from "@chakra-ui/react"
 
 const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const gesturePtRef = useRef<String | null>(null);
   const indexFingerRef = useRef(null);
   const landmarksRef = useRef(null);
-  const gesturePtRef = useRef<String | null>(null);
   const pinkyRef = useRef(null);
-  const pinkyTipArr = useRef([]);
-  const gestureRef = useRef<String | null>(null);
+  const indexTipArr = useRef(null);
+  const pinkyTipArr = useRef(null);
+  const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
+  const [appTitle, setAppTitle] = useState<String | null>(
+    'American Sign Language'
+  );
   const [handPresence, setHandPresence] = useState(null);
-  const landmarkBuffer = useRef<{ x: number; y: number; z: number }[]>([]);
-  const [smoothedIndex, setSmoothedIndex] = useState({ x: 0, y: 0, z: 0 });
+  const [messageBody, setMessageBody] = useState('');
 
   const hand_landmarker_task = '/models/hand_landmarker.task';
   let handLandmarker;
@@ -162,9 +154,8 @@ const Demo = () => {
 
           indexFingerRef.current = indexVals;
           pinkyRef.current = pinkyVals;
-          landmarksRef.current = results.landmarks;
 
-          drawLandmarks(results.landmarks);
+          // drawLandmarks(results.landmarks);
 
           recognizeGestures(pixelVals);
 
@@ -180,99 +171,8 @@ const Demo = () => {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  // useEffect(() => {
-  //   const zGestures = () => {
-  //     const indexVals = indexFingerRef.current;
-  //     if (indexVals) {
-  //       landmarkBuffer.current.push(indexVals);
+  let letterOutput;
 
-  //       if (landmarkBuffer.current.length >= 2) {
-  //         const x1: any = landmarkBuffer.current[0].x;
-  //         const y1 = landmarkBuffer.current[0].y;
-  //         const x2: any = landmarkBuffer.current.at(-1).x;
-  //         const y2 = landmarkBuffer.current.at(-1).y;
-  //         const deltaX = x2 - x1;
-  //         const deltaY = y2 - y1;
-  //         const slope = Math.abs(y2 - y1) / Math.abs(x2 - x1);
-  //         const gesture = gestureRef.current;
-
-  //         const zGesture = new fp.GestureDescription('z-sign')
-
-  //         // const est = GE.estimate(landmarksRef.current, 6.5);
-
-  //         setTimeout(() => {
-  //           if (x2 > 0.6 && y2 < 5 && gestureRef.current === null) {
-  //             gestureRef.current = 'gestureStart';
-  //             console.log(gestureRef.current);
-  //           }
-
-  //           if (x2 < 0.5 && y2 < 5 && gestureRef.current === 'gestureStart') {
-  //             gestureRef.current = 'firstGesture';
-  //             console.log(gestureRef.current);
-  //             landmarkBuffer.current = [];
-  //           }
-  //         }, 300);
-
-  //         setTimeout(() => {
-  //           if (x2 < 0.7 && y2 > 0.7 && gestureRef.current === 'firstGesture') {
-  //             gestureRef.current = 'secondGesture';
-  //             console.log(gestureRef.current);
-  //             landmarkBuffer.current = [];
-  //           }
-  //         }, 100);
-
-  //         setTimeout(() => {
-  //           if (x2 < 0.5 && gestureRef.current === 'secondGesture') {
-  //             gestureRef.current = 'thirdGesture';
-  //             console.log(gestureRef.current);
-  //             console.log('Z');
-  //             landmarkBuffer.current = [];
-  //           }
-  //         }, 100);
-
-  //       }
-  //     }
-  //     requestAnimationFrame(zGestures);
-  //   };
-
-  //   requestAnimationFrame(zGestures);
-  // }, []);
-
-  // useEffect(() => {
-  //   const jGestures = () => {
-
-  //   }
-
-  //  }, []);
-
-  // const zRecognize = () => {
-  //   const indexVals = indexFingerRef.current;
-
-  //   if (indexVals) {
-  //     indexArrRef.current.push({ x: indexVals.x, y: indexVals.y });
-
-  //     if (indexArrRef.current.length >= 1) {
-  //       const x1 = indexArrRef.current[0].x;
-  //       const y1 = indexArrRef.current[0].y;
-  //       // const z1 = indexArrRef.current[0].z;
-  //       const x2 = indexArrRef.current.at(-1).x;
-  //       const y2 = indexArrRef.current.at(-1).y;
-
-  //       const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1)) * 100;
-  //       const deltaX = x2 - x1;
-  //       const deltaY = y2 - y1;
-  //       const slope = (y2 - y1) / (x2 - x1);
-
-  //       console.log('Current X:', x2);
-  //       // console.log('Current Y:', y2);
-  //       console.log(deltaX);
-  //       // console.log(deltaY);
-  //     }
-  //     // console.log("Current Y", y2)
-  //     // console.log('slope:', slope);
-  //     indexFingerRef.current = [];
-  //   }
-  // };
   useEffect(() => {
     const jRecognize = () => {
       const pinkyVals = pinkyRef.current;
@@ -290,95 +190,207 @@ const Demo = () => {
         const y1 = pinkyTipArr.current[0].y;
         const y2 = pinkyTipArr.current.at(-1).y;
 
-       
+        setTimeout(() => {
+          if (x2 < -0.01 && y2 < -0.06) {
+            gesturePtRef.current = 'first point';
+            console.log(gesturePtRef.current);
+          }
+        }, 300);
 
-        // setTimeout(() => {
-        //   if (x2 < -0.01 && y2 < -0.06) {
-        //     gesturePtRef.current = 'first point';
-        //     console.log(gesturePtRef.current);
-        //   }
-        // }, 300);
+        setTimeout(() => {
+          if (
+            x2 > -0.001 &&
+            y2 < -0.01 &&
+            gesturePtRef.current === 'first point'
+          ) {
+            gesturePtRef.current = 'second point';
+            console.log(gesturePtRef.current);
+          }
+        }, 300);
 
-        // setTimeout(() => {
-        //   if (
-        //     x2 > -0.001 &&
-        //     y2 < -0.01 &&
-        //     gesturePtRef.current === 'first point'
-        //   ) {
-        //     gesturePtRef.current = 'second point';
-        //     console.log(gesturePtRef.current);
-        //   }
-        // }, 300);
+        setTimeout(() => {
+          if (
+            x2 > 0.07 &&
+            y2 < -0.02 &&
+            gesturePtRef.current === 'second point'
+          ) {
+            gesturePtRef.current = 'third point';
+            console.log(gesturePtRef.current);
 
-        // setTimeout(() => {
-        //   if (
-        //     x2 > 0.07 &&
-        //     y2 < -0.02 &&
-        //     gesturePtRef.current === 'second point'
-        //   ) {
-        //     gesturePtRef.current = 'third point';
-        //     console.log(gesturePtRef.current);
-        //     console.log("J")
-        //   }
-        // }, 300);
-
-
+            setMessageBody((msg) => msg + 'J');
+          }
+        }, 300);
       }
       requestAnimationFrame(jRecognize);
     };
     requestAnimationFrame(jRecognize);
 
-    // return (() => {
-    //   gesturePtRef.current = null
-    //   pinkyTipArr.current = []
-    // })
+    return () => {
+      gesturePtRef.current = null;
+      pinkyTipArr.current = [];
+    };
   }, []);
 
+  useEffect(() => {
+    const zGestures = () => {
+      const indexVals = indexFingerRef.current;
+      if (indexVals) {
+        indexTipArr.current.push(indexVals);
+
+        if (indexTipArr.current.length >= 2) {
+          const x1: any = indexTipArr.current[0].x;
+          const y1 = indexTipArr.current[0].y;
+          const x2: any = indexTipArr.current.at(-1).x;
+          const y2 = indexTipArr.current.at(-1).y;
+
+          const zGesture = new fp.GestureDescription('z-sign');
+
+          // const est = GE.estimate(landmarksRef.current, 6.5);
+
+          setTimeout(() => {
+            if (x2 > 0.6 && y2 < 5 && gesturePtRef.current === null) {
+              gesturePtRef.current = 'gestureStart';
+              console.log(gesturePtRef.current);
+            }
+
+            if (x2 < 0.5 && y2 < 5 && gesturePtRef.current === 'gestureStart') {
+              gesturePtRef.current = 'firstGesture';
+              console.log(gesturePtRef.current);
+              indexTipArr.current = [];
+            }
+          }, 300);
+
+          setTimeout(() => {
+            if (
+              x2 < 0.7 &&
+              y2 > 0.7 &&
+              gesturePtRef.current === 'firstGesture'
+            ) {
+              gesturePtRef.current = 'secondGesture';
+              console.log(gesturePtRef.current);
+              indexTipArr.current = [];
+            }
+          }, 100);
+
+          setTimeout(() => {
+            if (x2 < 0.5 && gesturePtRef.current === 'secondGesture') {
+              gesturePtRef.current = 'thirdGesture';
+              console.log(gesturePtRef.current);
+              setMessageBody((msg) => msg + 'Z');
+              indexTipArr.current = [];
+            }
+          }, 100);
+        }
+      }
+      requestAnimationFrame(zGestures);
+    };
+
+    requestAnimationFrame(zGestures);
+
+    return () => {
+      gesturePtRef.current = null;
+    };
+  }, []);
+
+  const rafInterval = (callback, interval) => {
+    let start = performance.now();
+    const loop = (now) => {
+      if (now - start >= interval) {
+        callback();
+        start = now;
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  };
+
   const recognizeGestures = async (landmarks) => {
-    const GE = new fp.GestureEstimator(gestArray);
+    const GE = new fp.GestureEstimator(currentLanguage);
     const est = GE.estimate(landmarks, 6.5);
-   console.log(est.poseData)
-   
 
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
       });
-      console.log(result)
+
+      const currUnicode = result.name;
+
+      let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
+      const lastChars = messageBody.slice(-2);
+
+      if (lastChars === 'U004EU004E') {
+        lastChars.replace('U004EU004E', 'U00D1').slice(0);
+        setMessageBody((msg) => msg + lastChars);
+      } else {
+
+
+        // setInterval(() => {
+
+            if (messageBody.length <= 20) {
+              
+               setMessageBody((msg) => msg + letter);
+            }
+        
+       
+        // }, 1000)
+    //     rafInterval(() => {
+
+    //       console.log(letter.length)
+    //       setMessageBody((msg) => msg + letter);
+    //     }, 1000);
+      }
+    }
+  };
+
+  const gestureLanguageToggle = () => {
+    if (currentLanguage === ASLGestArray) {
+      setCurrentLanguage(MSLGestArray);
+      setAppTitle('Mexican Sign Language');
+    } else {
+      setCurrentLanguage(ASLGestArray);
+      setAppTitle('American Sign Language');
     }
   };
 
   return (
     <>
-      <h1>
-        Is there a Hand?
-        {handPresence ? 'Yes' : 'No'}
-        {/* {handPresence ? 'Yes' : 'No'} */}
-      </h1>
-
+      {/* 
       <button
         onClick={() => {
           // jRecognize();
         }}
       >
         Detect Hand
-      </button>
+      </button> */}
+      <p>test</p>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          style={{
+            height: '500px',
+            width: '500px',
+            // top: 0,
+            // left: 0,
+            // zIndex: 1,
+            transform: 'scaleX(-1)',
+            pointerEvents: 'none',
+          }}
+        />
+      </div>
+
+      <div
         style={{
-          position: 'absolute',
-          height: '100%',
-          width: '100%',
-          top: 0,
-          left: 0,
-          zIndex: 1,
-          transform: 'scaleX(-1)',
-          pointerEvents: 'none',
+          overflowWrap: 'break-word',
+          height: '300px',
+          width: '300px',
+          backgroundColor: 'red',
         }}
-      />
+      >
+        <p style={{ textAlign: 'center' }}>{messageBody}</p>
+      </div>
 
       <canvas
         ref={canvasRef}
@@ -390,7 +402,7 @@ const Demo = () => {
           left: 0,
           zIndex: 2,
           transform: 'scaleX(-1)',
-          pointerEvents: 'none', // prevents canvas from blocking clicks
+          pointerEvents: 'none',
         }}
       />
     </>
