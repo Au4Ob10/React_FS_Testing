@@ -11,7 +11,6 @@ const Demo = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gesturePtRef = useRef<String | null>(null);
   const indexFingerRef = useRef(null);
-  const landmarksRef = useRef(null);
   const pinkyRef = useRef(null);
   const indexTipArr = useRef(null);
   const pinkyTipArr = useRef(null);
@@ -322,26 +321,22 @@ const Demo = () => {
         lastChars.replace('U004EU004E', 'U00D1').slice(0);
         setMessageBody((msg) => msg + lastChars);
       } else {
+        rafInterval(() => {
+          setTimeout(() => {
+            setMessageBody((msg) => msg + letter);
+          }, 1000);
+        }, 1000);
 
+        //     rafInterval(() => {
 
-        // setInterval(() => {
-
-            if (messageBody.length <= 20) {
-              
-               setMessageBody((msg) => msg + letter);
-            }
-        
-       
-        // }, 1000)
-    //     rafInterval(() => {
-
-    //       console.log(letter.length)
-    //       setMessageBody((msg) => msg + letter);
-    //     }, 1000);
+        //       console.log(letter.length)
+        //       setMessageBody((msg) => msg + letter);
+        //     }, 1000);
       }
+      requestAnimationFrame(recognizeGestures);
     }
   };
-
+  requestAnimationFrame(recognizeGestures);
   const gestureLanguageToggle = () => {
     if (currentLanguage === ASLGestArray) {
       setCurrentLanguage(MSLGestArray);
