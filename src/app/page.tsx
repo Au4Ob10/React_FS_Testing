@@ -10,15 +10,18 @@ const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gesturePtRef = useRef<String | null>(null);
+  const poseRef = useRef(null)
   const indexFingerRef = useRef(null);
   const pinkyRef = useRef(null);
   const indexTipArr = useRef(null);
   const pinkyTipArr = useRef(null);
-  const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
+  const letterRef = useRef<string | null>(null);
+  const [currentLanguage, setCurrentLanguage] = useState(MSLGestArray);
+
   const [appTitle, setAppTitle] = useState<String | null>(
-    'American Sign Language'
+    'Mexican Sign Language'
   );
-  const [handPresence, setHandPresence] = useState(null);
+
   const [messageBody, setMessageBody] = useState('');
 
   const hand_landmarker_task = '/models/hand_landmarker.task';
@@ -216,7 +219,8 @@ const Demo = () => {
             gesturePtRef.current = 'third point';
             console.log(gesturePtRef.current);
 
-            setMessageBody((msg) => msg + 'J');
+            letterRef.current = 'J';
+            letterRef.current = null;
           }
         }, 300);
       }
@@ -307,6 +311,8 @@ const Demo = () => {
     const GE = new fp.GestureEstimator(currentLanguage);
     const est = GE.estimate(landmarks, 6.5);
 
+    poseRef.current = est.poseData;
+
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
@@ -319,24 +325,35 @@ const Demo = () => {
 
       if (lastChars === 'U004EU004E') {
         lastChars.replace('U004EU004E', 'U00D1').slice(0);
-        setMessageBody((msg) => msg + lastChars);
+        return;
+        // setMessageBody((msg) => msg + lastChars);
       } else {
-        rafInterval(() => {
-          setTimeout(() => {
-            setMessageBody((msg) => msg + letter);
-          }, 1000);
-        }, 1000);
-
+        letterRef.current = letter;
         //     rafInterval(() => {
 
         //       console.log(letter.length)
         //       setMessageBody((msg) => msg + letter);
         //     }, 1000);
       }
-      requestAnimationFrame(recognizeGestures);
     }
   };
-  requestAnimationFrame(recognizeGestures);
+   let number = 1;
+
+  useEffect(() => {
+    rafInterval(() => {
+      const letter = letterRef.current;
+      console.log(poseRef.current)
+      if (letter && number <= 20 && poseRef) {
+        setMessageBody((msg) => msg + letter);
+        number += 1
+        
+        letterRef.current = null;
+      }
+    }, 300);
+
+  
+  }, [number]);
+
   const gestureLanguageToggle = () => {
     if (currentLanguage === ASLGestArray) {
       setCurrentLanguage(MSLGestArray);
@@ -357,7 +374,8 @@ const Demo = () => {
       >
         Detect Hand
       </button> */}
-      <p>test</p>
+      <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
+      <button onClick={gestureLanguageToggle}>Toggle Language</button>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <video
@@ -376,16 +394,7 @@ const Demo = () => {
         />
       </div>
 
-      <div
-        style={{
-          overflowWrap: 'break-word',
-          height: '300px',
-          width: '300px',
-          backgroundColor: 'red',
-        }}
-      >
-        <p style={{ textAlign: 'center' }}>{messageBody}</p>
-      </div>
+      <p style={{ textAlign: 'center' }}>{messageBody}</p>
 
       <canvas
         ref={canvasRef}
