@@ -13,8 +13,8 @@ const Demo = () => {
   const poseRef = useRef(null)
   const indexFingerRef = useRef(null);
   const pinkyRef = useRef(null);
-  const indexTipArr = useRef(null);
-  const pinkyTipArr = useRef(null);
+  const indexTipArr = useRef([]);
+  const pinkyTipArr = useRef([]);
   const letterRef = useRef<string | null>(null);
   const [currentLanguage, setCurrentLanguage] = useState(MSLGestArray);
 
@@ -154,7 +154,10 @@ const Demo = () => {
           const indexVals = results.landmarks[0][8];
           const pinkyVals = results.worldLandmarks[0][20];
 
+
+          if (indexVals) {
           indexFingerRef.current = indexVals;
+          }
           pinkyRef.current = pinkyVals;
 
           // drawLandmarks(results.landmarks);
@@ -246,8 +249,12 @@ const Demo = () => {
           const x2: any = indexTipArr.current.at(-1).x;
           const y2 = indexTipArr.current.at(-1).y;
 
+          console.log("x:", x2)
+          console.log("y:", y2)
+
           const zGesture = new fp.GestureDescription('z-sign');
 
+        
           // const est = GE.estimate(landmarksRef.current, 6.5);
 
           setTimeout(() => {
@@ -342,7 +349,7 @@ const Demo = () => {
   useEffect(() => {
     rafInterval(() => {
       const letter = letterRef.current;
-      console.log(poseRef.current)
+      // console.log(poseRef.current)
       if (letter && number <= 20 && poseRef) {
         setMessageBody((msg) => msg + letter);
         number += 1
