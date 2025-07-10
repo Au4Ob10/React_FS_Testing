@@ -120,14 +120,14 @@
           "Index": ["VerticalUp"],
           "Middle": ["VerticalUp"],
           "Ring": ["VerticalUp"],
-          "Pinky": ["DiagonalUpLeft"]
+          "Pinky": ["VerticalUp"]
         },
         "directionConf": {
           "Thumb": 0.7,
           "Index": 0.7,
           "Middle": 0.7,
           "Ring": 0.7,
-          "Pinky": 0.7
+          "Pinky": 1.0
         }
 
 },
@@ -245,7 +245,7 @@
       "Pinky": 0.8
     },
     "directions": {
-      "Thumb": ["DiagonalUpRight"],
+      "Thumb": ["VerticalUp"],
       "Index": ["HorizontalRight"],
       "Middle": ["HorizontalRight"],
       "Ring": ["HorizontalRight"],
@@ -314,15 +314,15 @@
       "Thumb": ["VerticalUp"],
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
-      "Ring": ["VerticalUp"],
-      "Pinky": ["VerticalUp"]
+      "Ring": ["DiagonalUpRight"],
+      "Pinky": ["DiagonalUpLeft"]
     },
     "directionConf": {
       "Thumb": 0.7,
       "Index": 0.7,
       "Middle": 0.7,
       "Ring": 0.7,
-      "Pinky": 0.7
+      "Pinky": 1.0
     }
 
 },
@@ -334,7 +334,7 @@
       "Index": "NoCurl",
       "Middle": "FullCurl",
       "Ring": "FullCurl",
-      "Pinky": "NoCurl"
+      "Pinky": "FullCurl"
     },
     "curlConf": {
       "Thumb": 0.8,
@@ -344,7 +344,7 @@
       "Pinky": 0.8
     },
     "directions": {
-      "Thumb": ["DiagonalUpRight"],
+      "Thumb": ["HorizontalRight"],
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
@@ -542,7 +542,7 @@
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
-      "Pinky": ["DiagonalUpLeft"]
+      "Pinky": ["VerticalUp"]
     },
     "directionConf": {
       "Thumb": 0.7,
@@ -646,7 +646,7 @@
       "Index": 1.0,
       "Middle": 1.0,
       "Ring": 0.7,
-      "Pinky": 0.7
+      "Pinky": 1.0
     }
 
 },
@@ -703,7 +703,7 @@
     },
     "directions": {
       "Thumb": ["DiagonalUpLeft"],
-      "Index": ["VerticalUp"],
+      "Index": ["DiagonalUpRight"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
       "Pinky": ["VerticalUp"]

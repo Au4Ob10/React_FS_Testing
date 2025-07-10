@@ -10,16 +10,17 @@ const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gesturePtRef = useRef<String | null>(null);
+ const  fpGestureRef = useRef(null)
   const poseRef = useRef(null);
   const indexFingerRef = useRef(null);
   const pinkyRef = useRef(null);
   const indexTipArr = useRef([]);
   const pinkyTipArr = useRef([]);
   const letterRef = useRef<string | null>(null);
-  const [currentLanguage, setCurrentLanguage] = useState(MSLGestArray);
+  const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
 
   const [appTitle, setAppTitle] = useState<String | null>(
-    'Mexican Sign Language'
+    'American Sign Language'
   );
 
   const [messageBody, setMessageBody] = useState('');
@@ -27,6 +28,8 @@ const Demo = () => {
   const hand_landmarker_task = '/models/hand_landmarker.task';
   let handLandmarker;
   let animationFrameId;
+  let videoFrameID;
+  const video = videoRef.current
 
   useEffect(() => {
     const initializeHandDetection = async () => {
@@ -43,7 +46,8 @@ const Demo = () => {
       } catch (error) {
         console.error('Error initializing hand detection:', error);
       }
-      animationFrameId = requestAnimationFrame(initializeHandDetection);
+      // animationFrameId = requestAnimationFrame(initializeHandDetection);
+       videoFrameID = video.requestVideoFrameCallback(initializeHandDetection)
     };
 
     const startWebcam = async () => {
@@ -69,7 +73,8 @@ const Demo = () => {
       }
 
       if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
+       video.cancelVideoFrameCallback(videoFrameID)
+        // cancelAnimationFrame(animationFrameId);
       }
     };
   }, []);
@@ -128,7 +133,8 @@ const Demo = () => {
 
     const renderLoop = async () => {
       if (!videoRef.current || !canvasRef.current || !handLandmarker) {
-        animationFrameId = requestAnimationFrame(renderLoop);
+ 
+       requestAnimationFrame(renderLoop)
         return;
       }
       if (videoRef.current && videoRef.current.readyState === 4) {
@@ -167,6 +173,7 @@ const Demo = () => {
         }
 
         animationFrameId = requestAnimationFrame(renderLoop);
+   
       }
     };
 
@@ -179,83 +186,85 @@ const Demo = () => {
     return val >= min && val <= max;
   };
 
-  useEffect(() => {
-    const jRecognize = () => {
-      const pinkyVals = pinkyRef.current;
+  // useEffect(() => {
+  //   const jRecognize = () => {
+  //     const pinkyVals = pinkyRef.current;
 
-      if (pinkyVals) {
-        pinkyTipArr.current.push({
-          x: pinkyVals.x,
-          y: pinkyVals.y,
-          z: pinkyVals.z,
-        });
+  //     if (pinkyVals) {
+  //       pinkyTipArr.current.push({
+  //         x: pinkyVals.x,
+  //         y: pinkyVals.y,
+  //         z: pinkyVals.z,
+  //       });
 
-        const x1 = pinkyTipArr.current[0].x;
-        const x2 = pinkyTipArr.current.at(-1).x;
+  //       const x1 = pinkyTipArr.current[0].x;
+  //       const x2 = pinkyTipArr.current.at(-1).x;
 
-        const y1 = pinkyTipArr.current[0].y;
-        const y2 = pinkyTipArr.current.at(-1).y;
+  //       const y1 = pinkyTipArr.current[0].y;
+  //       const y2 = pinkyTipArr.current.at(-1).y;
 
-        console.log('x:', x2, '\n', 'y:', y2);
+  //       console.log('x:', x2, '\n', 'y:', y2);
 
-        setTimeout(() => {
-          if (x2 < -0.01 && y2 < -0.06) {
-            gesturePtRef.current = 'first point';
-            console.log(gesturePtRef.current);
-          }
-        }, 300);
+  //       setTimeout(() => {
+  //         if (x2 < -0.01 && y2 < -0.06) {
+  //           gesturePtRef.current = 'first point';
+  //           console.log(gesturePtRef.current);
+  //         }
+  //       }, 300);
 
-        setTimeout(() => {
-          if (
-            x2 > 0.02 &&
-            y2 > 0.01 &&
-            gesturePtRef.current === 'first point'
-          ) {
-            gesturePtRef.current = 'second point';
-            console.log(gesturePtRef.current);
-          }
-        }, 300);
+  //       setTimeout(() => {
+  //         if (
+  //           x2 > 0.02 &&
+  //           y2 > 0.01 &&
+  //           gesturePtRef.current === 'first point'
+  //         ) {
+  //           gesturePtRef.current = 'second point';
+  //           console.log(gesturePtRef.current);
+  //         }
+  //       }, 300);
 
-        setTimeout(() => {
-          if (
-            x2 > 0.05 &&
-            y2 > -0.016 &&
+  //       setTimeout(() => {
+  //         if (
+  //           x2 > 0.05 &&
+  //           y2 > -0.016 &&
            
-            gesturePtRef.current === 'second point'
-          ) {
-            gesturePtRef.current = 'third point';
-            console.log(gesturePtRef.current);
+  //           gesturePtRef.current === 'second point'
+  //         ) {
+  //           gesturePtRef.current = 'third point';
+  //           console.log(gesturePtRef.current);
 
-            console.log('J');
-            setMessageBody((msg) => msg + 'J');
-            letterRef.current = null;
-          }
-        }, 300);
+  //           console.log('J');
+  //           setMessageBody((msg) => msg + 'J');
+  //           letterRef.current = null;
+  //         }
+  //       }, 300);
 
-        setTimeout(() => {
-          if (
-            isBetween(x2, 0.05, 0.08) &&
-            isBetween(y2, -0.0253, -0.0216) &&
-            gesturePtRef.current === 'third point'
-          ) {
-            gesturePtRef.current = 'fourth point';
-            console.log(gesturePtRef.current);
+  //       // setTimeout(() => {
+  //       //   if (
+  //       //     isBetween(x2, 0.05, 0.08) &&
+  //       //     isBetween(y2, -0.0253, -0.0216) &&
+  //       //     gesturePtRef.current === 'third point'
+  //       //   ) {
+  //       //     gesturePtRef.current = 'fourth point';
+  //       //     console.log(gesturePtRef.current);
 
-            console.log('J');
-            setMessageBody((msg) => msg + 'J');
-            letterRef.current = null;
-          }
-        }, 300);
-      }
-      requestAnimationFrame(jRecognize);
-    };
-    requestAnimationFrame(jRecognize);
+  //       //     console.log('J');
+  //       //     setMessageBody((msg) => msg + 'J');
+  //       //     letterRef.current = null;
+  //       //   }
+  //       // }, 300);
+  //     }
+  //     requestAnimationFrame(jRecognize);
+  //   };
+  //   requestAnimationFrame(jRecognize);
 
-    return () => {
-      gesturePtRef.current = null;
-      pinkyTipArr.current = [];
-    };
-  }, []);
+  //   return () => {
+  //     gesturePtRef.current = null;
+  //     pinkyTipArr.current = [];
+  //   };
+  // }, []);
+
+ 
 
   const rafInterval = (callback, interval) => {
     let start = performance.now();
@@ -264,8 +273,13 @@ const Demo = () => {
         callback();
         start = now;
       }
+ 
       requestAnimationFrame(loop);
     };
+
+      if (video) {}
+  
+    
     requestAnimationFrame(loop);
   };
 
@@ -274,6 +288,9 @@ const Demo = () => {
     const est = GE.estimate(landmarks, 6.5);
 
     poseRef.current = est.poseData;
+    fpGestureRef.current = est.gestures
+
+  // console.log(est.gestures)
 
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
@@ -285,18 +302,18 @@ const Demo = () => {
       let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
       const lastChars = messageBody.slice(-2);
 
-      if (lastChars === 'U004EU004E') {
-        lastChars.replace('U004EU004E', 'U00D1').slice(0);
-        return;
-        // setMessageBody((msg) => msg + lastChars);
-      } else {
+      // if (lastChars === 'U004EU004E') {
+      //   lastChars.replace('U004EU004E', 'U00D1').slice(0);
+      //   return;
+      //   // setMessageBody((msg) => msg + lastChars);
+      // } else {
         letterRef.current = letter;
         //     rafInterval(() => {
 
         //       console.log(letter.length)
         //       setMessageBody((msg) => msg + letter);
         //     }, 1000);
-      }
+      // }
     }
   };
   let number = 1;
@@ -304,14 +321,18 @@ const Demo = () => {
   useEffect(() => {
     rafInterval(() => {
       const letter = letterRef.current;
-      // console.log(poseRef.current)
-      if (letter && number <= 20 && poseRef) {
-        // setMessageBody((msg) => msg + letter);
-        number += 1;
+      console.log(poseRef.current)
+      console.log(fpGestureRef.current)
+      if (letter && poseRef.current) {
+        setMessageBody((msg) => msg + letter);
 
-        letterRef.current = null;
+      if (letter) {
+        letterRef.current = null
       }
-    }, 300);
+      }
+    }, 400);
+
+   
   }, [number]);
 
   const gestureLanguageToggle = () => {
@@ -354,7 +375,7 @@ const Demo = () => {
         />
       </div>
 
-      <p style={{ textAlign: 'center' }}>{messageBody}</p>
+      <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>{messageBody}</p>
 
       <canvas
         ref={canvasRef}
