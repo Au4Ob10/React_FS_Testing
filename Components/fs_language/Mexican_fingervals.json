@@ -494,7 +494,7 @@
     "Curls": {
       "Thumb": "NoCurl",
       "Index": "HalfCurl",
-      "Middle": "HalfCurl",
+      "Middle": "FullCurl",
       "Ring": "FullCurl",
       "Pinky": "HalfCurl"
     },
@@ -507,10 +507,10 @@
     },
     "directions": {
       "Thumb": ["DiagonalDownRight"],
-      "Index": ["HorizontalRight"],
+      "Index": ["VerticalDown"],
       "Middle": ["DiagonalDownRight"],
       "Ring": ["DiagonalDownRight"],
-      "Pinky": ["DiagonalDownRight"]
+      "Pinky": ["VerticalDown"]
     },
     "directionConf": {
       "Thumb": 0.8,
@@ -542,7 +542,7 @@
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
-      "Pinky": ["VerticalUp"]
+      "Pinky": ["DiagonalUpLeft"]
     },
     "directionConf": {
       "Thumb": 0.7,
