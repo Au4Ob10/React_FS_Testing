@@ -1,23 +1,29 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { messageContext } from '../page';
+import React, { useContext, useEffect, useRef, useState, Dispatch, SetStateAction } from 'react';
+import { msgBody } from '../messageContext';
+import * as fp from 'fingerpose';
+import { MSLGestArray, ASLGestArray } from 'components/generateSigns';
 
-export const motionSigns = (landmarks, detectMotionSigns) => {
-  const [messageBody, setMessageBody] = useContext(messageContext);
+
+export const useMotionSignsDetect = (landmarks, motionEnabled) => {
+
   const indexTipArr = useRef([]);
   const pinkyTipArr = useRef([]);
   const pinkyFingerRef = useRef(null);
   const indexFingerRef = useRef(null);
-  const gesturePtRef = useRef<string | null>(null);
+  const landmarksRef = useRef(null)
+  const gesturePtRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const {messageBody, setMessageBody} = useContext(msgBody)
 
-  if (!detectMotionSigns) {
-    return;
-  }
+      landmarksRef.current = landmarks[20]
+      
+       const pinkyVals = landmarksRef.current
+      pinkyTipArr.current = []
 
-  useEffect(() => {
-    const jRecognize = () => {
-      pinkyFingerRef.current = landmarks[20];
-
-      const pinkyVals = pinkyFingerRef.current;
+      if (!motionEnabled) {
+        return;
+      }
+     
 
       if (pinkyVals) {
         pinkyTipArr.current.push({
@@ -26,10 +32,7 @@ export const motionSigns = (landmarks, detectMotionSigns) => {
           z: pinkyVals.z,
         });
 
-        const x1 = pinkyTipArr.current[0].x;
         const x2 = pinkyTipArr.current.at(-1).x;
-
-        const y1 = pinkyTipArr.current[0].y;
         const y2 = pinkyTipArr.current.at(-1).y;
 
         setTimeout(() => {
@@ -58,36 +61,23 @@ export const motionSigns = (landmarks, detectMotionSigns) => {
           ) {
             gesturePtRef.current = 'third point';
             console.log(gesturePtRef.current);
-            setMessageBody('J');
+            setMessageBody((msg) => msg + 'J');
             console.log('J');
           }
         }, 300);
       }
-      requestAnimationFrame(jRecognize);
-    };
-    requestAnimationFrame(jRecognize);
 
-    return () => {
-      gesturePtRef.current = null;
-      pinkyTipArr.current = [];
-    };
-  }, []);
-
-  useEffect(() => {
-    const zRecognize = () => {
       indexFingerRef.current = landmarks[8];
       const indexVals = indexFingerRef.current;
+
+
       if (indexVals) {
         indexTipArr.current.push(indexVals);
 
         if (indexTipArr.current.length >= 2) {
-          const x1: any = indexTipArr.current[0].x;
-          const y1 = indexTipArr.current[0].y;
+
           const x2: any = indexTipArr.current.at(-1).x;
           const y2 = indexTipArr.current.at(-1).y;
-          const deltaX = x2 - x1;
-          const deltaY = y2 - y1;
-          const slope = Math.abs(y2 - y1) / Math.abs(x2 - x1);
 
           // const zGesture = new fp.GestureDescription('z-sign')
           // const est = GE.estimate(landmarksRef.current, 6.5);
@@ -121,16 +111,19 @@ export const motionSigns = (landmarks, detectMotionSigns) => {
             if (x2 < 0.5 && gesturePtRef.current === 'secondGesture') {
               gesturePtRef.current = 'thirdGesture';
               console.log(gesturePtRef.current);
-              setMessageBody('Z');
+             setMessageBody((msg) => msg + 'Z');
               console.log('Z');
               indexTipArr.current = [];
             }
           }, 100);
         }
       }
-      requestAnimationFrame(zRecognize);
-    };
 
-    requestAnimationFrame(zRecognize);
-  }, []);
-};
+      return () => {
+        gesturePtRef.current = null;
+        pinkyTipArr.current = [];
+        indexFingerRef.current = [];
+      };
+    
+  }
+

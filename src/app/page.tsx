@@ -1,40 +1,50 @@
 'use client';
-import React, { useEffect, useRef, useState, useContext, createContext } from 'react';
-import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
-import * as fp from 'fingerpose';
+import React, {
+  useState,
+  createContext,
+  useRef,
+  useEffect,
+  SetStateAction,
+  Dispatch,
+  useContext,
+  ReactNode,
+} from 'react';
 import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
-import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
-import { useTimeout } from '@chakra-ui/react';
-import { motionSigns } from './gestureDetection/motionSigns';
-import GestureToggleButton from './gestureDetection/gestureToggle';
+import GestureToggleButton from './gestureDetection/gestureMode';
+import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
+// import { useStaticSignsDetect } from './gestureDetection/staticSignsDetect';
+import * as fp from 'fingerpose';
 
+import { useMotionSignsDetect } from './gestureDetection/motionSignsDetect';
+import { msgBody } from './messageContext';
 
-// import motionSigns from './motion_gestures/motionSigns';
+// export const titleContext = createContext(null)
+// export const subheadingContext = createContext(null)
 
-
-export const messageContext = createContext<any>('')
-
-const Demo = () => {
+// export const Demo = ({children}: {children: ReactNode }) => {
+export const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const poseRef = useRef(null);
-  const indexFingerRef = useRef(null);
-  const pinkyRef = useRef(null);
+  // const [messageBody, setMessageBody] = useState<string | null>('');
+  const [subheading, setSubheading] = useState('Motion Detection Enabled');
+  const [motionDetectionEnabled, setMotionDetectionEnabled] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState(MSLGestArray);
   const [appTitle, setAppTitle] = useState<String | null>(
     'Mexican Sign Language'
   );
-  
-  const [gestureSubTitle, setGestureSubTitle] = useState<String | null>("Static")
-  const gestureDetectionMode = useRef<string | null>("Static")
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
   const handLandmarker = useRef(null);
-  const handLandmarkVals = useRef(null);
-  const animationFrameId = useRef(null);
-  const [messageBody, setMessageBody] = useState('');
-  const hand_landmarker_task = '/models/hand_landmarker.task';
+  const landmarksRef = useRef(null)
+  const [messageBody, setMessageBody] = useState<string | null>('');
+
+
+
+ const [canvasDim, setCanvasDim] = useState<{ width: number; height: number }>({
+  width: 0,
+  height: 0,
+});
 
   useEffect(() => {
-
     const initializeHandDetection = async () => {
       try {
         const vision = await FilesetResolver.forVisionTasks(
@@ -43,11 +53,13 @@ const Demo = () => {
         handLandmarker.current = await HandLandmarker.createFromOptions(
           vision,
           {
-            baseOptions: { modelAssetPath: hand_landmarker_task },
+            baseOptions: { modelAssetPath: '/models/hand_landmarker.task' },
             numHands: 1,
             runningMode: 'VIDEO',
           }
         );
+
+        landmarkDetections();
       } catch (error) {
         console.error('Error initializing hand detection:', error);
       }
@@ -67,59 +79,60 @@ const Demo = () => {
 
     startWebcam();
 
-    const renderLoop = () => {
-      if (!videoRef.current || !canvasRef.current || !handLandmarker.current) {
-        requestAnimationFrame(renderLoop);
-        return;
-      }
-
+    const landmarkDetections = () => {
       if (videoRef.current && videoRef.current.readyState === 4) {
         const results = handLandmarker.current.detectForVideo(
           videoRef.current,
           performance.now()
         );
 
-        const canvas = canvasRef.current;
-
-        const canvasWidth = canvas.clientWidth;
-        const canvasHeight = canvas.clientHeight;
-
-       
-        handLandmarkVals.current = results.landmarks[0]
-
-        
-        if (results.landmarks && results.landmarks.length > 0) {
-          const lmVals = results.landmarks[0];
-
-          const pixelVals = lmVals.map(({ x, y, z }) => [
-            x * canvasWidth,
-            y * canvasHeight,
-            z,
-          ]);
-
-          const indexVals = results.landmarks[0][8];
-          const pinkyVals = results.worldLandmarks[0][20];
-
-          if (indexVals) {
-            indexFingerRef.current = indexVals;
-          }
-          pinkyRef.current = pinkyVals;
-
-          recognizeGestures(pixelVals);
-
-          
+        if (results.landmarks) {
+        landmarksRef.current = results.landmarks[0]
         }
       }
     };
 
-    const recognizeGestures = async (landmarks) => {
+    if (!landmarksRef.current || !canvasRef.current) return;
+
+    const canvasWidth = canvasRef.current.clientWidth
+    const canvasHeight = canvasRef.current.clientHeight
+
+  
+    // if (motionEnabled || !landmarks || !canvas) return;
+
+    const rafInterval = (callback, interval) => {
+      let start = performance.now();
+      const loop = (now) => {
+        if (now - start >= interval) {
+          callback();
+          start = now;
+        }
+
+        requestAnimationFrame(loop);
+      };
+
+      requestAnimationFrame(loop);
+    };
+    const recognizeGestures = () => {
+      if (!canvasRef.current) {
+        return;
+      }
+      const canvasWidth = canvasRef.current.clientWidth
+      const canvasHeight = canvasRef.current.clientHeight
+
+  
+      const pixelVals = landmarksRef.current[0].map(({ x, y, z }) => [
+        x * canvasWidth,
+        y * canvasHeight,
+        z,
+      ]);
+
       const GE = new fp.GestureEstimator(currentLanguage);
-      const est = GE.estimate(landmarks, 6.5);
-    
-      poseRef.current = est.poseData;
+      const est = GE.estimate(pixelVals, 6.5);
+
+      const pose = est.poseData;
 
       if (est.gestures.length > 0) {
-         
         let currGesture = est.gestures.reduce((c1, c2) => {
           return c1.score > c2.score ? c1 : c2;
         });
@@ -128,38 +141,38 @@ const Demo = () => {
           parseInt(currGesture.name.slice(1), 16)
         );
 
-        const pose = poseRef.current;
-
         if (letter && pose) {
           setMessageBody((msg) => msg + letter);
         }
       }
     };
 
-    const liveLandmarks = handLandmarkVals.current;
-
-    
     rafInterval(() => {
-      renderLoop();
+      recognizeGestures()
     }, 400);
 
-    // }
-  // }
+    recognizeGestures();
 
-    return () => {
-      if (
-        videoRef.current &&
-        videoRef.current.srcObject instanceof MediaStream
-      ) {
-        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-      }
 
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-    };
+
+    // return () => {
+    //   if (
+    //     videoRef.current &&
+    //     videoRef.current.srcObject instanceof MediaStream
+    //   ) {
+    //     videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+    //   }
+
+    //   // if (animationFrameId.current) {
+    //   //   cancelAnimationFrame(animationFrameId.current);
+    //   // }
+    // };
   }, []);
 
+
+  // useStaticSignsDetect(landmarks, canvasDim, motionDetectionEnabled);
+
+  // useMotionSignsDetect(landmarksRef, motionDetectionEnabled);
 
   const gestureLanguageToggle = () => {
     if (currentLanguage === ASLGestArray) {
@@ -171,44 +184,36 @@ const Demo = () => {
     }
   };
 
+  const gestureModeToggle = () => {
+    setMotionDetectionEnabled((motion) => !motion);
+  };
 
   return (
     <>
-      {/* 
-      <button
-        onClick={() => {
-          // jRecognize();
-        }}
-      >
-        Detect Hand
-      </button> */}
       <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
-      <h2 style={{ textAlign: 'center' }}>{gestureSubTitle} Gesture Detection Enabled</h2>
+      {/* <h2 style={{ textAlign: 'center' }}>{gestureSubTitle} Gesture Detection Enabled</h2> */}
       <button onClick={gestureLanguageToggle}>Toggle Language</button>
+      <button onClick={gestureModeToggle}>Toggle Gesture Mode</button>
 
-      <messageContext.Provider value={[messageBody,setMessageBody]}>
-        <GestureToggleButton landmarks={handLandmarkVals.current}/>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <video
           ref={videoRef}
           autoPlay
           playsInline
+          muted
           style={{
             height: '500px',
             width: '500px',
-            // top: 0,
-            // left: 0,
-            // zIndex: 1,
             transform: 'scaleX(-1)',
             pointerEvents: 'none',
           }}
         />
       </div>
-
-      <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>
-        {messageBody}
-      </p>
-      </messageContext.Provider>
+      {/* <msgBody.Provider value={{ messageBody, setMessageBody }}> */}
+        <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>
+          {messageBody}
+        </p>
+      {/* </msgBody.Provider> */}
 
       <canvas
         ref={canvasRef}
