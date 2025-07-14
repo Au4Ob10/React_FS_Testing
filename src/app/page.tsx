@@ -1,48 +1,36 @@
 'use client';
-import React, {
-  useState,
-  createContext,
-  useRef,
-  useEffect,
-  SetStateAction,
-  Dispatch,
-  useContext,
-  ReactNode,
-} from 'react';
-import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
-import GestureToggleButton from './gestureDetection/gestureMode';
+import React, { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 // import { useStaticSignsDetect } from './gestureDetection/staticSignsDetect';
 import * as fp from 'fingerpose';
+import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
+import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
+import { useTimeout } from '@chakra-ui/react';
 
-import { useMotionSignsDetect } from './gestureDetection/motionSignsDetect';
-import { msgBody } from './messageContext';
-
-// export const titleContext = createContext(null)
-// export const subheadingContext = createContext(null)
-
-// export const Demo = ({children}: {children: ReactNode }) => {
-export const Demo = () => {
+const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  // const [messageBody, setMessageBody] = useState<string | null>('');
-  const [subheading, setSubheading] = useState('Motion Detection Enabled');
-  const [motionDetectionEnabled, setMotionDetectionEnabled] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState(MSLGestArray);
-  const [appTitle, setAppTitle] = useState<String | null>(
-    'Mexican Sign Language'
-  );
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const gesturePtRef = useRef<String | null>(null);
+ const  fpGestureRef = useRef(null)
+  const poseRef = useRef(null);
+  const indexFingerRef = useRef(null);
+  const pinkyRef = useRef(null);
+  const indexTipArr = useRef([]);
+  const pinkyTipArr = useRef([]);
+  const letterRef = useRef<string | null>(null);
+  const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
 
-  const handLandmarker = useRef(null);
-  const landmarksRef = useRef(null)
-  const [messageBody, setMessageBody] = useState<string | null>('');
+  const [appTitle, setAppTitle] = useState<String | null>(
+    'American Sign Language'
+  );
 
+  const [messageBody, setMessageBody] = useState('');
 
-
- const [canvasDim, setCanvasDim] = useState<{ width: number; height: number }>({
-  width: 0,
-  height: 0,
-});
+  const hand_landmarker_task = '/models/hand_landmarker.task';
+  let handLandmarker;
+  let animationFrameId;
+  let videoFrameID;
+  const video = videoRef.current
 
   useEffect(() => {
     const initializeHandDetection = async () => {
@@ -50,19 +38,17 @@ export const Demo = () => {
         const vision = await FilesetResolver.forVisionTasks(
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
         );
-        handLandmarker.current = await HandLandmarker.createFromOptions(
-          vision,
-          {
-            baseOptions: { modelAssetPath: '/models/hand_landmarker.task' },
-            numHands: 1,
-            runningMode: 'VIDEO',
-          }
-        );
-
-        landmarkDetections();
+        handLandmarker = await HandLandmarker.createFromOptions(vision, {
+          baseOptions: { modelAssetPath: hand_landmarker_task },
+          numHands: 1,
+          runningMode: 'VIDEO',
+        });
+        // detectHands();
       } catch (error) {
         console.error('Error initializing hand detection:', error);
       }
+      // animationFrameId = requestAnimationFrame(initializeHandDetection);
+       videoFrameID = video.requestVideoFrameCallback(initializeHandDetection)
     };
 
     const startWebcam = async () => {
@@ -79,9 +65,81 @@ export const Demo = () => {
 
     startWebcam();
 
-    const landmarkDetections = () => {
+    return () => {
+      if (
+        videoRef.current &&
+        videoRef.current.srcObject instanceof MediaStream
+      ) {
+        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      }
+
+      if (animationFrameId) {
+       video.cancelVideoFrameCallback(videoFrameID)
+        // cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    let animationFrameId;
+
+    const drawLandmarks = (landmarksArray) => {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (!canvas || !ctx || !landmarksArray || landmarksArray.length === 0)
+        return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = 'green';
+      ctx.lineWidth = 2;
+
+      const handJoints = {
+        thumb: [0, 1, 2, 3, 4],
+        index: [5, 6, 7, 8],
+        middle: [9, 10, 11, 12],
+        ring: [13, 14, 15, 16],
+        pinky: [17, 18, 19, 20],
+        palm: [5, 9, 13, 17, 0, 5],
+      };
+
+      Object.values(handJoints).forEach((jointArr) => {
+        const arrLen = jointArr.length;
+        const lineStartArr = jointArr.slice(0, arrLen - 1);
+        const lineEndArr = jointArr.slice(1);
+
+        lineStartArr.forEach((startIdx, i) => {
+          const lineStart = landmarksArray[0][startIdx];
+          const lineEnd = landmarksArray[0][lineEndArr[i]];
+
+          ctx.beginPath();
+          ctx.moveTo(lineStart.x * canvas.width, lineStart.y * canvas.height);
+          ctx.lineTo(lineEnd.x * canvas.width, lineEnd.y * canvas.height);
+          ctx.stroke();
+        });
+      });
+
+      ctx.fillStyle = 'red';
+      landmarksArray.forEach((landmarks) => {
+        landmarks.forEach((landmark) => {
+          const x = landmark.x * canvas.width;
+          const y = landmark.y * canvas.height;
+
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+      });
+    };
+
+    const renderLoop = async () => {
+      if (!videoRef.current || !canvasRef.current || !handLandmarker) {
+ 
+       requestAnimationFrame(renderLoop)
+        return;
+      }
       if (videoRef.current && videoRef.current.readyState === 4) {
-        const results = handLandmarker.current.detectForVideo(
+        const results = handLandmarker.detectForVideo(
           videoRef.current,
           performance.now()
         );
@@ -94,85 +152,195 @@ export const Demo = () => {
 
     if (!landmarksRef.current || !canvasRef.current) return;
 
-    const canvasWidth = canvasRef.current.clientWidth
-    const canvasHeight = canvasRef.current.clientHeight
+        const canvasWidth = canvas.clientWidth;
+        const canvasHeight = canvas.clientHeight;
 
-  
-    // if (motionEnabled || !landmarks || !canvas) return;
+        if (results.landmarks && results.landmarks.length > 0) {
+          const lmVals = results.landmarks[0];
 
-    const rafInterval = (callback, interval) => {
-      let start = performance.now();
-      const loop = (now) => {
-        if (now - start >= interval) {
-          callback();
-          start = now;
+          const pixelVals = lmVals.map(({ x, y, z }) => [
+            x * canvasWidth,
+            y * canvasHeight,
+            z,
+          ]);
+
+          const indexVals = results.landmarks[0][8];
+          const pinkyVals = results.worldLandmarks[0][20];
+
+          if (indexVals) {
+            indexFingerRef.current = indexVals;
+          }
+          pinkyRef.current = pinkyVals;
+
+          // drawLandmarks(results.landmarks);
+
+          recognizeGestures(pixelVals);
+
+          // zGestures();
         }
 
-        requestAnimationFrame(loop);
-      };
-
-      requestAnimationFrame(loop);
-    };
-    const recognizeGestures = () => {
-      if (!canvasRef.current) {
-        return;
-      }
-      const canvasWidth = canvasRef.current.clientWidth
-      const canvasHeight = canvasRef.current.clientHeight
-
-  
-      const pixelVals = landmarksRef.current[0].map(({ x, y, z }) => [
-        x * canvasWidth,
-        y * canvasHeight,
-        z,
-      ]);
-
-      const GE = new fp.GestureEstimator(currentLanguage);
-      const est = GE.estimate(pixelVals, 6.5);
-
-      const pose = est.poseData;
-
-      if (est.gestures.length > 0) {
-        let currGesture = est.gestures.reduce((c1, c2) => {
-          return c1.score > c2.score ? c1 : c2;
-        });
-
-        let letter = String.fromCharCode(
-          parseInt(currGesture.name.slice(1), 16)
-        );
-
-        if (letter && pose) {
-          setMessageBody((msg) => msg + letter);
-        }
+        animationFrameId = requestAnimationFrame(renderLoop);
+   
       }
     };
 
-    rafInterval(() => {
-      recognizeGestures()
-    }, 400);
+    renderLoop();
 
-    recognizeGestures();
-
-
-
-    // return () => {
-    //   if (
-    //     videoRef.current &&
-    //     videoRef.current.srcObject instanceof MediaStream
-    //   ) {
-    //     videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-    //   }
-
-    //   // if (animationFrameId.current) {
-    //   //   cancelAnimationFrame(animationFrameId.current);
-    //   // }
-    // };
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
+  const isBetween = (val, min, max) => {
+    return val >= min && val <= max;
+  };
 
-  // useStaticSignsDetect(landmarks, canvasDim, motionDetectionEnabled);
+  // useEffect(() => {
+  //   const jRecognize = () => {
+  //     const pinkyVals = pinkyRef.current;
 
-  // useMotionSignsDetect(landmarksRef, motionDetectionEnabled);
+  //     if (pinkyVals) {
+  //       pinkyTipArr.current.push({
+  //         x: pinkyVals.x,
+  //         y: pinkyVals.y,
+  //         z: pinkyVals.z,
+  //       });
+
+  //       const x1 = pinkyTipArr.current[0].x;
+  //       const x2 = pinkyTipArr.current.at(-1).x;
+
+  //       const y1 = pinkyTipArr.current[0].y;
+  //       const y2 = pinkyTipArr.current.at(-1).y;
+
+  //       console.log('x:', x2, '\n', 'y:', y2);
+
+  //       setTimeout(() => {
+  //         if (x2 < -0.01 && y2 < -0.06) {
+  //           gesturePtRef.current = 'first point';
+  //           console.log(gesturePtRef.current);
+  //         }
+  //       }, 300);
+
+  //       setTimeout(() => {
+  //         if (
+  //           x2 > 0.02 &&
+  //           y2 > 0.01 &&
+  //           gesturePtRef.current === 'first point'
+  //         ) {
+  //           gesturePtRef.current = 'second point';
+  //           console.log(gesturePtRef.current);
+  //         }
+  //       }, 300);
+
+  //       setTimeout(() => {
+  //         if (
+  //           x2 > 0.05 &&
+  //           y2 > -0.016 &&
+           
+  //           gesturePtRef.current === 'second point'
+  //         ) {
+  //           gesturePtRef.current = 'third point';
+  //           console.log(gesturePtRef.current);
+
+  //           console.log('J');
+  //           setMessageBody((msg) => msg + 'J');
+  //           letterRef.current = null;
+  //         }
+  //       }, 300);
+
+  //       // setTimeout(() => {
+  //       //   if (
+  //       //     isBetween(x2, 0.05, 0.08) &&
+  //       //     isBetween(y2, -0.0253, -0.0216) &&
+  //       //     gesturePtRef.current === 'third point'
+  //       //   ) {
+  //       //     gesturePtRef.current = 'fourth point';
+  //       //     console.log(gesturePtRef.current);
+
+  //       //     console.log('J');
+  //       //     setMessageBody((msg) => msg + 'J');
+  //       //     letterRef.current = null;
+  //       //   }
+  //       // }, 300);
+  //     }
+  //     requestAnimationFrame(jRecognize);
+  //   };
+  //   requestAnimationFrame(jRecognize);
+
+  //   return () => {
+  //     gesturePtRef.current = null;
+  //     pinkyTipArr.current = [];
+  //   };
+  // }, []);
+
+ 
+
+  const rafInterval = (callback, interval) => {
+    let start = performance.now();
+    const loop = (now) => {
+      if (now - start >= interval) {
+        callback();
+        start = now;
+      }
+ 
+      requestAnimationFrame(loop);
+    };
+
+      if (video) {}
+  
+    
+    requestAnimationFrame(loop);
+  };
+
+  const recognizeGestures = async (landmarks) => {
+    const GE = new fp.GestureEstimator(currentLanguage);
+    const est = GE.estimate(landmarks, 6.5);
+
+    poseRef.current = est.poseData;
+    fpGestureRef.current = est.gestures
+
+  // console.log(est.gestures)
+
+    if (est.gestures.length > 0) {
+      let result = est.gestures.reduce((c1, c2) => {
+        return c1.score > c2.score ? c1 : c2;
+      });
+
+      const currUnicode = result.name;
+
+      let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
+      const lastChars = messageBody.slice(-2);
+
+      // if (lastChars === 'U004EU004E') {
+      //   lastChars.replace('U004EU004E', 'U00D1').slice(0);
+      //   return;
+      //   // setMessageBody((msg) => msg + lastChars);
+      // } else {
+        letterRef.current = letter;
+        //     rafInterval(() => {
+
+        //       console.log(letter.length)
+        //       setMessageBody((msg) => msg + letter);
+        //     }, 1000);
+      // }
+    }
+  };
+  let number = 1;
+
+  useEffect(() => {
+    rafInterval(() => {
+      const letter = letterRef.current;
+      console.log(poseRef.current)
+      console.log(fpGestureRef.current)
+      if (letter && poseRef.current) {
+        setMessageBody((msg) => msg + letter);
+
+      if (letter) {
+        letterRef.current = null
+      }
+      }
+    }, 400);
+
+   
+  }, [number]);
 
   const gestureLanguageToggle = () => {
     if (currentLanguage === ASLGestArray) {
@@ -184,14 +352,9 @@ export const Demo = () => {
     }
   };
 
-  const gestureModeToggle = () => {
-    setMotionDetectionEnabled((motion) => !motion);
-  };
-
   return (
     <>
       <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
-      {/* <h2 style={{ textAlign: 'center' }}>{gestureSubTitle} Gesture Detection Enabled</h2> */}
       <button onClick={gestureLanguageToggle}>Toggle Language</button>
       <button onClick={gestureModeToggle}>Toggle Gesture Mode</button>
 
@@ -209,11 +372,8 @@ export const Demo = () => {
           }}
         />
       </div>
-      {/* <msgBody.Provider value={{ messageBody, setMessageBody }}> */}
-        <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>
-          {messageBody}
-        </p>
-      {/* </msgBody.Provider> */}
+
+      <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>{messageBody}</p>
 
       <canvas
         ref={canvasRef}
