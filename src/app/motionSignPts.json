@@ -1,0 +1,45 @@
+{
+
+"J": {
+    "point1": {
+        "xCeil": -0.01,
+        "yCeil": -0.06
+    },
+    "point2": {
+        "xFloor": 0.02,
+        "yFloor": 0.01
+    },
+    "point3": {
+        "xFloor": 0.05,
+        "yFloor": -0.016
+    }
+},
+
+  "Z": { 
+    "point1": {
+      "xFloor": 0.55,
+      "xCeil": 0.87,
+      "yFloor": 0.14,
+      "yCeil": 0.8
+    },
+    "point2": {
+      "xFloor": 0.16,
+      "xCeil": 0.55,
+      "yFloor": 0.14,
+      "yCeil": 0.8
+    },
+    "point3": {
+      "xFloor": 0.55,
+      "xCeil": 0.87,
+      "yFloor": 0.14,
+      "yCeil": 0.8
+    },
+    "point4": {
+      "xFloor": 0.16,
+      "xCeil": 0.55,
+      "yFloor": 0.14,
+      "yCeil": 0.8
+    }
+  }
+}
+

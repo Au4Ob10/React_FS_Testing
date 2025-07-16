@@ -6,7 +6,7 @@ import React, {
   createContext,
 } from 'react';
 import { motionSigns } from './motionSignsDetect';
-import staticSignsDetect from './staticSignsDetect';
+import staticSignsDetect from '../oldGestureDetection/staticOriginal';
 import { handLandmarks } from '../page';
 
 const GestureToggleButton = () => {

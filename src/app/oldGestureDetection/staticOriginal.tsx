@@ -1,8 +1,8 @@
-'use client';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import * as fp from 'fingerpose';
-import { MSLGestArray, ASLGestArray } from 'components/generateSigns';
-import { msgBody } from '../messageContext';
+// 'use client';
+// import React, { useContext, useEffect, useRef, useState } from 'react';
+// import * as fp from 'fingerpose';
+// import { MSLGestArray, ASLGestArray } from 'components/generateSigns';
+// import { msgBody } from '../messageContext';
 
 export const useStaticSignsDetect = (
   landmarks,

@@ -10,7 +10,7 @@ const msgContentState = {
     messageBody: null,
     setMessageBody: () => {}
 }
- export const msgBody = createContext<msgContent>(msgContentState);
+ export const messageContext = createContext<msgContent>(msgContentState);
 
 
 
