@@ -18,27 +18,27 @@
   "Z": { 
     "point1": {
       "xFloor": 0.33,
-      "xCeil": 1.0,
-      "yFloor": 0,
-      "yCeil": 0.68
+      "xCeil": 0.46,
+      "yFloor": 0.43,
+      "yCeil": 0.56
     },
     "point2": {
-      "xFloor": 0,
-      "xCeil": 0.33,
-      "yFloor": 0,
-      "yCeil": 0.68
+      "xFloor": 0.1,
+      "xCeil": 0.38,
+      "yFloor": 0.43,
+      "yCeil": 0.56
     },
     "point3": {
-      "xFloor": 0,
-      "xCeil": 0.33,
-      "yFloor": 0.68,
-      "yCeil": 1
+      "xFloor": 0.33,
+      "xCeil": 0.46,
+      "yFloor": 0.77,
+      "yCeil": 0.83
     },
     "point4": {
-      "xFloor": 0.33,
-      "xCeil": 1.0,
-      "yFloor": 0.68,
-      "yCeil": 1.0
+      "xFloor": 0.1,
+      "xCeil": 0.38,
+      "yFloor": 0.77,
+      "yCeil": 0.83
     }
   }
 }
