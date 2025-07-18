@@ -31,16 +31,17 @@ const Demo = () => {
   const lastAppendedLetterRef = useRef(null);
   const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
+  const landmarks = useRef(null)
 
   const [appTitle, setAppTitle] = useState<String | null>(
     'American Sign Language'
   );
 
   const [subHeading, setSubHeading] = useState('Static');
-  const [messageBody, setMessageBody] = useState('')
-  // const { messageBody, setMessageBody } = useContext(messageContext);
+  // const [messageBody, setMessageBody] = useState('')
+  const { messageBody, setMessageBody } = useContext(messageContext);
 
-  
+  const hand_landmarker_task = '/models/hand_landmarker.task';
 
   let animationFrameId;
   let videoFrameID;
@@ -53,7 +54,7 @@ const Demo = () => {
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
         );
         landmarkRef.current = await HandLandmarker.createFromOptions(vision, {
-          baseOptions: { modelAssetPath: '/models/hand_landmarker.task'},
+          baseOptions: { modelAssetPath: hand_landmarker_task },
           numHands: 1,
           runningMode: 'VIDEO',
         });
@@ -118,16 +119,18 @@ const Demo = () => {
         if (results.landmarks && results.landmarks.length > 0) {
           const lmVals = results.landmarks[0];
 
+
+         landmarks.current = results.landmarks
+
+         indexFingerRef.current = results.landmarks[0][8]
+         pinkyRef.current = results.landmarks[0][20]
+
+
           const pixelVals = lmVals.map(({ x, y, z }) => [
             x * canvasWidth,
             y * canvasHeight,
             z,
           ]);
-
-          indexFingerRef.current = results.landmarks[0][8]
-          pinkyRef.current = results.landmarks[0][20]
-
-
 
           // drawLandmarks(results.landmarks);
           recognizeGestures(pixelVals);
@@ -167,10 +170,9 @@ const Demo = () => {
     }
   };
 
-  // useStaticSigns(letterRef, poseRef, motionEnabled);
+  // useStaticSigns(letterRef.current, poseRef.current, motionEnabled);
+
   useMotionSigns(indexFingerRef,pinkyRef)
-
-
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);

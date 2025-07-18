@@ -11,12 +11,14 @@ const signs = (signsJSON) => {
 
   // gestureArr.push(fp.Gestures.ThumbsUpGesture)
 
-  Object.entries(signsJSON).forEach(([unicodeVal, props]) => {
 
+  Object.entries(signsJSON).forEach(([unicodeVal, props]) => {
 
     // let letter = String.fromCharCode(parseInt(unicodeVal.slice(1), 16))
 
     const newGesture = new fp.GestureDescription(unicodeVal);
+
+ 
 
   Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
       const directionProps = props.directions[fingerName];
