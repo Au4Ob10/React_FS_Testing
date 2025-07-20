@@ -12,7 +12,7 @@ import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
 import { messageContext } from './messageContext';
 import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
 import { useTimeout } from '@chakra-ui/react';
-import motionSigns from '../app/motionSignPts.json';
+import motionShapes from '../app/motionShapes.json';
 import useStaticSigns from './gestureDetection/useStaticSigns';
 import useMotionSigns from './gestureDetection/useMotionSigns';
 
@@ -20,18 +20,15 @@ const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkRef = useRef(null);
-  const gesturePtRef = useRef<String | null>(null);
   const fpGestureRef = useRef(null);
   const poseRef = useRef(null);
-  const indexFingerRef = useRef(null);
-  const pinkyRef = useRef(null);
-  const indexTipArr = useRef([]);
-  const pinkyTipArr = useRef([]);
-  const letterRef = useRef<string | null>(null);
-  const lastAppendedLetterRef = useRef(null);
+  const staticLetterRef = useRef<string | null>(null);
+  const motionLetterRef = useRef<string | null>(null);
   const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
-  const landmarks = useRef(null)
+  const landmarks = useRef(null);
+  const pixelValsRef = useRef(null);
+  const gestureEstimate = useRef(null);
 
   const [appTitle, setAppTitle] = useState<String | null>(
     'American Sign Language'
@@ -119,12 +116,7 @@ const Demo = () => {
         if (results.landmarks && results.landmarks.length > 0) {
           const lmVals = results.landmarks[0];
 
-
-         landmarks.current = results.landmarks
-
-         indexFingerRef.current = results.landmarks[0][8]
-         pinkyRef.current = results.landmarks[0][20]
-
+          landmarks.current = results.landmarks;
 
           const pixelVals = lmVals.map(({ x, y, z }) => [
             x * canvasWidth,
@@ -134,6 +126,7 @@ const Demo = () => {
 
           // drawLandmarks(results.landmarks);
           recognizeGestures(pixelVals);
+          motionSigns(pixelVals);
 
           // zGestures();
         }
@@ -154,8 +147,6 @@ const Demo = () => {
     poseRef.current = est.poseData;
     fpGestureRef.current = est.gestures;
 
-    // console.log(est.gestures)
-
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
@@ -164,15 +155,50 @@ const Demo = () => {
       const currUnicode = result.name;
 
       let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
-      // const lastChars = messageBody.slice(-2);
 
-      letterRef.current = letter;
+      staticLetterRef.current = letter;
     }
   };
 
-  // useStaticSigns(letterRef.current, poseRef.current, motionEnabled);
+  const motionSigns = (pixelVals) => {
+    let gestureArr = [];
 
-  useMotionSigns(indexFingerRef,pinkyRef)
+    Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
+      const newGesture = new fp.GestureDescription(unicodeVal);
+
+      Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
+        newGesture.addCurl(fp.Finger[fingerName], fp.FingerCurl[curlType], 1);
+      });
+
+      gestureArr.push(newGesture);
+    });
+
+    const GE = new fp.GestureEstimator(gestureArr);
+
+    const est = GE.estimate(pixelVals, 7.5);
+
+    if (est.gestures.length > 0) {
+      let result = est.gestures.reduce((c1, c2) => {
+        return c1.score > c2.score ? c1 : c2;
+      });
+
+      const currUnicode = result.name;
+      const letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
+
+      motionLetterRef.current = letter;
+
+    }
+  };
+
+  // useStaticSigns(staticLetterRef.current, poseRef.current, motionEnabled);
+
+  // const test = () => {
+  //   console.log(pixelValsRef.current);
+  //   requestAnimationFrame(test);
+  // };
+  // requestAnimationFrame(test);
+
+  useMotionSigns(landmarkRef, motionLetterRef,motionEnabled);
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);

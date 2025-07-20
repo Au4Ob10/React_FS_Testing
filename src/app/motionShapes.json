@@ -1,0 +1,21 @@
+  {
+  "U004A": {
+      "Curls": {
+        "Thumb": "HalfCurl",
+        "Index": "FullCurl",
+        "Middle": "FullCurl",
+        "Ring": "FullCurl",
+        "Pinky": "NoCurl"
+      }
+    },
+
+    "U005A": {
+      "Curls": {
+        "Thumb": "HalfCurl",
+        "Index": "NoCurl",
+        "Middle": "NoCurl",
+        "Ring": "FullCurl",
+        "Pinky": "FullCurl"
+      }
+    }
+  }
