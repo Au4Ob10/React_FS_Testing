@@ -1,5 +1,6 @@
 'use client';
 import React, {
+  createRef,
   useEffect,
   useRef,
   useState,
@@ -12,14 +13,15 @@ import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
 import { messageContext } from './messageContext';
 import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
 import { useTimeout } from '@chakra-ui/react';
-import motionShapes from '../app/motionShapes.json';
 import useStaticSigns from './gestureDetection/useStaticSigns';
 import useMotionSigns from './gestureDetection/useMotionSigns';
+import { landmarksRef} from './landmarkRefs';
+
 
 const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const landmarkRef = useRef(null);
+  const landmarkDetect = useRef(null);
   const fpGestureRef = useRef(null);
   const poseRef = useRef(null);
   const staticLetterRef = useRef<string | null>(null);
@@ -27,8 +29,15 @@ const Demo = () => {
   const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
   const landmarks = useRef(null);
-  const pixelValsRef = useRef(null);
   const gestureEstimate = useRef(null);
+  const [currentLandmarks, setCurrentLandmarks] = useState(null);
+  const pixelValsRef = useRef(null)
+  
+
+  // const landmarkTips = useRef({
+  //   indexTip: null,
+  //   pinkyTip: null
+  // })
 
   const [appTitle, setAppTitle] = useState<String | null>(
     'American Sign Language'
@@ -50,7 +59,7 @@ const Demo = () => {
         const vision = await FilesetResolver.forVisionTasks(
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
         );
-        landmarkRef.current = await HandLandmarker.createFromOptions(vision, {
+        landmarkDetect.current = await HandLandmarker.createFromOptions(vision, {
           baseOptions: { modelAssetPath: hand_landmarker_task },
           numHands: 1,
           runningMode: 'VIDEO',
@@ -94,9 +103,12 @@ const Demo = () => {
 
   useEffect(() => {
     let animationFrameId;
+    
 
     const renderLoop = async () => {
-      const handLandmarker = landmarkRef.current;
+      const handLandmarker = landmarkDetect.current;
+
+      
 
       if (!videoRef.current || !canvasRef.current || !handLandmarker) {
         requestAnimationFrame(renderLoop);
@@ -107,26 +119,32 @@ const Demo = () => {
           videoRef.current,
           performance.now()
         );
-
+       
+    
         const canvas = canvasRef.current;
 
         const canvasWidth = canvas.clientWidth;
         const canvasHeight = canvas.clientHeight;
 
         if (results.landmarks && results.landmarks.length > 0) {
-          const lmVals = results.landmarks[0];
+          
+          landmarksRef.current = {
+            indexTip: results.landmarks[0][8],
+            pinkyTip: results.landmarks[0][20]
+          }
+         
 
-          landmarks.current = results.landmarks;
-
-          const pixelVals = lmVals.map(({ x, y, z }) => [
+          const pixelVals = results.landmarks[0].map(({ x, y, z }) => [
             x * canvasWidth,
             y * canvasHeight,
             z,
           ]);
 
+
+          pixelValsRef.current = pixelVals;
+          
           // drawLandmarks(results.landmarks);
-          recognizeGestures(pixelVals);
-          motionSigns(pixelVals);
+          // staticSigns();
 
           // zGestures();
         }
@@ -140,14 +158,9 @@ const Demo = () => {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  const recognizeGestures = async (landmarks) => {
+  const staticSigns =  () => {
     const GE = new fp.GestureEstimator(currentLanguage);
-    const est = GE.estimate(landmarks, 6.5);
-
-    poseRef.current = est.poseData;
-    fpGestureRef.current = est.gestures;
-
-    if (est.gestures.length > 0) {
+    const est = GE.estimate(pixelValsRef.current, 6.5);
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
       });
@@ -157,48 +170,24 @@ const Demo = () => {
       let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
 
       staticLetterRef.current = letter;
-    }
+
   };
 
-  const motionSigns = (pixelVals) => {
-    let gestureArr = [];
 
-    Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
-      const newGesture = new fp.GestureDescription(unicodeVal);
 
-      Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
-        newGesture.addCurl(fp.Finger[fingerName], fp.FingerCurl[curlType], 1);
-      });
-
-      gestureArr.push(newGesture);
-    });
-
-    const GE = new fp.GestureEstimator(gestureArr);
-
-    const est = GE.estimate(pixelVals, 7.5);
-
-    if (est.gestures.length > 0) {
-      let result = est.gestures.reduce((c1, c2) => {
-        return c1.score > c2.score ? c1 : c2;
-      });
-
-      const currUnicode = result.name;
-      const letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
-
-      motionLetterRef.current = letter;
-
-    }
-  };
+  
 
   // useStaticSigns(staticLetterRef.current, poseRef.current, motionEnabled);
 
   // const test = () => {
-  //   console.log(pixelValsRef.current);
+  //   console.log(currentLandmarks[0][8]);
   //   requestAnimationFrame(test);
   // };
   // requestAnimationFrame(test);
 
-  useMotionSigns(landmarkRef, motionLetterRef,motionEnabled);
+
+
+  useMotionSigns(currentLandmarks, pixelValsRef,motionEnabled);
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
