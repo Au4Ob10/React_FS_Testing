@@ -6,11 +6,11 @@ interface Keypoint3D {
   z: number;
 }
 
-export const landmarksRef = createRef()
+export const fingerTipsRef = createRef()
 export const pixelValsRef = createRef<Keypoint3D[]>();
 
 
-landmarksRef.current = {
+fingerTipsRef.current = {
   indexTip: null,
   pinkyTip: null
 }

@@ -1,38 +1,28 @@
 'use client';
 import React, {
-  createRef,
   useEffect,
   useRef,
   useState,
-  useContext,
-  createContext,
 } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
 import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
-import { messageContext } from './messageContext';
-import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
-import { useTimeout } from '@chakra-ui/react';
 import useStaticSigns from './gestureDetection/useStaticSigns';
+import { fingerTipsRef } from './landmarkRefs';
+import { useMessageBody } from './messageState';
 import useMotionSigns from './gestureDetection/useMotionSigns';
-import { landmarksRef} from './landmarkRefs';
-
 
 const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
-  const fpGestureRef = useRef(null);
   const poseRef = useRef(null);
   const staticLetterRef = useRef<string | null>(null);
-  const motionLetterRef = useRef<string | null>(null);
   const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
-  const landmarks = useRef(null);
-  const gestureEstimate = useRef(null);
-  const [currentLandmarks, setCurrentLandmarks] = useState(null);
-  const pixelValsRef = useRef(null)
-  
+  const landmarksRef = useRef(null);
+
+  const pixelValsRef = useRef(null);
 
   // const landmarkTips = useRef({
   //   indexTip: null,
@@ -44,8 +34,10 @@ const Demo = () => {
   );
 
   const [subHeading, setSubHeading] = useState('Static');
+
+
   // const [messageBody, setMessageBody] = useState('')
-  const { messageBody, setMessageBody } = useContext(messageContext);
+  // const { messageBody, setMessageBody } = useContext(messageContext);
 
   const hand_landmarker_task = '/models/hand_landmarker.task';
 
@@ -59,11 +51,14 @@ const Demo = () => {
         const vision = await FilesetResolver.forVisionTasks(
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
         );
-        landmarkDetect.current = await HandLandmarker.createFromOptions(vision, {
-          baseOptions: { modelAssetPath: hand_landmarker_task },
-          numHands: 1,
-          runningMode: 'VIDEO',
-        });
+        landmarkDetect.current = await HandLandmarker.createFromOptions(
+          vision,
+          {
+            baseOptions: { modelAssetPath: hand_landmarker_task },
+            numHands: 1,
+            runningMode: 'VIDEO',
+          }
+        );
         // detectHands();
       } catch (error) {
         console.error('Error initializing hand detection:', error);
@@ -103,12 +98,9 @@ const Demo = () => {
 
   useEffect(() => {
     let animationFrameId;
-    
 
     const renderLoop = async () => {
       const handLandmarker = landmarkDetect.current;
-
-      
 
       if (!videoRef.current || !canvasRef.current || !handLandmarker) {
         requestAnimationFrame(renderLoop);
@@ -119,32 +111,29 @@ const Demo = () => {
           videoRef.current,
           performance.now()
         );
-       
-    
+
         const canvas = canvasRef.current;
 
         const canvasWidth = canvas.clientWidth;
         const canvasHeight = canvas.clientHeight;
 
         if (results.landmarks && results.landmarks.length > 0) {
-          
-          landmarksRef.current = {
+          landmarksRef.current = results.landmarks[0];
+          fingerTipsRef.current = {
             indexTip: results.landmarks[0][8],
-            pinkyTip: results.landmarks[0][20]
-          }
-         
+            pinkyTip: results.landmarks[0][20],
+          };
 
-          const pixelVals = results.landmarks[0].map(({ x, y, z }) => [
+          const pixelVals = landmarksRef.current.map(({ x, y, z }) => [
             x * canvasWidth,
             y * canvasHeight,
             z,
           ]);
 
-
           pixelValsRef.current = pixelVals;
-          
+
           // drawLandmarks(results.landmarks);
-          // staticSigns();
+          staticSigns();
 
           // zGestures();
         }
@@ -155,39 +144,31 @@ const Demo = () => {
 
     renderLoop();
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
 
-  const staticSigns =  () => {
+     const staticSigns = () => {
     const GE = new fp.GestureEstimator(currentLanguage);
+
     const est = GE.estimate(pixelValsRef.current, 6.5);
+    if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
       });
 
       const currUnicode = result.name;
-
+    
+      poseRef.current = est.poseData
       let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
 
       staticLetterRef.current = letter;
-
+    }
   };
+ 
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
 
+  useStaticSigns(staticLetterRef, poseRef, motionEnabled);
 
-
-  
-
-  // useStaticSigns(staticLetterRef.current, poseRef.current, motionEnabled);
-
-  // const test = () => {
-  //   console.log(currentLandmarks[0][8]);
-  //   requestAnimationFrame(test);
-  // };
-  // requestAnimationFrame(test);
-
-
-
-  useMotionSigns(currentLandmarks, pixelValsRef,motionEnabled);
+  useMotionSigns(pixelValsRef,motionEnabled);
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
@@ -204,7 +185,9 @@ const Demo = () => {
     }
   };
 
-  return (
+  const messageBody = useMessageBody((state) => state.messageBody)
+
+   return (
     <>
       {/* 
       <button
@@ -237,11 +220,10 @@ const Demo = () => {
           }}
         />
       </div>
-      <messageContext.Provider value={{ messageBody, setMessageBody }}>
+     
         <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>
           {messageBody}
         </p>
-      </messageContext.Provider>
       <canvas
         ref={canvasRef}
         style={{
