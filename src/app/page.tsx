@@ -22,6 +22,7 @@ const Demo = () => {
   const [motionEnabled, setMotionEnabled] = useState(false);
   const landmarksRef = useRef(null);
 
+
   const pixelValsRef = useRef(null);
 
   // const landmarkTips = useRef({
@@ -147,8 +148,8 @@ const Demo = () => {
 
      const staticSigns = () => {
     const GE = new fp.GestureEstimator(currentLanguage);
-
     const est = GE.estimate(pixelValsRef.current, 6.5);
+
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
@@ -166,9 +167,11 @@ const Demo = () => {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  useStaticSigns(staticLetterRef, poseRef, motionEnabled);
+  useStaticSigns(staticLetterRef,motionEnabled);
 
   useMotionSigns(pixelValsRef,motionEnabled);
+
+ 
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
@@ -184,8 +187,20 @@ const Demo = () => {
       setAppTitle('American Sign Language');
     }
   };
+    const messageBody = useMessageBody((state) => state.messageBody)
 
-  const messageBody = useMessageBody((state) => state.messageBody)
+  const setMessage = useMessageBody((state) => state.appendMessage);
+
+  // const clearMessage = () => {
+  //   setMessage('')
+  //   console.log(messageBody.length)
+  // }
+
+  const deleteCharacter = () => {
+    setMessage('')
+  }
+
+
 
    return (
     <>
@@ -203,6 +218,8 @@ const Demo = () => {
       </h2>
       <button onClick={gestureLanguageToggle}>Toggle Language</button>
       <button onClick={gestureModeToggle}>Toggle Gesture Mode</button>
+      <button>Clear Message</button>
+      <button onClick={deleteCharacter}>Backspace</button>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <video

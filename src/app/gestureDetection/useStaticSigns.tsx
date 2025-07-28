@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as fp from 'fingerpose';
 import { messageContext } from '../messageContext';
 import { useMessageBody } from '../messageState';
+import { clearMessageRef, deleteLetterRef } from '../deletionRef';
 
-const useStaticSigns = (letterRef, poseRef, motionEnabled: boolean) => {
+const useStaticSigns = (letterRef, motionEnabled: boolean) => {
   const lastAppendedLetterRef = useRef(null);
   const rafIdRef = useRef(null);
 
-  const appendLetter = useMessageBody((state) => state.appendMessage);
+  const setMessageBody = useMessageBody((state) => state.appendMessage);
 
   useEffect(() => {
     const rafInterval = (callback, interval) => {
@@ -16,16 +17,24 @@ const useStaticSigns = (letterRef, poseRef, motionEnabled: boolean) => {
         if (!motionEnabled && now - start >= interval) {
           callback();
           start = now;
-          
-        } else if (motionEnabled) {
+        } 
+        else if (deleteLetterRef.current === "delete")  {
+         console.log('test')
+        }
+        else if (clearMessageRef.current === "clear") {
+          setMessageBody('')
+          clearMessageRef.current = null
+        }
+        else if (motionEnabled) {
           cancelAnimationFrame(rafIdRef.current);
           rafIdRef.current = null;
+          letterRef.current = null;
           return;
         }
-        rafIdRef.current = requestAnimationFrame(loop); //
+        rafIdRef.current = requestAnimationFrame(loop);
       };
 
-      rafIdRef.current = requestAnimationFrame(loop); //
+      rafIdRef.current = requestAnimationFrame(loop);
     };
 
     // if(motionEnabled) {
@@ -33,20 +42,18 @@ const useStaticSigns = (letterRef, poseRef, motionEnabled: boolean) => {
     //     }
 
     const letterAppend = () => {
-      const letter = letterRef.current;
       // if (letter && letter !== lastAppendedLetterRef.current) {
       // console.log(letter)
-      if (letter) {
-        appendLetter(letter);
+      if (letterRef.current) {
+        setMessageBody(letterRef.current);
         letterRef.current = null;
         // lastAppendedLetterRef.current = letter;
       }
     };
-    if (!motionEnabled) {
-      rafInterval(() => {
-        letterAppend();
-      }, 500);
-    }
+
+    rafInterval(() => {
+      letterAppend();
+    }, 500);
   }, [motionEnabled]);
 };
 

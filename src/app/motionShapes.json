@@ -1,21 +1,34 @@
-  {
+{
   "U004A": {
-      "Curls": {
-        "Thumb": "HalfCurl",
-        "Index": "FullCurl",
-        "Middle": "FullCurl",
-        "Ring": "FullCurl",
-        "Pinky": "NoCurl"
-      }
+    "Curls": {
+      "Thumb": "NoCurl",
+      "Index": "FullCurl",
+      "Middle": "FullCurl",
+      "Ring": "FullCurl",
+      "Pinky": "NoCurl"
     },
-
-    "U005A": {
-      "Curls": {
-        "Thumb": "HalfCurl",
-        "Index": "NoCurl",
-        "Middle": "NoCurl",
-        "Ring": "FullCurl",
-        "Pinky": "FullCurl"
-      }
+    "curlConf": {
+      "Thumb": 0.7,
+      "Index": 0.7,
+      "Middle": 0.7,
+      "Ring": 0.7,
+      "Pinky": 0.9
+    }
+  },
+  "U005A": {
+    "Curls": {
+      "Thumb": "HalfCurl",
+      "Index": "NoCurl",
+      "Middle": "FullCurl",
+      "Ring": "FullCurl",
+      "Pinky": "FullCurl"
+    },
+    "curlConf": {
+      "Thumb": 0.7,
+      "Index": 0.9,
+      "Middle": 0.7,
+      "Ring": 0.7,
+      "Pinky": 0.7
     }
   }
+}
