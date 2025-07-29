@@ -9,7 +9,7 @@ import * as fp from 'fingerpose';
 import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
 import { fingerTipsRef } from './landmarkRefs';
 // import { useMessageBody } from './messageState';
-import useMotionSigns from './gestureDetection/useMotionSigns';
+import {createMotionLetters,detectMotionSigns} from './gestureDetection/detectMotionSigns';
 import detectStaticSigns from './gestureDetection/detectStaticSigns';
 
 const Demo = () => {
@@ -18,11 +18,12 @@ const Demo = () => {
   const landmarkDetect = useRef(null);
   const poseRef = useRef(null);
   const staticLetterRef = useRef<string | null>(null);
-  const letterRef = useRef<string | null>('');
+  const motionLetterRef = useRef<string | null>('');
+  const completedLetter = useRef<string | null>(null);
   const [ASLMode, setASLMode] = useState(true)
   const [languageArray, setLanguageArray] = useState(ASLGestArray);
-  const [motionEnabled, setMotionEnabled] = useState(false);
-  const motionEnabledRef = useRef(false);
+  const [motionEnabled, setMotionEnabled] = useState(true);
+  const motionEnabledRef = useRef(true);
   const landmarksRef = useRef(null);
   const [messageBody, setMessageBody] = useState('')
   const animationRef = useRef(null)
@@ -50,6 +51,8 @@ const Demo = () => {
   let animationFrameId;
   let videoFrameID;
   const video = videoRef.current;
+
+ 
 
 
   useEffect(() => {
@@ -136,7 +139,7 @@ const Demo = () => {
       }
 
       if (motionEnabledRef.current ) {
-          letterRef.current = null;
+          staticLetterRef.current = null;
         cancelAnimationFrame(animationRef.current)
      
         // animationRef.current = null;
@@ -151,6 +154,8 @@ const Demo = () => {
 
 
   useEffect(() => {
+    
+
     const renderLoop = async () => {
       const handLandmarker = landmarkDetect.current;
 
@@ -176,34 +181,55 @@ const Demo = () => {
             pinkyTip: results.landmarks[0][20],
           };
 
-          const pixelVals = landmarksRef.current.map(({ x, y, z }) => [
+        
+     const pixelVals = landmarksRef.current.map(({ x, y, z }) => [
             x * canvasWidth,
             y * canvasHeight,
             z,
           ]);
-
+          
           pixelValsRef.current = pixelVals;
+          staticLetterRef.current = detectStaticSigns(languageArray, pixelValsRef)
 
-          letterRef.current = detectStaticSigns(languageArray, pixelValsRef)
-
-          if (letterRef.current.length < 2) {
-            setMessageBody((msg) => msg + letterRef.current)
-            letterRef.current = ''
-            console.log(motionEnabledRef.current)
+          if (staticLetterRef && staticLetterRef.current.length === 1) {
+            setMessageBody((msg) => msg + staticLetterRef.current)
           }
-        }
-      }
-    };
+
+   
 
 
     rafInterval(
       renderLoop, 500)
 
+             const detectMotionLetters = () => {
+          if (!motionEnabledRef.current) {
+            cancelAnimationFrame(animationRef.current)
+            motionLetterRef.current = null
+            return
+          }
+          if (motionEnabledRef.current) {
+          motionLetterRef.current = createMotionLetters(canvas,landmarksRef)
+          completedLetter.current = detectMotionSigns(motionLetterRef,landmarksRef)
+          }
+          if (completedLetter && completedLetter.current.length === 1) {
+            setMessageBody((msg) => msg + completedLetter.current)
+            completedLetter.current = null
+          }
+          animationRef.current = requestAnimationFrame(detectMotionLetters)
+          }
+          animationRef.current = requestAnimationFrame(detectMotionLetters)
+
+        }
+      }
+    };
+
+      
+
 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  useMotionSigns(pixelValsRef, motionEnabled);
+ 
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
