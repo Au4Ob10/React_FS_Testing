@@ -7,10 +7,10 @@ import React, {
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
 import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
-import useStaticSigns from './gestureDetection/useStaticSigns';
 import { fingerTipsRef } from './landmarkRefs';
-import { useMessageBody } from './messageState';
+// import { useMessageBody } from './messageState';
 import useMotionSigns from './gestureDetection/useMotionSigns';
+import detectStaticSigns from './gestureDetection/detectStaticSigns';
 
 const Demo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -18,9 +18,14 @@ const Demo = () => {
   const landmarkDetect = useRef(null);
   const poseRef = useRef(null);
   const staticLetterRef = useRef<string | null>(null);
-  const [currentLanguage, setCurrentLanguage] = useState(ASLGestArray);
+  const letterRef = useRef<string | null>('');
+  const [ASLMode, setASLMode] = useState(true)
+  const [languageArray, setLanguageArray] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
+  const motionEnabledRef = useRef(false);
   const landmarksRef = useRef(null);
+  const [messageBody, setMessageBody] = useState('')
+  const animationRef = useRef(null)
 
 
   const pixelValsRef = useRef(null);
@@ -45,6 +50,28 @@ const Demo = () => {
   let animationFrameId;
   let videoFrameID;
   const video = videoRef.current;
+
+
+  useEffect(() => {
+
+    if (ASLMode) {
+      setAppTitle('American Sign Language')
+      setLanguageArray(ASLGestArray)
+    }
+
+    else {
+      setAppTitle('Mexican Sign Language')
+      setLanguageArray(ASLGestArray)
+    }
+
+  }, [ASLMode])
+
+
+  useEffect(() => {
+    motionEnabledRef.current = motionEnabled
+  },[motionEnabled])
+
+  
 
   useEffect(() => {
     const initializeHandDetection = async () => {
@@ -97,9 +124,33 @@ const Demo = () => {
     };
   }, []);
 
-  useEffect(() => {
-    let animationFrameId;
+  let animationId;
 
+
+  const rafInterval = (callback, interval) => {
+    let start = performance.now();
+    const loop = (now) => {
+          if (!motionEnabledRef.current && now - start >= interval) {
+        callback();
+        start = now;
+      }
+
+      if (motionEnabledRef.current ) {
+          letterRef.current = null;
+        cancelAnimationFrame(animationRef.current)
+     
+        // animationRef.current = null;
+      }
+
+      animationRef.current = requestAnimationFrame(loop);
+    };
+
+    animationRef.current = requestAnimationFrame(loop);
+  };
+
+
+
+  useEffect(() => {
     const renderLoop = async () => {
       const handLandmarker = landmarkDetect.current;
 
@@ -133,45 +184,26 @@ const Demo = () => {
 
           pixelValsRef.current = pixelVals;
 
-          // drawLandmarks(results.landmarks);
-          staticSigns();
+          letterRef.current = detectStaticSigns(languageArray, pixelValsRef)
 
-          // zGestures();
+          if (letterRef.current.length < 2) {
+            setMessageBody((msg) => msg + letterRef.current)
+            letterRef.current = ''
+            console.log(motionEnabledRef.current)
+          }
         }
-
-        animationFrameId = requestAnimationFrame(renderLoop);
       }
     };
 
-    renderLoop();
+
+    rafInterval(
+      renderLoop, 500)
 
 
-     const staticSigns = () => {
-    const GE = new fp.GestureEstimator(currentLanguage);
-    const est = GE.estimate(pixelValsRef.current, 6.5);
-
-    if (est.gestures.length > 0) {
-      let result = est.gestures.reduce((c1, c2) => {
-        return c1.score > c2.score ? c1 : c2;
-      });
-
-      const currUnicode = result.name;
-    
-      
-      let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
-
-      staticLetterRef.current = letter;
-    }
-  };
- 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  useStaticSigns(staticLetterRef,motionEnabled);
-
-  useMotionSigns(pixelValsRef,motionEnabled);
-
- 
+  useMotionSigns(pixelValsRef, motionEnabled);
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
@@ -179,30 +211,25 @@ const Demo = () => {
   };
 
   const gestureLanguageToggle = () => {
-    if (currentLanguage === ASLGestArray) {
-      setCurrentLanguage(MSLGestArray);
-      setAppTitle('Mexican Sign Language');
-    } else {
-      setCurrentLanguage(ASLGestArray);
-      setAppTitle('American Sign Language');
-    }
+    setASLMode((useASL) => !useASL)
   };
-    const messageBody = useMessageBody((state) => state.messageBody)
+  //   const messageBody = useMessageBody((state) => state.messageBody)
 
-  const setMessage = useMessageBody((state) => state.appendMessage);
+  // const setMessage = useMessageBody((state) => state.appendMessage);
 
   // const clearMessage = () => {
   //   setMessage('')
   //   console.log(messageBody.length)
   // }
 
-  const deleteCharacter = () => {
-    setMessage('')
+
+  
+  const clearMessage = () => {
+    setMessageBody('')
   }
 
 
-
-   return (
+  return (
     <>
       {/* 
       <button
@@ -218,8 +245,8 @@ const Demo = () => {
       </h2>
       <button onClick={gestureLanguageToggle}>Toggle Language</button>
       <button onClick={gestureModeToggle}>Toggle Gesture Mode</button>
-      <button>Clear Message</button>
-      <button onClick={deleteCharacter}>Backspace</button>
+      <button onClick={clearMessage}>Clear Message</button>
+      {/* <button onClick={deleteCharacter}>Backspace</button> */}
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <video
@@ -237,10 +264,10 @@ const Demo = () => {
           }}
         />
       </div>
-     
-        <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>
-          {messageBody}
-        </p>
+
+      <p style={{ textAlign: 'center', wordWrap: 'break-word' }}>
+        {messageBody}
+      </p>
       <canvas
         ref={canvasRef}
         style={{
