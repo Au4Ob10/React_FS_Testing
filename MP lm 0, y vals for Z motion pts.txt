@@ -11,9 +11,6 @@ mtn 4: 0.05103735998272896
 
 
 
-for (yVals in arr)
-
-
 
 
 Wrist pt 1
