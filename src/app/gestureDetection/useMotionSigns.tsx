@@ -1,17 +1,32 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import { messageContext } from '../messageContext';
 import * as fp from 'fingerpose';
+import { fingerTipsRef } from '../landmarkRefs';
 import motionShapes from '../motionShapes.json';
+import { useMessageBody } from '../messageState';
 
+const useMotionSigns = (pixelValsRef, motionEnabled) => {
+  const gestureEstimate = useRef(null);
+  const letterRef = useRef(null);
+  const lastLetterRef = useRef(null);
+  const gesturePt = useRef(null);
+  const rafIdRef = useRef(null);
 
+  const appendLetter = useMessageBody((state) => state.appendMessage);
 
-export const validGestureShape = (pixelValsRef,motionLetter) => {
+  useEffect(() => {
+    let lastUpdateTime = 0;
+
+    const validGestureShape = () => {
       const pixelVals = pixelValsRef.current;
       let gestureArr = [];
 
       if (pixelVals) {
         Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
+          // let letter = String.fromCharCode(parseInt(unicodeVal.slice(1), 16))
+
           const newGesture = new fp.GestureDescription(unicodeVal);
+
           Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
             const curlConfidence = props.curlConf[fingerName];
             newGesture.addCurl(
@@ -27,6 +42,12 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
 
         const est = GE.estimate(pixelVals, 8.0);
 
+        // const test = () => {
+        //   console.log(est.poseData);
+
+        //   requestAnimationFrame(test);
+        // };
+        // requestAnimationFrame(test);
 
         if (est.gestures.length > 0) {
           let result = est.gestures.reduce((c1, c2) => {
@@ -38,43 +59,44 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
             parseInt(currUnicode.slice(1), 16)
           );
 
-          motionLetter.current.fingerpose = letter;
+          letterRef.current = letter;
         }
       }
     };
 
+    const motionGestures = () => {
+      const letter = letterRef.current;
 
-    export const detectMotionGestures = (fingerTipsRef, motionLetter, motionEnabled) => {
-
-      let animationId;
-      let gesturePt;
-      let lastTime;
-   
      
       const coordRange = (val, min, max) => {
         return val >= min && val <= max;
       };
 
-        let indexFingerTip = fingerTipsRef.current['indexTip'];
-        let pinkyTip = fingerTipsRef.current['pinkyTip'];
-
+      let lastTime = Date.now();
 
       const createMotionSign = () => {
-      
+        validGestureShape();
+
+        let indexFingerTip = fingerTipsRef.current['indexTip'];
+        let pinkyTip = fingerTipsRef.current['pinkyTip'];
         const now = Date.now();
 
-  
+        const currentLetter = letterRef.current;
+
         if (!motionEnabled) {
-          cancelAnimationFrame(animationId);
-         animationId = null
+          cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
           pinkyTip = null
           indexFingerTip = null
           return;
         }
-        
-        if (fingerTipsRef.current) {
-    
-        if (motionLetter.current.fingerpose === 'J') {
+
+        if (lastLetterRef.current !== currentLetter) {
+          gesturePt.current = null;
+          lastLetterRef.current = currentLetter;
+        }
+
+        if (letterRef.current === 'J') {
           indexFingerTip = null
           const xPinky = pinkyTip['x'];
           const yPinky = pinkyTip['y'];
@@ -83,43 +105,45 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
           if (
             coordRange(xPinky, 0, 0.46) &&
             coordRange(yPinky, 0.08, 1.0) &&
-            gesturePt === null
+            gesturePt.current === null
           ) {
-            gesturePt = 'firstJ';
+            gesturePt.current = 'firstJ';
             lastTime = now;
             console.log('First J point hit');
           }
           if (
             coordRange(xPinky, 0, 0.46) &&
             coordRange(yPinky, 0.25, 1.0) &&
-            gesturePt === 'firstJ'
+            gesturePt.current === 'firstJ'
           ) {
-            gesturePt = 'secondJ';
+            gesturePt.current = 'secondJ';
             lastTime = now;
             console.log('Second J point hit');
           }
           if (
             coordRange(xPinky, 0, 0.61) &&
             coordRange(yPinky, 0.35, 1.0) &&
-            gesturePt === 'secondJ'
+            gesturePt.current === 'secondJ'
           ) {
-            gesturePt = 'thirdJ';
+            gesturePt.current = 'thirdJ';
             lastTime = now;
             console.log('Third J point hit');
           }
           if (
             coordRange(xPinky, 0.39, 1.0) &&
             coordRange(yPinky, 0.25, 1.0) &&
-            gesturePt === 'thirdJ'
+            gesturePt.current === 'thirdJ'
           ) {
             lastTime = now;
             console.log('Fourth J point hit');
-            motionLetter.current.final = "J"
-            gesturePt = null;
+            appendLetter(letterRef.current);
+            gesturePt.current = null;
+            letterRef.current = null;
+            // setMessageBody((msg) => msg + 'J');
           }
         }
 
-        if (indexFingerTip && motionLetter.current.fingerpose === 'Z') {
+        if (indexFingerTip && letterRef.current === 'Z') {
           pinkyTip = null
           const xIndex = indexFingerTip['x'];
           const yIndex = indexFingerTip['y'];
@@ -129,27 +153,27 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
           if (
             coordRange(xIndex, 0.33, 1.0) &&
             coordRange(yIndex, 0.0, 0.68) &&
-            gesturePt === null
+            gesturePt.current === null
           ) {
-            gesturePt = 'firstZ';
+            gesturePt.current = 'firstZ';
             lastTime = now;
             console.log('First Z point hit');
           }
           if (
             coordRange(xIndex, 0.0, 0.33) &&
             coordRange(yIndex, 0.0, 0.68) &&
-            gesturePt === 'firstZ'
+            gesturePt.current === 'firstZ'
           ) {
-            gesturePt = 'secondZ';
+            gesturePt.current = 'secondZ';
             lastTime = now;
             console.log('Second Z point hit');
           }
           if (
             coordRange(xIndex, 0.46, 1.0) &&
             coordRange(yIndex, 0.46, 1.0) &&
-            gesturePt === 'secondZ'
+            gesturePt.current === 'secondZ'
           ) {
-            gesturePt = 'thirdZ';
+            gesturePt.current = 'thirdZ';
            
             lastTime = now;
             console.log('Third Z point hit');
@@ -157,24 +181,26 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
           if (
             coordRange(xIndex, 0, 0.47) &&
             coordRange(yIndex, 0.61, 1.0) &&
-            gesturePt === 'thirdZ'
+            gesturePt.current === 'thirdZ'
           ) {
             lastTime = now;
             console.log('Fourth Z point hit');
-            motionLetter.current.final = "Z"
-            gesturePt = null;
-            // motionLetter.current = null;
+            appendLetter(letterRef.current);
+            gesturePt.current = null;
+            letterRef.current = null;
+            // setMessageBody((msg) => msg + 'Z');
           }
         }
-      }
-        animationId = requestAnimationFrame(createMotionSign);
+
+        rafIdRef.current = requestAnimationFrame(createMotionSign);
       };
-       animationId = requestAnimationFrame(createMotionSign);
+      rafIdRef.current = requestAnimationFrame(createMotionSign);
     };
-   
-  
+    motionGestures();
+  }, [motionEnabled]);
+};
 
-
+export default useMotionSigns;
 
 // Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
 //   const newGesture = new fp.GestureDescription(unicodeVal);
