@@ -26,7 +26,7 @@ const Demo = () => {
 
   const [ASLMode, setASLMode] = useState(true)
   const [languageArray, setLanguageArray] = useState(ASLGestArray);
-  const [motionEnabled, setMotionEnabled] = useState(true);
+  const [motionEnabled, setMotionEnabled] = useState(false);
   const motionEnabledRef = useRef(false);
 
   const landmarksRef = useRef(null);
@@ -160,13 +160,14 @@ const Demo = () => {
   useEffect(() => {
 
     const detectLandmarks = () => {
+     
   if (videoRef.current && videoRef.current.readyState === 4) {
     const handLandmarker = landmarkDetect.current;
         const results = handLandmarker.detectForVideo(
           videoRef.current,
           performance.now()
         );
-
+  
          landmarksRef.current = results.landmarks[0];
 
 
@@ -202,8 +203,6 @@ detectLandmarks()
 
 console.log(motionLetter.current)
   detectMotionGestures(fingerTipsRef,motionLetter,motionEnabled)
-  
-
   let finalLetter = motionLetter.current.final
 
 if (finalLetter && finalLetter.length === 1) {
@@ -212,11 +211,12 @@ if (finalLetter && finalLetter.length === 1) {
 }
 
 }
-        motionSigns()
+        // motionSigns()
 
 
     const staticSigns = async () => {
-      
+    
+      detectLandmarks()
       if (!videoRef.current || !canvasRef.current) {
         // requestAnimationFrame(staticSigns);
         return;
@@ -233,7 +233,8 @@ if (finalLetter && finalLetter.length === 1) {
 
         }
     }
-  //  rafInterval(staticSigns, 500)
+    rafInterval(staticSigns,500)
+
 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
