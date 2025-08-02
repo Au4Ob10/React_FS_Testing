@@ -270,36 +270,7 @@
     }
 
 },
-  "U004a": {
-    "Curls": {
-      "Thumb": "NoCurl",
-      "Index": "FullCurl",
-      "Middle": "FullCurl",
-      "Ring": "FullCurl",
-      "Pinky": "NoCurl"
-    },
-    "curlConf": {
-      "Thumb": 1.0,
-      "Index": 1.0,
-      "Middle": 1.0,
-      "Ring": 1.0,
-      "Pinky": 1.0
-    },
-    "directions": {
-      "Thumb": [],
-      "Index": ["DiagonalUpRight", "DiagonalUpRight"],
-      "Middle": ["DiagonalUpRight"],
-      "Ring": ["HorizontalRight"],
-      "Pinky": ["HorizontalRight"]
-    },
-    "directionConf": {
-      "Thumb": 0.7,
-      "Index": 0.7,
-      "Middle": 0.7,
-      "Ring": 0.7,
-      "Pinky": 0.7
-    }
-  },
+
   "U004b": {
     "Curls": {
       "Thumb": "NoCurl",
