@@ -5,9 +5,12 @@ import motionShapes from '../motionShapes.json';
 
 
 
-export const validGestureShape = (pixelValsRef,motionLetter) => {
+export const detectMotionGesture = (pixelValsRef,fingerTipsRef,motionLetter) => {
+
       const pixelVals = pixelValsRef.current;
+      
       let gestureArr = [];
+      let letter: string;
 
       if (pixelVals) {
         Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
@@ -34,17 +37,19 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
           });
 
           const currUnicode = result.name;
-          const letter = String.fromCharCode(
+           letter = String.fromCharCode(
             parseInt(currUnicode.slice(1), 16)
           );
 
-          motionLetter.current.fingerpose = letter;
+          
         }
       }
-    };
+    
+  
+      const createMotionSign = () => {    
 
-
-    export const detectMotionGestures = (fingerTipsRef, motionLetter, motionEnabled) => {
+      let indexFingerTip = fingerTipsRef.current['indexTip'];
+      let pinkyTip = fingerTipsRef.current['pinkyTip'];
 
       let animationId;
       let gesturePt;
@@ -55,22 +60,17 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
         return val >= min && val <= max;
       };
 
-        let indexFingerTip = fingerTipsRef.current['indexTip'];
-        let pinkyTip = fingerTipsRef.current['pinkyTip'];
-
-
-      const createMotionSign = () => {
-      
+    
+  
         const now = Date.now();
 
-  
-        if (!motionEnabled) {
-          cancelAnimationFrame(animationId);
-         animationId = null
-          pinkyTip = null
-          indexFingerTip = null
-          return;
-        }
+        // if (!motionEnabled) {
+        //   cancelAnimationFrame(animationId);
+        //  animationId = null
+        //   pinkyTip = null
+        //   indexFingerTip = null
+        //   return;
+        // }
         
         if (fingerTipsRef.current) {
     
@@ -167,11 +167,11 @@ export const validGestureShape = (pixelValsRef,motionLetter) => {
           }
         }
       }
-        animationId = requestAnimationFrame(createMotionSign);
+      
       };
-       animationId = requestAnimationFrame(createMotionSign);
+      createMotionSign()
     };
-   
+  
   
 
 

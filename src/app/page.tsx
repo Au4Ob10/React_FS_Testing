@@ -18,12 +18,15 @@ const Demo = () => {
   const landmarkDetect = useRef(null);
 
   const staticLetter = useRef<string | null>('');
-
   const motionLetter = useRef({
     fingerpose: null,
-    final: null
+    finalLetter: null
   })
-
+  // const motionLetter = useRef({
+  //   fingerpose: null,
+  //   final: null
+  // })
+const animationId = useRef(null)
   const [ASLMode, setASLMode] = useState(true)
   const [languageArray, setLanguageArray] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
@@ -82,7 +85,6 @@ const Demo = () => {
   },[motionEnabled])
 
   
-
   useEffect(() => {
     const initializeHandDetection = async () => {
       try {
@@ -134,7 +136,6 @@ const Demo = () => {
     };
   }, []);
 
-  let animationId;
 
  const rafInterval = (callback, interval) => {
     let start = performance.now();
@@ -158,9 +159,15 @@ const Demo = () => {
   };
 
   useEffect(() => {
+    // if (
+    //   !videoRef.current ||
+    //   videoRef.current.readyState !== 4 ||
+    //   landmarkDetect.current
+    // ) {
+    //   return
+    // }
 
     const detectLandmarks = () => {
-     
   if (videoRef.current && videoRef.current.readyState === 4) {
     const handLandmarker = landmarkDetect.current;
         const results = handLandmarker.detectForVideo(
@@ -170,7 +177,7 @@ const Demo = () => {
   
          landmarksRef.current = results.landmarks[0];
 
-
+        
           if (landmarksRef.current && landmarksRef.current.length > 0) {
 
 
@@ -193,30 +200,36 @@ const Demo = () => {
       
         }
     }
+    // animationId.current = requestAnimationFrame(detectLandmarks);
   }
-
-  
+  // animationId.current = requestAnimationFrame(detectLandmarks);
 
 const motionSigns = () => {
-detectLandmarks()
-  validGestureShape(pixelValsRef,motionLetter)
+  detectLandmarks()
 
-console.log(motionLetter.current)
-  detectMotionGestures(fingerTipsRef,motionLetter,motionEnabled)
-  let finalLetter = motionLetter.current.final
+  if (!videoRef.current || !canvasRef.current) {
+        // requestAnimationFrame(staticSigns);
+        return;
+      }
 
-if (finalLetter && finalLetter.length === 1) {
- setMessageBody((msg) => msg + finalLetter)
- finalLetter = null
+
+  if (landmarksRef.current && landmarksRef.current.length > 0) {
+motionLetter.current.fingerpose = validGestureShape(pixelValsRef)
+  motionLetter.current.finalLetter = detectMotionGestures(fingerTipsRef,motionLetter)
+  
+ 
+if (motionLetter.current && motionLetter.current.finalLetter.length === 1) {
+ setMessageBody((msg) => msg + motionLetter.current.finalLetter)
+ 
 }
-
+  }
 }
-        // motionSigns()
+animationId.current = requestAnimationFrame(motionSigns);
 
 
     const staticSigns = async () => {
-    
-      detectLandmarks()
+    detectLandmarks()
+     
       if (!videoRef.current || !canvasRef.current) {
         // requestAnimationFrame(staticSigns);
         return;
@@ -233,7 +246,10 @@ if (finalLetter && finalLetter.length === 1) {
 
         }
     }
-    rafInterval(staticSigns,500)
+  
+ 
+    // rafInterval(staticSigns,500)
+    rafInterval(motionSigns,500)
 
 
     return () => cancelAnimationFrame(animationFrameId);
