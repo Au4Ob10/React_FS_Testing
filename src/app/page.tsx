@@ -3,9 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
 import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
-import { fingerTipsRef } from './landmarkRefs';
-// import { useMessageBody } from './messageState';
-// import {validGestureShape, detectMotionGestures } from './gestureDetection/detectMotionSigns';
+import drawLandmarks from './gestureDetection/drawLandmarks';
 import detectStaticSigns from './gestureDetection/detectStaticSigns';
 import { detectMotionSigns } from './gestureDetection/detectMotionSigns';
 import motionShapes from '../app/motionShapes.json';
@@ -17,7 +15,7 @@ const Demo = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
 
-  const staticLetter = useRef<string | null>('');
+  const staticLetter = useRef<string>('');
   const fingerPoseLetter = useRef(null);
   const motionLetter = useRef(null);
   const animationId = useRef(null);
@@ -140,8 +138,8 @@ const Demo = () => {
     let start = performance.now();
     const loop = (now) => {
 
-      useASL.current ? setLanguageArray(ASLGestArray) : setLanguageArray(MSLGestArray)
-  
+      useASL.current ? setLanguageArray(MSLGestArray) : setLanguageArray(ASLGestArray)
+
       if (!motionEnabledRef.current && now - start >= interval) {
         callback();
         start = now;
@@ -198,6 +196,8 @@ const Demo = () => {
       }
 
     };
+
+
     
 
     const motionSigns = () => {
@@ -205,14 +205,13 @@ const Demo = () => {
       if (landmarksRef.current && landmarksRef.current.length > 0) {
         const pixelVals = pixelValsRef.current;
 
-        let gestureArr = [];
+        const gestureArr = [];
    
 
         if (pixelVals) {
           Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
             const newGesture = new fp.GestureDescription(unicodeVal);
             Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
-              const curlConfidence = props.curlConf[fingerName];
               newGesture.addCurl(
                 fp.Finger[fingerName],
                 fp.FingerCurl[curlType],
@@ -228,7 +227,7 @@ const Demo = () => {
         const est = GE.estimate(pixelVals, 8.0);
 
         if (est.gestures.length > 0) {
-          let result = est.gestures.reduce((c1, c2) => {
+          const result = est.gestures.reduce((c1, c2) => {
             return c1.score > c2.score ? c1 : c2;
           });
 
@@ -263,24 +262,41 @@ const Demo = () => {
         return;
       }
      
-      staticLetter.current = detectStaticSigns(ASLGestArray, pixelValsRef);
+      staticLetter.current = detectStaticSigns(languageArray, pixelValsRef);
 
       if (landmarksRef.current) {
-        if (staticLetter.current) {
+        if (typeof(staticLetter.current) === 'string' && staticLetter.current.length === 1) {
           setMessageBody((msg) => msg + staticLetter.current);
-          staticLetter.current = '';
+         staticLetter.current = ''
         }
       }
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 500);
+      rafInterval(staticSigns, 600);
     
     }
     // rafInterval(motionSigns,500)
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, []);
+  });
+
+
+  useEffect (() => {
+     let animationFrame;
+
+        const landmarkDraw = () => {
+          if (!landmarksRef.current) {
+            cancelAnimationFrame(animationFrame)
+          }
+
+      if (landmarksRef.current && landmarksRef.current.length > 0) {
+        drawLandmarks(landmarksRef,canvasRef)
+      }
+      animationFrame = requestAnimationFrame(landmarkDraw)
+    }
+    animationFrame = requestAnimationFrame(landmarkDraw)
+  }, [])
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);

@@ -1,4 +1,4 @@
-const drawLandmarks = (landmarksArray) => {
+const drawLandmarks = (landmarksArray, canvasRef) => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       if (!canvas || !ctx || !landmarksArray || landmarksArray.length === 0)
@@ -46,3 +46,5 @@ const drawLandmarks = (landmarksArray) => {
         });
       });
     };
+
+    export default drawLandmarks

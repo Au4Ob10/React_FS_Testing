@@ -5,7 +5,7 @@ import { useMessageBody } from '../messageState';
 import { clearMessageRef, deleteLetterRef } from '../deletionRef';
 
 const detectStaticSigns = (currentLanguage, pixelValsRef) => {
-  let letter;
+  let letter = ''
 
   if (pixelValsRef.current && pixelValsRef.current.length) {
     const GE = new fp.GestureEstimator(currentLanguage);
