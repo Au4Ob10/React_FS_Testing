@@ -1,48 +1,49 @@
 'use client';
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
 import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
 import { fingerTipsRef } from './landmarkRefs';
 // import { useMessageBody } from './messageState';
-import {validGestureShape, detectMotionGestures } from './gestureDetection/detectMotionSigns';
+// import {validGestureShape, detectMotionGestures } from './gestureDetection/detectMotionSigns';
 import detectStaticSigns from './gestureDetection/detectStaticSigns';
+import { detectMotionSigns } from './gestureDetection/detectMotionSigns';
+import motionShapes from '../app/motionShapes.json';
 
 const Demo = () => {
+
+ 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
 
   const staticLetter = useRef<string | null>('');
-  const motionLetter = useRef({
-    fingerpose: null,
-    finalLetter: null
-  })
-  // const motionLetter = useRef({
-  //   fingerpose: null,
-  //   final: null
-  // })
-const animationId = useRef(null)
-  const [ASLMode, setASLMode] = useState(true)
-  const [languageArray, setLanguageArray] = useState(ASLGestArray);
+  const fingerPoseLetter = useRef(null);
+  const motionLetter = useRef(null);
+  const animationId = useRef(null);
+
+  const motionGesturePt = useRef({
+    J: null,
+    Z: null
+  });
+  const [ASLMode, setASLMode] = useState(true);
+  const useASL = useRef(true);
+  const [languageArray,setLanguageArray] = useState(ASLGestArray)
+  // const [languageArray, setLanguageArray] = useState(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
   const motionEnabledRef = useRef(false);
 
   const landmarksRef = useRef(null);
   const fingerTipsRef = useRef({
     indexTip: null,
-    pinkyTip: null
+    pinkyTip: null,
   });
-  const [messageBody, setMessageBody] = useState('')
-  const animationRef = useRef(null)
-
+  const [messageBody, setMessageBody] = useState('');
+  const animationRef = useRef(null);
 
   const pixelValsRef = useRef(null);
 
+  
   // const landmarkTips = useRef({
   //   indexTip: null,
   //   pinkyTip: null
@@ -54,7 +55,6 @@ const animationId = useRef(null)
 
   const [subHeading, setSubHeading] = useState('Static');
 
-
   // const [messageBody, setMessageBody] = useState('')
   // const { messageBody, setMessageBody } = useContext(messageContext);
 
@@ -64,27 +64,27 @@ const animationId = useRef(null)
   let videoFrameID;
   const video = videoRef.current;
 
+  const hasUnicode = MSLGestArray
 
   useEffect(() => {
-
     if (ASLMode) {
-      setAppTitle('American Sign Language')
-      setLanguageArray(ASLGestArray)
+      setAppTitle('American Sign Language');
+      useASL.current = true
+   
+    } else {
+      setAppTitle('Mexican Sign Language');
+      useASL.current = false
+    
     }
-
-    else {
-      setAppTitle('Mexican Sign Language')
-      setLanguageArray(ASLGestArray)
-    }
-
-  }, [ASLMode])
+  }, [ASLMode]);
 
 
+
+ 
   useEffect(() => {
-    motionEnabledRef.current = motionEnabled
-  },[motionEnabled])
+    motionEnabledRef.current = motionEnabled;
+  }, [motionEnabled]);
 
-  
   useEffect(() => {
     const initializeHandDetection = async () => {
       try {
@@ -136,19 +136,21 @@ const animationId = useRef(null)
     };
   }, []);
 
-
- const rafInterval = (callback, interval) => {
+  const rafInterval = (callback, interval) => {
     let start = performance.now();
     const loop = (now) => {
-          if (!motionEnabledRef.current && now - start >= interval) {
+
+      useASL.current ? setLanguageArray(ASLGestArray) : setLanguageArray(MSLGestArray)
+  
+      if (!motionEnabledRef.current && now - start >= interval) {
         callback();
         start = now;
       }
 
-      if (motionEnabledRef.current ) {
-          staticLetter.current = null;
-        cancelAnimationFrame(animationRef.current)
-     
+      if (motionEnabledRef.current) {
+        staticLetter.current = null;
+        cancelAnimationFrame(animationRef.current);
+
         // animationRef.current = null;
       }
 
@@ -159,31 +161,26 @@ const animationId = useRef(null)
   };
 
   useEffect(() => {
-    // if (
-    //   !videoRef.current ||
-    //   videoRef.current.readyState !== 4 ||
-    //   landmarkDetect.current
-    // ) {
-    //   return
-    // }
+
 
     const detectLandmarks = () => {
-  if (videoRef.current && videoRef.current.readyState === 4) {
-    const handLandmarker = landmarkDetect.current;
+      if (
+        videoRef.current &&
+        videoRef.current.readyState === 4 &&
+        landmarkDetect.current
+      ) {
+        const handLandmarker = landmarkDetect.current;
         const results = handLandmarker.detectForVideo(
           videoRef.current,
           performance.now()
         );
-  
-         landmarksRef.current = results.landmarks[0];
 
-        
-          if (landmarksRef.current && landmarksRef.current.length > 0) {
+        landmarksRef.current = results.landmarks[0];
 
-
-        const canvas = canvasRef.current;
-        const canvasWidth = canvas.clientWidth;
-        const canvasHeight = canvas.clientHeight;
+        if (landmarksRef.current && landmarksRef.current.length > 0) {
+          const canvas = canvasRef.current;
+          const canvasWidth = canvas.clientWidth;
+          const canvasHeight = canvas.clientHeight;
 
           const pixelVals = landmarksRef.current.map(({ x, y, z }) => [
             x * canvasWidth,
@@ -193,69 +190,97 @@ const animationId = useRef(null)
 
           pixelValsRef.current = pixelVals;
 
-            fingerTipsRef.current = {
+          fingerTipsRef.current = {
             indexTip: landmarksRef.current[8],
             pinkyTip: landmarksRef.current[20],
           };
-      
         }
-    }
-    // animationId.current = requestAnimationFrame(detectLandmarks);
-  }
-  // animationId.current = requestAnimationFrame(detectLandmarks);
-
-const motionSigns = () => {
-  detectLandmarks()
-
-  if (!videoRef.current || !canvasRef.current) {
-        // requestAnimationFrame(staticSigns);
-        return;
       }
 
+    };
+    
 
-  if (landmarksRef.current && landmarksRef.current.length > 0) {
-motionLetter.current.fingerpose = validGestureShape(pixelValsRef)
-  motionLetter.current.finalLetter = detectMotionGestures(fingerTipsRef,motionLetter)
-  
- 
-if (motionLetter.current && motionLetter.current.finalLetter.length === 1) {
- setMessageBody((msg) => msg + motionLetter.current.finalLetter)
- 
-}
-  }
-}
-animationId.current = requestAnimationFrame(motionSigns);
+    const motionSigns = () => {
+      detectLandmarks();
+      if (landmarksRef.current && landmarksRef.current.length > 0) {
+        const pixelVals = pixelValsRef.current;
 
+        let gestureArr = [];
+   
+
+        if (pixelVals) {
+          Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
+            const newGesture = new fp.GestureDescription(unicodeVal);
+            Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
+              const curlConfidence = props.curlConf[fingerName];
+              newGesture.addCurl(
+                fp.Finger[fingerName],
+                fp.FingerCurl[curlType],
+                1.0
+              );
+            });
+            gestureArr.push(newGesture);
+          });
+        }
+
+        const GE = new fp.GestureEstimator(gestureArr);
+
+        const est = GE.estimate(pixelVals, 8.0);
+
+        if (est.gestures.length > 0) {
+          let result = est.gestures.reduce((c1, c2) => {
+            return c1.score > c2.score ? c1 : c2;
+          });
+
+          const currUnicode = result.name;
+          fingerPoseLetter.current = String.fromCharCode(
+            parseInt(currUnicode.slice(1), 16)
+          );
+
+          if (motionEnabledRef.current) {
+            motionLetter.current = detectMotionSigns(
+              fingerTipsRef,
+              fingerPoseLetter,
+              motionGesturePt
+            );
+          }
+
+          if (motionLetter.current === 'J' || motionLetter.current === 'Z') {
+            setMessageBody((msg) => msg + motionLetter.current);
+          }
+        }
+      }
+      animationId.current = requestAnimationFrame(motionSigns);
+    };
+
+    animationId.current = requestAnimationFrame(motionSigns);
 
     const staticSigns = async () => {
-    detectLandmarks()
-     
+      detectLandmarks();
+      
       if (!videoRef.current || !canvasRef.current) {
         // requestAnimationFrame(staticSigns);
         return;
       }
-          staticLetter.current = detectStaticSigns(languageArray, pixelValsRef)
+     
+      staticLetter.current = detectStaticSigns(ASLGestArray, pixelValsRef);
 
-          if (landmarksRef.current) {
-
-          if (staticLetter.current && staticLetter.current.length === 1) {
-            setMessageBody((msg) => msg + staticLetter.current)
-            staticLetter.current = ''
-           
-          }
-
+      if (landmarksRef.current) {
+        if (staticLetter.current) {
+          setMessageBody((msg) => msg + staticLetter.current);
+          staticLetter.current = '';
         }
-    }
-  
- 
-    // rafInterval(staticSigns,500)
-    rafInterval(motionSigns,500)
+      }
+    };
 
+    if (!motionEnabledRef.current) {
+      rafInterval(staticSigns, 500);
+    
+    }
+    // rafInterval(motionSigns,500)
 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
-
-
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
@@ -263,7 +288,7 @@ animationId.current = requestAnimationFrame(motionSigns);
   };
 
   const gestureLanguageToggle = () => {
-    setASLMode((useASL) => !useASL)
+    setASLMode((useASL) => !useASL);
   };
   //   const messageBody = useMessageBody((state) => state.messageBody)
 
@@ -274,12 +299,9 @@ animationId.current = requestAnimationFrame(motionSigns);
   //   console.log(messageBody.length)
   // }
 
-
-  
   const clearMessage = () => {
-    setMessageBody('')
-  }
-
+    setMessageBody('');
+  };
 
   return (
     <>

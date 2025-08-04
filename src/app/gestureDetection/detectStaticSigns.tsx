@@ -5,9 +5,13 @@ import { useMessageBody } from '../messageState';
 import { clearMessageRef, deleteLetterRef } from '../deletionRef';
 
 const detectStaticSigns = (currentLanguage, pixelValsRef) => {
+  let letter;
 
+  if (pixelValsRef.current && pixelValsRef.current.length) {
     const GE = new fp.GestureEstimator(currentLanguage);
     const est = GE.estimate(pixelValsRef.current, 6.5);
+
+    console.log(est.poseData)
 
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
@@ -15,68 +19,65 @@ const detectStaticSigns = (currentLanguage, pixelValsRef) => {
       });
 
       const currUnicode = result.name;
-    
-      let letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
 
-      return letter;
-    
+      letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
     }
-  };
-  
- export default detectStaticSigns;
+    return letter;
+  }
+};
 
+export default detectStaticSigns;
 
+// const lastAppendedLetterRef = useRef(null);
+// const rafIdRef = useRef(null);
 
-  // const lastAppendedLetterRef = useRef(null);
-  // const rafIdRef = useRef(null);
+// const setMessageBody = useMessageBody((state) => state.appendMessage);
 
-  // const setMessageBody = useMessageBody((state) => state.appendMessage);
+// useEffect(() => {
+//   const rafInterval = (callback, interval) => {
+//     let start = performance.now();
+//     const loop = (now) => {
+//       if (!motionEnabled && now - start >= interval) {
+//         callback();
+//         start = now;
+//       }
+//       else if (deleteLetterRef.current === "delete")  {
+//        console.log('test')
+//       }
+//       else if (clearMessageRef.current === "clear") {
+//         setMessageBody('')
+//         clearMessageRef.current = null
+//       }
+//       else if (motionEnabled) {
+//         cancelAnimationFrame(rafIdRef.current);
+//         rafIdRef.current = null;
+//         letterRef.current = null;
+//         return;
+//       }
+//       rafIdRef.current = requestAnimationFrame(loop);
+//     };
 
-  // useEffect(() => {
-  //   const rafInterval = (callback, interval) => {
-  //     let start = performance.now();
-  //     const loop = (now) => {
-  //       if (!motionEnabled && now - start >= interval) {
-  //         callback();
-  //         start = now;
-  //       } 
-  //       else if (deleteLetterRef.current === "delete")  {
-  //        console.log('test')
-  //       }
-  //       else if (clearMessageRef.current === "clear") {
-  //         setMessageBody('')
-  //         clearMessageRef.current = null
-  //       }
-  //       else if (motionEnabled) {
-  //         cancelAnimationFrame(rafIdRef.current);
-  //         rafIdRef.current = null;
-  //         letterRef.current = null;
-  //         return;
-  //       }
-  //       rafIdRef.current = requestAnimationFrame(loop);
-  //     };
+//     rafIdRef.current = requestAnimationFrame(loop);
+//   };
 
-  //     rafIdRef.current = requestAnimationFrame(loop);
-  //   };
+//   // if(motionEnabled) {
+//   //         return
+//   //     }
 
-  //   // if(motionEnabled) {
-  //   //         return
-  //   //     }
+//   const letterAppend = () => {
+//     // if (letter && letter !== lastAppendedLetterRef.current) {
+//     // console.log(letter)
+//     if (letterRef.current) {
+//       setMessageBody(letterRef.current);
+//       letterRef.current = null;
+//       // lastAppendedLetterRef.current = letter;
+//     }
+//   };
 
-  //   const letterAppend = () => {
-  //     // if (letter && letter !== lastAppendedLetterRef.current) {
-  //     // console.log(letter)
-  //     if (letterRef.current) {
-  //       setMessageBody(letterRef.current);
-  //       letterRef.current = null;
-  //       // lastAppendedLetterRef.current = letter;
-  //     }
-  //   };
-
-  //   rafInterval(() => {
-  //     letterAppend();
-  //   }, 500);
-  // }, [motionEnabled]);
+//   rafInterval(() => {
+//     letterAppend();
+//   }, 500);
+// }, [motionEnabled]);
 // };
 
 // export default useStaticSigns;
