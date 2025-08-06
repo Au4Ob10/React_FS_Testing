@@ -62,18 +62,24 @@ const Demo = () => {
   let videoFrameID;
   const video = videoRef.current;
 
-  const hasUnicode = MSLGestArray
+  
+
+
 
   useEffect(() => {
     if (ASLMode) {
       setAppTitle('American Sign Language');
       useASL.current = true
+     
    
     } else {
       setAppTitle('Mexican Sign Language');
       useASL.current = false
+     
     
     }
+    setMessageBody('')
+
   }, [ASLMode]);
 
 

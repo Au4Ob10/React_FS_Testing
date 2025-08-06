@@ -11,7 +11,7 @@ const detectStaticSigns = (currentLanguage, pixelValsRef) => {
     const GE = new fp.GestureEstimator(currentLanguage);
     const est = GE.estimate(pixelValsRef.current, 6.5);
 
-    console.log(est.poseData)
+   
 
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
