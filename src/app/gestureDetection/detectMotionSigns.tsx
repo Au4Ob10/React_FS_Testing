@@ -12,7 +12,7 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
     
       let currentTime;
-      let finalLetter: string;
+      let finalLetter = ''
     
    
      
@@ -25,11 +25,22 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
         if (fingerTipsRef.current) {
 
         const fingerposeLetter = motionLetter.current
+
+    
+        // z   x greater to left, y greater moving down
+
+        // pt. 1  x > 0.5 y < 0.49
+
+        // pt. 2 x < 0.5 y > 0.49
+
+        // pt. 3 x > 0.5 y > 0.49
+
+        // pt. 4 x < 0.5 y > 0.49
     
         if (fingerposeLetter === 'J') {
           indexFingerTip = null
-          const xPinky = pinkyTip['x'];
-          const yPinky = pinkyTip['y'];
+          const xPinky = pinkyTip.x;
+          const yPinky = pinkyTip.y;
 
           currentTime = now;
 
@@ -82,10 +93,19 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
           const xIndex = indexFingerTip['x'];
           const yIndex = indexFingerTip['y'];
 
-    
+          console.log(indexFingerTip)
+     // z   x greater to left, y greater moving down
+
+        // pt. 1  x > 0.5 y < 0.49
+
+        // pt. 2 x < 0.5 y > 0.49
+
+        // pt. 3 x > 0.5 y > 0.49
+
+        // pt. 4 x < 0.5 y > 0.49
           if (
-            coordRange(xIndex, 0.47, 1.0) &&
-            coordRange(yIndex, 0.0, 0.49) &&
+            coordRange(xIndex, 0.6, 1.0) &&
+            coordRange(yIndex, 0.0, 0.29) &&
             gesturePt.current.Z === null 
           ) {
             gesturePt.current.Z = 'firstZ';
@@ -93,8 +113,8 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
             console.log('First Z point hit');
           }
           if (
-            coordRange(xIndex, 0.0, 0.47) &&
-            coordRange(yIndex, 0.0, 0.49) &&
+            coordRange(xIndex, 0.0, 0.35) &&
+            coordRange(yIndex, 0.49, 1.0) &&
             gesturePt.current.Z === 'firstZ'
           ) {
             gesturePt.current.Z = 'secondZ';
@@ -102,8 +122,8 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
             console.log('Second Z point hit');
           }
           if (
-            coordRange(xIndex, 0.47, 1.0) &&
-            coordRange(yIndex, 0.49, 1.0) &&
+            coordRange(xIndex, 0.64, 1.0) &&
+            coordRange(yIndex, 0.61, 1.0) &&
             gesturePt.current.Z === 'secondZ'
           ) {
             gesturePt.current.Z = 'thirdZ';
@@ -112,8 +132,8 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
             console.log('Third Z point hit');
           }
           if (
-            coordRange(xIndex, 0, 0.47) &&
-            coordRange(yIndex, 0.49, 1.0) &&
+            coordRange(xIndex, 0, 0.4) &&
+            coordRange(yIndex, 0.68, 1.0) &&
             gesturePt.current.Z === 'thirdZ'
           ) {
             currentTime = now;
