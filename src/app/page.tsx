@@ -15,16 +15,23 @@ const Demo = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
   
+  const jPoints = useRef({
+   x: [],
+   y: []
+  })
 
   const staticLetter = useRef<string>('');
   const fingerPoseLetter = useRef(null);
   const motionLetter = useRef(null);
   const animationId = useRef(null);
+  const landmarkBuffer = useRef([])
 
   const motionGesturePt = useRef({
     J: null,
     Z: null
   });
+
+
   const [ASLMode, setASLMode] = useState(true);
   const useASL = useRef(true);
   const [languageArray,setLanguageArray] = useState(ASLGestArray)
@@ -260,15 +267,80 @@ useEffect(() => {
           );
 
           if (motionEnabledRef.current) {
+
+
+
+
+
+
+        if (landmarkBuffer.current.length >= 2) {
+          const x1: any = landmarkBuffer.current[0].x;
+          const y1 = landmarkBuffer.current[0].y;
+          const x2: any = landmarkBuffer.current.at(-1).x;
+          const y2 = landmarkBuffer.current.at(-1).y;
+     
+     
+
+          setTimeout(() => {
+         
+            if (x2 > 0.6 && y2 < 5 && motionGesturePt.current.Z=== null) {
+              motionGesturePt.current.Z= 'gestureStart'
+              console.log("Z Start")
+            }
+              
+              if (x2 < 0.5 && y2 < 5 && motionGesturePt.current.Z=== 'gestureStart') {
+                motionGesturePt.current.Z= 'firstGesture';
+                 console.log("first z point")
+                landmarkBuffer.current = [];
+              }
+          
+          }, 300);
+
+          setTimeout(() => {
+            if (x2 < 0.7 && y2 > 0.7 && motionGesturePt.current.Z=== "firstGesture") {
+                motionGesturePt.current.Z= 'secondGesture';
+                console.log("second z point")
+                 landmarkBuffer.current = [];
+            }
+          }, 100);
+
+          setTimeout(() => {
+            if (x2 < 0.5 && motionGesturePt.current.Z=== 'secondGesture' ) {
+                motionGesturePt.current.Z= 'thirdGesture';
+                console.log("third z point")
+                setMessageBody((msg) => msg + "Z")
+                landmarkBuffer.current = [];
+            }
+          }, 100);
+
+        }
+      
+
+            //  if (motionLetter.current === "Z" && fingerTipsRef.current) {
+              
+            //   zCoords.current.x.push(fingerTipsRef.current.indexTip.x)
+            //    zCoords.current.y.push(fingerTipsRef.current.indexTip.y)
+
+            //    const xPt = zCoords.current.x
+            //    const yPt = zCoords.current.y
+
+            //    console.log(Math.sqrt((xPt.at(-1) - xPt[0])**2 + (yPt.at(-1) - yPt[0]) ** 2))
+            // }
+
             motionLetter.current = detectMotionSigns(
               fingerTipsRef,
               fingerPoseLetter,
-              motionGesturePt
+              motionGesturePt,
+              
             );
+
+            console.log(motionLetter.current)
+           
           }
 
      if (motionLetter.current === 'J' || motionLetter.current === 'Z') {
             setMessageBody((msg) => msg + motionLetter.current);
+            motionLetter.current = ''
           }
         }
       }
@@ -287,6 +359,7 @@ useEffect(() => {
      
       staticLetter.current = detectStaticSigns(ASLGestArray, pixelValsRef);
 
+ 
       
       const indexFingerTip = fingerTipsRef.current.indexTip  
       const middleFingerTip = fingerTipsRef.current.middleFingerTip
@@ -312,10 +385,7 @@ useEffect(() => {
           setMessageBody((msg) => msg + "U");
         }
        
-       
-
-
-       
+      
         // if (middleFingerTip.y )
         else {
           setMessageBody((msg) => msg + staticLetter.current);
@@ -334,10 +404,15 @@ useEffect(() => {
     return () => { cancelAnimationFrame(animationFrameId); 
       cancelAnimationFrame(animationRef.current)
       cancelAnimationFrame(animationId.current)
-     }
-  });
+     }}
+  );
 
 
+  // const test = () => {
+  //  console.log(fingerTipsRef.current.indexTip)
+  //  requestAnimationFrame(test)
+  // }
+  //    requestAnimationFrame(test)
   // useEffect (() => {
   //    let animationFrame;
 
@@ -375,9 +450,28 @@ useEffect(() => {
     setMessageBody('');
   };
 
+
+
   const zPoint = () => {
-    console.log(fingerTipsRef.current.indexTip)
+   
+   const pinkyXPt =  fingerTipsRef.current.indexTip.x
+   const pinkyYPt =  fingerTipsRef.current.indexTip.y  
+
+   const xPoints = jPoints.current.x
+   const yPoints = jPoints.current.y
+
+   xPoints.push(pinkyXPt)
+   yPoints.push(pinkyYPt)
+
+
+
+   if (jPoints.current.x.length >= 2) {
+
+    console.log(Math.sqrt((xPoints.at(-1) - xPoints[0]) ** 2 + (yPoints.at(-1) - yPoints[0]) ** 2))
+    console.log((yPoints.at(-1) - yPoints[0]) / (xPoints.at(-1) - yPoints[0]))
+   }
   }
+  // }
 
   return (
     <>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as fp from 'fingerpose';
 import { messageContext } from '../messageContext';
-import { useMessageBody } from '../messageState';
 import { clearMessageRef, deleteLetterRef } from '../deletionRef';
 
 const detectStaticSigns = (currentLanguage, pixelValsRef) => {
@@ -12,6 +11,7 @@ const detectStaticSigns = (currentLanguage, pixelValsRef) => {
     const est = GE.estimate(pixelValsRef.current, 7.5);
 
   
+ 
 
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {

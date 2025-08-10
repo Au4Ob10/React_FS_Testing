@@ -7,6 +7,7 @@ import motionShapes from '../motionShapes.json';
 
 export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
+
       let indexFingerTip = fingerTipsRef.current['indexTip'];
       let pinkyTip = fingerTipsRef.current['pinkyTip'];
 
@@ -14,6 +15,10 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
       let currentTime;
       let finalLetter = ''
     
+
+      // if (indexFingerTip) {
+      //   console.log(indexFingerTip)
+      // }
    
      
       const coordRange = (val, min, max) => {
@@ -27,15 +32,18 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
         const fingerposeLetter = motionLetter.current
 
     
-        // z   x greater to left, y greater moving down
+    //     // z   x greater to left, y greater moving down
 
-        // pt. 1  x > 0.5 y < 0.49
+    //     // pt. 1  x > 0.5 y < 0.49
 
-        // pt. 2 x < 0.5 y > 0.49
+    //     // pt. 2 x < 0.5 y > 0.49
 
-        // pt. 3 x > 0.5 y > 0.49
+    //     // pt. 3 x > 0.5 y > 0.49
 
-        // pt. 4 x < 0.5 y > 0.49
+    //     // pt. 4 x < 0.5 y > 0.49
+
+       
+
     
         if (fingerposeLetter === 'J') {
           indexFingerTip = null
@@ -44,15 +52,15 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
           currentTime = now;
 
-          // if (currentTime - now >= 2000) {
-          //   pinkyTip = null
-          //   now = performance.now()
-          // }
+          if (currentTime - now >= 2000) {
+            pinkyTip = null
+            now = performance.now()
+          }
 
           if (
             coordRange(xPinky, 0, 0.46) &&
             coordRange(yPinky, 0.08, 1.0) &&
-            gesturePt.current.J === null 
+            gesturePt.current.J === null && fingerposeLetter === 'J'
           ) {
             gesturePt.current.J = 'firstJ';
             currentTime = now;
@@ -61,7 +69,7 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
           if (
             coordRange(xPinky, 0, 0.46) &&
             coordRange(yPinky, 0.25, 1.0) &&
-            gesturePt.current.J === 'firstJ'
+            gesturePt.current.J === 'firstJ' && fingerposeLetter === 'J'
           ) {
             gesturePt.current.J = 'secondJ';
             currentTime = now;
@@ -70,7 +78,7 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
           if (
             coordRange(xPinky, 0, 0.61) &&
             coordRange(yPinky, 0.35, 1.0) &&
-            gesturePt.current.J === 'secondJ'
+            gesturePt.current.J === 'secondJ' && fingerposeLetter === 'J'
           ) {
             gesturePt.current.J = 'thirdJ';
             currentTime = now;
@@ -79,7 +87,7 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
           if (
             coordRange(xPinky, 0.39, 1.0) &&
             coordRange(yPinky, 0.25, 1.0) &&
-            gesturePt.current.J === 'thirdJ'
+            gesturePt.current.J === 'thirdJ'&& fingerposeLetter === 'J'
           ) {
             currentTime = now;
             console.log('Fourth J point hit');
@@ -87,70 +95,94 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
             gesturePt.current.J = null;
           }
         }
+      
+    
+     
+      // console.log(fingerposeLetter)
 
-        if (indexFingerTip && fingerposeLetter === 'Z') {
-          pinkyTip = null
-          const xIndex = indexFingerTip['x'];
-          const yIndex = indexFingerTip['y'];
+      // if (fingerposeLetter === "Z") {
 
-          console.log(indexFingerTip)
-     // z   x greater to left, y greater moving down
+        
 
-        // pt. 1  x > 0.5 y < 0.49
+      //    zDistancePts.xPt.push(indexFingerTip.x)
+      //    zDistancePts.yPt.push(indexFingerTip.y)
 
-        // pt. 2 x < 0.5 y > 0.49
+      //    const x1 =  zDistancePts.xPt[0]
+      //    const x2 =  zDistancePts.xPt.at(-1)
+      //    const y1 =  zDistancePts.yPt[0]
+      //    const y2 =  zDistancePts.yPt.at(-1)
 
-        // pt. 3 x > 0.5 y > 0.49
+      //   if (zDistancePts.xPt.length >= 2) {
+      //   console.log(Math.sqrt((x2 - x1)**2 + (y2 - y1)**2))
+      //   }
 
-        // pt. 4 x < 0.5 y > 0.49
-          if (
-            coordRange(xIndex, 0.6, 1.0) &&
-            coordRange(yIndex, 0.0, 0.29) &&
-            gesturePt.current.Z === null 
-          ) {
-            gesturePt.current.Z = 'firstZ';
-            currentTime = now;
-            console.log('First Z point hit');
-          }
-          if (
-            coordRange(xIndex, 0.0, 0.35) &&
-            coordRange(yIndex, 0.49, 1.0) &&
-            gesturePt.current.Z === 'firstZ'
-          ) {
-            gesturePt.current.Z = 'secondZ';
-            currentTime = now;
-            console.log('Second Z point hit');
-          }
-          if (
-            coordRange(xIndex, 0.64, 1.0) &&
-            coordRange(yIndex, 0.61, 1.0) &&
-            gesturePt.current.Z === 'secondZ'
-          ) {
-            gesturePt.current.Z = 'thirdZ';
-           
-            currentTime = now;
-            console.log('Third Z point hit');
-          }
-          if (
-            coordRange(xIndex, 0, 0.4) &&
-            coordRange(yIndex, 0.68, 1.0) &&
-            gesturePt.current.Z === 'thirdZ'
-          ) {
-            currentTime = now;
-            console.log('Fourth Z point hit');
-           finalLetter = "Z"
-            gesturePt.current.Z = null;
-            // motionLetter.current = null;
-          }
-         
-        }
-      }
+      // }
+
+
       return finalLetter;
     };
-  
+      
   
 
 
+
+
+
+
+      // if (fingerposeLetter === "Z") {
+
+}
+      //   if (indexFingerTip && fingerposeLetter === 'Z') {
+      //     pinkyTip = null
+      //     const xIndex = indexFingerTip['x'];
+      //     const yIndex = indexFingerTip['y'];
+
+  
+
+
+
+      //     if (
+      //       coordRange(xIndex, 0.6, 1.0) &&
+      //       coordRange(yIndex, 0.0, 0.29) &&
+      //       gesturePt.current.Z === null 
+      //     ) {
+      //       gesturePt.current.Z = 'firstZ';
+      //       currentTime = now;
+      //       console.log('First Z point hit');
+      //     }
+      //     if (
+      //       coordRange(xIndex, 0.1, 0.5) &&
+      //       // coordRange(yIndex, 0.0, 0.29) &&
+      //       gesturePt.current.Z === 'firstZ'
+      //     ) {
+      //       gesturePt.current.Z = 'secondZ';
+      //       currentTime = now;
+      //       console.log('Second Z point hit');
+      //     }
+      //     if (
+      //       coordRange(xIndex, 0.6, 1.0) &&
+      //       coordRange(yIndex, 0.61, 1.0) &&
+      //       gesturePt.current.Z === 'secondZ'
+      //     ) {
+      //       gesturePt.current.Z = 'thirdZ';
+           
+      //       currentTime = now;
+      //       console.log('Third Z point hit');
+      //     }
+      //     if (
+      //       coordRange(xIndex, 0, 0.4) &&
+      //       coordRange(yIndex, 0.68, 1.0) &&
+      //       gesturePt.current.Z === 'thirdZ'
+      //     ) {
+      //       currentTime = now;
+      //       console.log('Fourth Z point hit');
+      //      finalLetter = "Z"
+      //       gesturePt.current.Z = null;
+      //       // motionLetter.current = null;
+      //     }
+         
+      //   }
+      // }
 
 // Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
 //   const newGesture = new fp.GestureDescription(unicodeVal);
