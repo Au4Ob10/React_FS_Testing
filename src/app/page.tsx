@@ -24,7 +24,7 @@ const Demo = () => {
   const fingerPoseLetter = useRef(null);
   const motionLetter = useRef(null);
   const animationId = useRef(null);
-  const landmarkBuffer = useRef([])
+
 
   const motionGesturePt = useRef({
     J: null,
@@ -34,7 +34,6 @@ const Demo = () => {
 
   const [ASLMode, setASLMode] = useState(true);
   const useASL = useRef(true);
-  const [languageArray,setLanguageArray] = useState(ASLGestArray)
   const languageArrayRef = useRef(ASLGestArray)
   const [motionEnabled, setMotionEnabled] = useState(false);
   const motionEnabledRef = useRef(false);
@@ -78,12 +77,13 @@ const Demo = () => {
   useEffect(() => {
     if (ASLMode) {
       setAppTitle('American Sign Language');
+      languageArrayRef.current = ASLGestArray
       
      
    
     } else {
       setAppTitle('Mexican Sign Language');
-     
+      languageArrayRef.current = MSLGestArray
      
     
     }
@@ -174,9 +174,9 @@ const Demo = () => {
     animationRef.current = requestAnimationFrame(loop);
   };
 
-useEffect(() => {
-  setLanguageArray(useASL.current ? MSLGestArray : ASLGestArray);
-}, [ASLMode]);
+// useEffect(() => {
+//   setLanguageArray(useASL.current ? MSLGestArray : ASLGestArray);
+// }, [ASLMode]);
 
 
 
@@ -218,6 +218,8 @@ useEffect(() => {
             middleFingerTip: landmarksRef.current[12],
             pinkyTip: landmarksRef.current[20],
           };
+
+      
         }
       }
 
@@ -225,7 +227,6 @@ useEffect(() => {
 
 
     
-
     const motionSigns = () => {
        if (!motionEnabledRef.current) {
           cancelAnimationFrame(animationId.current)
@@ -268,65 +269,6 @@ useEffect(() => {
 
           if (motionEnabledRef.current) {
 
-
-
-
-
-
-        if (landmarkBuffer.current.length >= 2) {
-          const x1: any = landmarkBuffer.current[0].x;
-          const y1 = landmarkBuffer.current[0].y;
-          const x2: any = landmarkBuffer.current.at(-1).x;
-          const y2 = landmarkBuffer.current.at(-1).y;
-     
-     
-
-          setTimeout(() => {
-         
-            if (x2 > 0.6 && y2 < 5 && motionGesturePt.current.Z=== null) {
-              motionGesturePt.current.Z= 'gestureStart'
-              console.log("Z Start")
-            }
-              
-              if (x2 < 0.5 && y2 < 5 && motionGesturePt.current.Z=== 'gestureStart') {
-                motionGesturePt.current.Z= 'firstGesture';
-                 console.log("first z point")
-                landmarkBuffer.current = [];
-              }
-          
-          }, 300);
-
-          setTimeout(() => {
-            if (x2 < 0.7 && y2 > 0.7 && motionGesturePt.current.Z=== "firstGesture") {
-                motionGesturePt.current.Z= 'secondGesture';
-                console.log("second z point")
-                 landmarkBuffer.current = [];
-            }
-          }, 100);
-
-          setTimeout(() => {
-            if (x2 < 0.5 && motionGesturePt.current.Z=== 'secondGesture' ) {
-                motionGesturePt.current.Z= 'thirdGesture';
-                console.log("third z point")
-                setMessageBody((msg) => msg + "Z")
-                landmarkBuffer.current = [];
-            }
-          }, 100);
-
-        }
-      
-
-            //  if (motionLetter.current === "Z" && fingerTipsRef.current) {
-              
-            //   zCoords.current.x.push(fingerTipsRef.current.indexTip.x)
-            //    zCoords.current.y.push(fingerTipsRef.current.indexTip.y)
-
-            //    const xPt = zCoords.current.x
-            //    const yPt = zCoords.current.y
-
-            //    console.log(Math.sqrt((xPt.at(-1) - xPt[0])**2 + (yPt.at(-1) - yPt[0]) ** 2))
-            // }
-
             motionLetter.current = detectMotionSigns(
               fingerTipsRef,
               fingerPoseLetter,
@@ -334,14 +276,12 @@ useEffect(() => {
               
             );
 
-            console.log(motionLetter.current)
-           
           }
 
-     if (motionLetter.current === 'J' || motionLetter.current === 'Z') {
+
             setMessageBody((msg) => msg + motionLetter.current);
             motionLetter.current = ''
-          }
+    
         }
       }
       animationId.current = requestAnimationFrame(motionSigns);
@@ -357,7 +297,7 @@ useEffect(() => {
         return;
       }
      
-      staticLetter.current = detectStaticSigns(ASLGestArray, pixelValsRef);
+      staticLetter.current = detectStaticSigns(languageArrayRef.current, pixelValsRef);
 
  
       
@@ -396,7 +336,7 @@ useEffect(() => {
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 300);
+      rafInterval(staticSigns, 500);
     
     }
     // rafInterval(motionSigns,500)
@@ -408,43 +348,49 @@ useEffect(() => {
   );
 
 
-  // const test = () => {
-  //  console.log(fingerTipsRef.current.indexTip)
-  //  requestAnimationFrame(test)
-  // }
-  //    requestAnimationFrame(test)
-  // useEffect (() => {
-  //    let animationFrame;
+ 
 
-  //       const landmarkDraw = () => {
-  //         if (!landmarksRef.current) {
-  //           cancelAnimationFrame(animationFrame)
-  //         }
 
-  //     if (landmarksRef.current && landmarksRef.current.length > 0) {
-  //       drawLandmarks(landmarksRef,canvasRef)
-  //     }
-  //     animationFrame = requestAnimationFrame(landmarkDraw)
-  //   }
-  //   animationFrame = requestAnimationFrame(landmarkDraw)
-  // }, [])
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
     subHeading === 'Static' ? setSubHeading('Motion') : setSubHeading('Static');
   };
 
+
+
+
+const backSpace = () => {
+
+  setMessageBody((msg) => msg.slice(0,-1))
+}
+
+
   const gestureLanguageToggle = () => {
     setASLMode((useASL) => !useASL);
+
   };
-  //   const messageBody = useMessageBody((state) => state.messageBody)
+ 
+    useEffect(() => {
+       if (ASLMode) {
+      setAppTitle('American Sign Language');
+      languageArrayRef.current = ASLGestArray
+      
+    } else {
+      setAppTitle('Mexican Sign Language');
+      languageArrayRef.current = MSLGestArray
+     
+    
+    }
+    setMessageBody('')
 
-  // const setMessage = useMessageBody((state) => state.appendMessage);
+  },[ASLMode])
 
-  // const clearMessage = () => {
-  //   setMessage('')
-  //   console.log(messageBody.length)
-  // }
+
+
+
+
+
 
   const clearMessage = () => {
     setMessageBody('');
@@ -452,25 +398,7 @@ useEffect(() => {
 
 
 
-  const zPoint = () => {
-   
-   const pinkyXPt =  fingerTipsRef.current.indexTip.x
-   const pinkyYPt =  fingerTipsRef.current.indexTip.y  
 
-   const xPoints = jPoints.current.x
-   const yPoints = jPoints.current.y
-
-   xPoints.push(pinkyXPt)
-   yPoints.push(pinkyYPt)
-
-
-
-   if (jPoints.current.x.length >= 2) {
-
-    console.log(Math.sqrt((xPoints.at(-1) - xPoints[0]) ** 2 + (yPoints.at(-1) - yPoints[0]) ** 2))
-    console.log((yPoints.at(-1) - yPoints[0]) / (xPoints.at(-1) - yPoints[0]))
-   }
-  }
   // }
 
   return (
@@ -483,14 +411,14 @@ useEffect(() => {
       
         Detect Hand
       </button> */}
-      <h1 style={{ textAlign: 'center' }}>{"American Sign Language"}</h1>
+      <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
       <h2 style={{ textAlign: 'center' }}>
         {subHeading} Gesture Detection Enabled
       </h2>
       <button onClick={gestureLanguageToggle}>Toggle Language</button>
       <button onClick={gestureModeToggle}>Toggle Gesture Mode</button>
+      <button onClick={backSpace}>Backspace</button>
       <button onClick={clearMessage}>Clear Message</button>
-      <button onClick={zPoint}>Z-Tip</button>
       {/* <button onClick={deleteCharacter}>Backspace</button> */}
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -499,11 +427,11 @@ useEffect(() => {
           autoPlay
           playsInline
           style={{
-            height: '500px',
-            width: '500px',
+            height: '40%',
+            width: '40%',
             // top: 0,
             // left: 0,
-            // zIndex: 1,
+            zIndex: 1,
             transform: 'scaleX(-1)',
             pointerEvents: 'none',
           }}
@@ -517,8 +445,8 @@ useEffect(() => {
         ref={canvasRef}
         style={{
           position: 'absolute',
-          height: '100%',
-          width: '100%',
+          height: '40%',
+          width: '40%',
           top: 0,
           left: 0,
           zIndex: 2,

@@ -10,6 +10,7 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
       let indexFingerTip = fingerTipsRef.current['indexTip'];
       let pinkyTip = fingerTipsRef.current['pinkyTip'];
+      let gestureTimeoutId = null
 
     
       let currentTime;
@@ -19,6 +20,18 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
       // if (indexFingerTip) {
       //   console.log(indexFingerTip)
       // }
+
+      const gestureTimeOut = () => {
+
+
+        if (gestureTimeoutId) {
+          clearTimeout(gestureTimeoutId)
+        }
+
+        gestureTimeoutId = setTimeout(() => {
+          console.log("gesture expired")
+        })
+      }
    
      
       const coordRange = (val, min, max) => {
@@ -31,20 +44,6 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
         const fingerposeLetter = motionLetter.current
 
-    
-    //     // z   x greater to left, y greater moving down
-
-    //     // pt. 1  x > 0.5 y < 0.49
-
-    //     // pt. 2 x < 0.5 y > 0.49
-
-    //     // pt. 3 x > 0.5 y > 0.49
-
-    //     // pt. 4 x < 0.5 y > 0.49
-
-       
-
-    
         if (fingerposeLetter === 'J') {
           indexFingerTip = null
           const xPinky = pinkyTip.x;
@@ -52,10 +51,10 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
           currentTime = now;
 
-          if (currentTime - now >= 2000) {
-            pinkyTip = null
-            now = performance.now()
-          }
+          // if (currentTime - now >= 2000) {
+          //   pinkyTip = null
+          //   now = performance.now()
+          // }
 
           if (
             coordRange(xPinky, 0, 0.46) &&
@@ -95,8 +94,80 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
             gesturePt.current.J = null;
           }
         }
+
+
+        if (fingerposeLetter === "Z") {
+  // Stage 1
+  if (indexFingerTip.x > 0.6 && indexFingerTip.y < 5 && gesturePt.current.Z === null) {
+    gesturePt.current.Z = 'gestureStart';
+    console.log("Z Start");
+  }
+
+  // Stage 2
+  if (indexFingerTip.x < 0.5 && indexFingerTip.y < 5 && gesturePt.current.Z === 'gestureStart') {
+    gesturePt.current.Z = 'firstGesture';
+    console.log("first z point");
+  }
+
+  // Stage 3
+  if (indexFingerTip.x < 0.7 && indexFingerTip.y > 0.7 && gesturePt.current.Z === "firstGesture") {
+    gesturePt.current.Z = 'secondGesture';
+    console.log("second z point");
+  }
+
+  // Stage 4
+  if (indexFingerTip.x < 0.5 && gesturePt.current.Z === 'secondGesture') {
+    gesturePt.current.Z = 'thirdGesture';
+    finalLetter = "Z";
+    console.log("third z point");
+    gesturePt.current.Z = null;
+  }
+}
+
       
-    
+    // if (fingerposeLetter === "Z") {
+
+    //   const xIndexFinger = indexFingerTip.x  
+    //   const yIndexFinger = indexFingerTip.y
+
+    //    setTimeout(() => {
+               
+    //               if (xIndexFinger > 0.6 && yIndexFinger < 5 && gesturePt.current.Z=== null) {
+    //                 gesturePt.current.Z= 'gestureStart'
+    //                 console.log("Z Start")
+    //               }
+                    
+    //                 if (xIndexFinger < 0.5 && yIndexFinger < 5 && gesturePt.current.Z=== 'gestureStart') {
+    //                   gesturePt.current.Z= 'firstGesture';
+    //                    console.log("first z point")
+                      
+    //                 }
+                
+    //             }, 300);
+      
+    //             setTimeout(() => {
+    //               if (xIndexFinger < 0.7 && yIndexFinger > 0.7 && gesturePt.current.Z=== "firstGesture") {
+    //                   gesturePt.current.Z= 'secondGesture';
+    //                   console.log("second z point")
+                     
+    //               }
+    //             }, 100);
+      
+    //             setTimeout(() => {
+    //               if (xIndexFinger < 0.5 && gesturePt.current.Z=== 'secondGesture' ) {
+    //                   gesturePt.current.Z = 'thirdGesture';
+    //                   console.log("third z point")
+    //                   finalLetter = "Z"
+                      
+    //               }
+    //             }, 100);
+
+    //             if (gesturePt.current.Z === "thirdGesture") {
+    //               finalLetter = "Z"
+    //               gesturePt.current.Z = null
+    //             }
+      
+    // }
      
       // console.log(fingerposeLetter)
 
