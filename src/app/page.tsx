@@ -20,7 +20,7 @@ const Demo = () => {
    y: []
   })
 
-  const staticLetter = useRef('');
+  const staticLetter = useRef<string>('');
   const fingerPoseLetter = useRef(null);
   const motionLetter = useRef(null);
   const animationId = useRef(null);
@@ -48,7 +48,6 @@ const Demo = () => {
   });
   const [messageBody, setMessageBody] = useState('');
   const animationRef = useRef(null);
-  
 
   const pixelValsRef = useRef(null);
 
@@ -309,9 +308,10 @@ const Demo = () => {
    
 
       if (landmarksRef.current && staticLetter.current.length === 1) {
-       
 
-    
+      
+
+
         if (indexFingerTip.x < middleFingerTip.x && staticLetter.current === "U") {
           setMessageBody((msg) => msg + "R");
         }
@@ -324,23 +324,14 @@ const Demo = () => {
         else if (indexFingerTip.x - middleFingerTip.x < 0.05 && staticLetter.current === "V") {
           setMessageBody((msg) => msg + "U");
         }
-
-        // else if(languageArrayRef.current === MSLGestArray && messageBody.slice(-2) === "NN") {
-
-        //   setMessageBody((msg) => msg.slice(0,-2) + "Ñ")
-
-        // }
-      
+       
       
         // if (middleFingerTip.y )
         else {
           setMessageBody((msg) => msg + staticLetter.current);
-          
         }
          staticLetter.current = ''
-  
         }
-        
       
     };
 
@@ -412,7 +403,14 @@ const backSpace = () => {
 
   return (
     <>
-  
+      {/* 
+      <button
+        onClick={() => {
+          // jRecognize();
+        }}
+      
+        Detect Hand
+      </button> */}
       <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
       <h2 style={{ textAlign: 'center' }}>
         {subHeading} Gesture Detection Enabled
