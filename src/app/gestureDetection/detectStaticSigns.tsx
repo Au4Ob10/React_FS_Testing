@@ -8,11 +8,11 @@ const detectStaticSigns = (currentLanguage, pixelValsRef) => {
 
   if (pixelValsRef.current && pixelValsRef.current.length) {
     const GE = new fp.GestureEstimator(currentLanguage);
-    const est = GE.estimate(pixelValsRef.current, 7.5);
+    const est = GE.estimate(pixelValsRef.current, 7.0);
 
   
  
-
+    console.log(est.poseData)
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
