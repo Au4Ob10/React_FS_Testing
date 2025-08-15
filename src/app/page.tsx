@@ -310,8 +310,6 @@ const Demo = () => {
       if (landmarksRef.current && staticLetter.current.length === 1) {
 
       
-
-
         if (indexFingerTip.x < middleFingerTip.x && staticLetter.current === "U") {
           setMessageBody((msg) => msg + "R");
         }
@@ -325,6 +323,9 @@ const Demo = () => {
           setMessageBody((msg) => msg + "U");
         }
        
+        else if (languageArrayRef.current === MSLGestArray && messageBody.slice(-2) === "NN") {
+          setMessageBody((msg) => msg.slice(0,-2) + "Ñ")
+        }
       
         // if (middleFingerTip.y )
         else {
@@ -415,11 +416,12 @@ const backSpace = () => {
       <h2 style={{ textAlign: 'center' }}>
         {subHeading} Gesture Detection Enabled
       </h2>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
       <button onClick={gestureLanguageToggle}>Toggle Language</button>
       <button onClick={gestureModeToggle}>Toggle Gesture Mode</button>
       <button onClick={backSpace}>Backspace</button>
       <button onClick={clearMessage}>Clear Message</button>
-      {/* <button onClick={deleteCharacter}>Backspace</button> */}
+      </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <video
