@@ -425,35 +425,36 @@
   "U0050": {
     "Curls": {
       "Thumb": "NoCurl",
-      "Index": "HalfCurl",
+      "Index": "NoCurl",
       "Middle": "HalfCurl",
       "Ring": "FullCurl",
       "Pinky": "FullCurl"
     },
     "curlConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     },
     "directions": {
-      "Thumb": ["HorizontalRight"],
+      "Thumb": ["DiagonalUpRight"],
       "Index": ["HorizontalRight"],
       "Middle": ["DiagonalDownRight"],
       "Ring": ["HorizontalRight"],
-      "Pinky": ["HorizontalRight"]
+      "Pinky": ["DiagonalDownRight"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
+   
   },
   "U0051": {
-    "Curls": {
+     "Curls": {
       "Thumb": "NoCurl",
       "Index": "NoCurl",
       "Middle": "FullCurl",
@@ -461,23 +462,23 @@
       "Pinky": "FullCurl"
     },
     "curlConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 1.0,
+      "Index": 1.0,
+      "Middle": 1.0,
+      "Ring": 1.0,
+      "Pinky": 1.0
     },
     "directions": {
       "Thumb": ["HorizontalRight"],
-      "Index": ["DiagonalUpRight"],
+      "Index": ["HorizontalRight"],
       "Middle": ["HorizontalRight"],
-      "Ring": ["DiagonalUpRight"],
-      "Pinky": ["DiagonalUpRight"]
+      "Ring": ["HorizontalRight"],
+      "Pinky": ["DiagonalDownRight"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
+      "Thumb": 0.7,
+      "Index": 0.7,
+      "Middle": 0.7,
       "Ring": 0.7,
       "Pinky": 0.7
     }
@@ -491,11 +492,11 @@
       "Pinky": "FullCurl"
     },
     "curlConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 1.0,
+      "Index": 1.0,
+      "Middle": 1.0,
+      "Ring": 1.0,
+      "Pinky": 1.0
     },
     "directions": {
       "Thumb": ["DiagonalUpLeft"],
@@ -505,11 +506,11 @@
       "Pinky": ["VerticalUp"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.7,
+      "Index": 0.7,
+      "Middle": 0.7,
+      "Ring": 0.7,
+      "Pinky": 0.7
     }
   },
   "U0053": {

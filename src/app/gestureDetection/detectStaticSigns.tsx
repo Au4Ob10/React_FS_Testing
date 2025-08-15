@@ -10,9 +10,7 @@ const detectStaticSigns = (currentLanguage, pixelValsRef) => {
     const GE = new fp.GestureEstimator(currentLanguage);
     const est = GE.estimate(pixelValsRef.current, 7.5);
 
-  
- 
-
+  console.log(est.poseData)
     if (est.gestures.length > 0) {
       let result = est.gestures.reduce((c1, c2) => {
         return c1.score > c2.score ? c1 : c2;
@@ -22,13 +20,23 @@ const detectStaticSigns = (currentLanguage, pixelValsRef) => {
 
       letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
     }
-    return letter;
+  
   }
-};
+  return letter;
 
-export default detectStaticSigns;
+}
 
-// const lastAppendedLetterRef = useRef(null);
+export default detectStaticSigns
+
+
+
+
+
+
+
+
+
+    // const lastAppendedLetterRef = useRef(null);
 // const rafIdRef = useRef(null);
 
 // const setMessageBody = useMessageBody((state) => state.appendMessage);
