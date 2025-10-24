@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as fp from 'fingerpose';
-import { messageContext } from '../messageContext';
-import { clearMessageRef, deleteLetterRef } from '../deletionRef';
+
 
 const detectStaticSigns = (currentLanguage, pixelValsRef) => {
   let letter = ''

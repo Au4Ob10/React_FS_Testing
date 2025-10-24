@@ -17,7 +17,7 @@ const signs = (signsJSON) => {
       const directionProps = props.directions[fingerName];
       const curlConfidence = props.curlConf[fingerName]
       const directionConf = props.directionConf[fingerName]
-
+ 
       newGesture.addCurl(fp.Finger[fingerName], fp.FingerCurl[curlType], curlConfidence);
 
       if (directionProps.length > 0) {

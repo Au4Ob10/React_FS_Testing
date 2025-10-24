@@ -1,0 +1,34 @@
+@startuml
+
+
+rectangle "<b>initializeHandDetection</b>" as handInit
+
+
+
+rectangle "<b>HandLandmarker.createFromOptions</b>" as createFromOptions
+
+rectangle "<b>FilesetResolver.forVisionTasks</b>\n--\n<b>String: </b> '...npm/@mediapipe-tasks-vision@latest/wasm'" as visionTasks
+
+rectangle "<b>landmarkDetect.current</b>" as lmCurrent
+
+
+rectangle "<b>baseOptions</b>\n--\n<b>String: </b> {modelAssetPath: hand_landmark_task}" as baseOptions
+rectangle "<b>hand_landmarker_task</b>\n--\n<b>String: </b> 'models/hand_landmarker.task'" as modelPath
+
+rectangle "<b>numHands</b>\n--\n<b>Number: </b>1" as numHands
+
+rectangle "<b>runningMode</b>\n--\n<b>String: </b>'VIDEO'" as runningMode
+
+handInit --> lmCurrent
+lmCurrent --> createFromOptions
+createFromOptions --> visionTasks
+createFromOptions --> baseOptions
+baseOptions --> modelPath
+createFromOptions --> numHands
+createFromOptions --> runningMode
+
+' rectangle "<b>initializeHandDetection</b>\n--\nVision\nLandmarkDetect.current"
+' rectangle "<b>Vision</b>" as vision
+' rectangle "<b>FilesetResolver.forVisionTasks</b>\n--\n<b>string:</b> ...@mediapipe/tasks-vision@latest/wasm" as fsResolver
+' rectangle "<b>HandLandmarker.createFromOptions</b>\n--\n<b>vartype?:</b> Vision\n<b>Number:</b> numHands\n<b>String:</b> runningMode\n<b>Object: </b> baseOptions: {modelAssetPath: <b>String</b>}" as lmDetect
+@enduml

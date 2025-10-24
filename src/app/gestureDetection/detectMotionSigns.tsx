@@ -1,7 +1,4 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import { messageContext } from '../messageContext';
-import * as fp from 'fingerpose';
-import motionShapes from '../motionShapes.json';
 
 
 

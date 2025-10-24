@@ -7,34 +7,30 @@ import drawLandmarks from './gestureDetection/drawLandmarks';
 import detectStaticSigns from './gestureDetection/detectStaticSigns';
 import { detectMotionSigns } from './gestureDetection/detectMotionSigns';
 import motionShapes from '../app/motionShapes.json';
-
+import './styles.css';
 const Demo = () => {
-
-
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
 
   const jPoints = useRef({
     x: [],
-    y: []
-  })
+    y: [],
+  });
 
   const staticLetter = useRef<string>('');
   const fingerPoseLetter = useRef(null);
   const motionLetter = useRef(null);
   const animationId = useRef(null);
 
-
   const motionGesturePt = useRef({
     J: null,
-    Z: null
+    Z: null,
   });
-
 
   const [ASLMode, setASLMode] = useState(true);
   const useASL = useRef(true);
-  const languageArrayRef = useRef(ASLGestArray)
+  const languageArrayRef = useRef(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
   const motionEnabledRef = useRef(false);
 
@@ -44,13 +40,11 @@ const Demo = () => {
     indexTip: null,
     middleFingerTip: null,
     pinkyTip: null,
-
   });
   const [messageBody, setMessageBody] = useState('');
   const animationRef = useRef(null);
 
   const pixelValsRef = useRef(null);
-
 
   // const landmarkTips = useRef({
   //   indexTip: null,
@@ -72,27 +66,16 @@ const Demo = () => {
   let videoFrameID;
   const video = videoRef.current;
 
-
-
   useEffect(() => {
     if (ASLMode) {
       setAppTitle('American Sign Language');
-      languageArrayRef.current = ASLGestArray
-
-
-
+      languageArrayRef.current = ASLGestArray;
     } else {
       setAppTitle('Mexican Sign Language');
-      languageArrayRef.current = MSLGestArray
-
-
+      languageArrayRef.current = MSLGestArray;
     }
-    setMessageBody('')
-
+    setMessageBody('');
   }, [ASLMode]);
-
-
-
 
   useEffect(() => {
     motionEnabledRef.current = motionEnabled;
@@ -152,7 +135,6 @@ const Demo = () => {
   const rafInterval = (callback, interval) => {
     let start = performance.now();
     const loop = (now) => {
-
       // useASL.current ? setLanguageArray(MSLGestArray) : setLanguageArray(ASLGestArray)
 
       if (!motionEnabledRef.current && now - start >= interval) {
@@ -162,8 +144,7 @@ const Demo = () => {
 
       if (motionEnabledRef.current) {
         cancelAnimationFrame(animationRef.current);
-        staticLetter.current = ''
-
+        staticLetter.current = '';
 
         // animationRef.current = null;
       }
@@ -174,15 +155,7 @@ const Demo = () => {
     animationRef.current = requestAnimationFrame(loop);
   };
 
-  // useEffect(() => {
-  //   setLanguageArray(useASL.current ? MSLGestArray : ASLGestArray);
-  // }, [ASLMode]);
-
-
-
   useEffect(() => {
-
-
     const detectLandmarks = () => {
       if (
         videoRef.current &&
@@ -196,8 +169,6 @@ const Demo = () => {
         );
 
         landmarksRef.current = results.landmarks[0];
-
-
 
         if (landmarksRef.current && landmarksRef.current.length > 0) {
           const canvas = canvasRef.current;
@@ -218,18 +189,13 @@ const Demo = () => {
             middleFingerTip: landmarksRef.current[12],
             pinkyTip: landmarksRef.current[20],
           };
-
-
         }
       }
-
     };
-
-
 
     const motionSigns = () => {
       if (!motionEnabledRef.current) {
-        cancelAnimationFrame(animationId.current)
+        cancelAnimationFrame(animationId.current);
       }
 
       detectLandmarks();
@@ -256,7 +222,6 @@ const Demo = () => {
 
         const est = GE.estimate(pixelVals, 8.0);
 
-
         if (est.gestures.length > 0) {
           const result = est.gestures.reduce((c1, c2) => {
             return c1.score > c2.score ? c1 : c2;
@@ -268,20 +233,15 @@ const Demo = () => {
           );
 
           if (motionEnabledRef.current) {
-
             motionLetter.current = detectMotionSigns(
               fingerTipsRef,
               fingerPoseLetter,
-              motionGesturePt,
-
+              motionGesturePt
             );
-
           }
 
-
           setMessageBody((msg) => msg + motionLetter.current);
-          motionLetter.current = ''
-
+          motionLetter.current = '';
         }
       }
       animationId.current = requestAnimationFrame(motionSigns);
@@ -297,129 +257,118 @@ const Demo = () => {
         return;
       }
 
-      staticLetter.current = detectStaticSigns(languageArrayRef.current, pixelValsRef);
+      staticLetter.current = detectStaticSigns(
+        languageArrayRef.current,
+        pixelValsRef
+      );
 
-
-
-      const indexFingerTip = fingerTipsRef.current.indexTip
-      const middleFingerTip = fingerTipsRef.current.middleFingerTip
-      const thumbTip = fingerTipsRef.current.thumbTip
-
-
+      const indexFingerTip = fingerTipsRef.current.indexTip;
+      const middleFingerTip = fingerTipsRef.current.middleFingerTip;
+      const thumbTip = fingerTipsRef.current.thumbTip;
 
       if (landmarksRef.current && staticLetter.current.length === 1) {
-
-
-        if (indexFingerTip.x < middleFingerTip.x && staticLetter.current === "U") {
-          setMessageBody((msg) => msg + "R");
+        if (
+          indexFingerTip.x < middleFingerTip.x &&
+          staticLetter.current === 'U'
+        ) {
+          setMessageBody((msg) => msg + 'R');
+        } else if (
+          thumbTip.y - middleFingerTip.y < 0.05 &&
+          staticLetter.current === 'E'
+        ) {
+          setMessageBody((msg) => msg + 'S');
+        } else if (
+          indexFingerTip.x - middleFingerTip.x < 0.05 &&
+          staticLetter.current === 'V'
+        ) {
+          setMessageBody((msg) => msg + 'U');
+        } else if (
+          languageArrayRef.current === MSLGestArray &&
+          messageBody.slice(-2) === 'NN'
+        ) {
+          setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
         }
 
-
-        else if (thumbTip.y - middleFingerTip.y < 0.05 && staticLetter.current === "E") {
-          setMessageBody((msg) => msg + "S");
-        }
-
-        else if (indexFingerTip.x - middleFingerTip.x < 0.05 && staticLetter.current === "V") {
-          setMessageBody((msg) => msg + "U");
-        }
-
-        else if (languageArrayRef.current === MSLGestArray && messageBody.slice(-2) === "NN") {
-          setMessageBody((msg) => msg.slice(0, -2) + "Ñ")
-        }
-
-        // if (middleFingerTip.y )
+    
         else {
           setMessageBody((msg) => msg + staticLetter.current);
         }
-        staticLetter.current = ''
+        staticLetter.current = '';
       }
-
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 500);
-
+      rafInterval(staticSigns, 200);
     }
     // rafInterval(motionSigns,500)
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      cancelAnimationFrame(animationRef.current)
-      cancelAnimationFrame(animationId.current)
-    }
-  }
-  );
-
-
-
-
-
+      cancelAnimationFrame(animationRef.current);
+      cancelAnimationFrame(animationId.current);
+    };
+  });
 
   const gestureModeToggle = () => {
     setMotionEnabled((useMotion) => !useMotion);
     subHeading === 'Static' ? setSubHeading('Motion') : setSubHeading('Static');
   };
 
-
-
-
   const backSpace = () => {
-
-    setMessageBody((msg) => msg.slice(0, -1))
-  }
-
+    setMessageBody((msg) => msg.slice(0, -1));
+  };
 
   const gestureLanguageToggle = () => {
     setASLMode((useASL) => !useASL);
-
   };
 
   useEffect(() => {
     if (ASLMode) {
       setAppTitle('American Sign Language');
-      languageArrayRef.current = ASLGestArray
-
+      languageArrayRef.current = ASLGestArray;
     } else {
       setAppTitle('Mexican Sign Language');
-      languageArrayRef.current = MSLGestArray
-
-
+      languageArrayRef.current = MSLGestArray;
     }
-    setMessageBody('')
-
-  }, [ASLMode])
-
-
-
+    setMessageBody('');
+  }, [ASLMode]);
 
   const messageSpace = () => {
-    setMessageBody((msg) => msg + " ")
-  }
-
+    setMessageBody((msg) => msg + ' ');
+  };
 
   const clearMessage = () => {
     setMessageBody('');
   };
 
-
-
-
-  // }
-
+  
   return (
     <>
       <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
       <h2 style={{ textAlign: 'center' }}>
         {subHeading} Gesture Detection Enabled
       </h2>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <button onClick={gestureLanguageToggle}>Toggle <br /> Language</button>
+      <div className="toggleButton" style={{}}>
+        <button onClick={gestureLanguageToggle}>
+          Toggle <br /> Language
+        </button>
         <button onClick={messageSpace}>Space</button>
-        <button onClick={gestureModeToggle}>Toggle <br /> Gesture Mode</button>
+        <button onClick={gestureModeToggle}>
+          Toggle <br /> Gesture Mode
+        </button>
 
+        <button className="deletionButton" onClick={backSpace}>
+          Backspace
+        </button>
+        <button className="deletionButton" onClick={clearMessage}>
+          Clear Message
+        </button>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div
+        className="videoDiv"
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
         <video
           ref={videoRef}
           autoPlay
@@ -433,32 +382,10 @@ const Demo = () => {
           }}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <button style={{
-           backgroundColor: 'red',
-          color: "white", 
-          borderRadius: '8px'
-        }}onClick={backSpace}>Backspace</button>
-        <button style={{
-          backgroundColor: 'red',
-          color: "white"
-        }} onClick={clearMessage}>Clear Message</button>
-      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}></div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          border: 'solid',
-          height: '5rem',
-          width: '15rem',
-          wordWrap: 'break-word',
-          margin: 'auto'
-        }}>
-
-          <p style={{ textAlign: 'center', }}>
-            {messageBody}
-          </p>
+      <div className="messageDiv">
+        <p className="messageBody">{messageBody}</p>
       </div>
       <canvas
         ref={canvasRef}
@@ -473,7 +400,6 @@ const Demo = () => {
           pointerEvents: 'none',
         }}
       />
-
     </>
   );
 };

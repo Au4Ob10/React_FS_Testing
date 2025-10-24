@@ -1,0 +1,32 @@
+@startuml
+
+
+title "Special Project Directory Structure"
+skinparam defaultTextAlignment center
+
+skinparam note {
+  BackgroundColor #FFFFF
+}
+
+rectangle "<b>Directory Name</b>\n--\nFile Names" as desc
+note left of desc
+Tree Diagram Format
+end note
+
+rectangle "<b>React_Fingerspelling_Project</b>" as root 
+rectangle "<b>Components</b>\n--\ngenerateSigns.js\nhandposeutil.js" as comp  
+rectangle "<b>fs_language</b>\n--\nASL_fingervals.json\nMSL_fingervals.json" as fslang 
+rectangle "<b>handsigns</b>\n--\nAsign.js\n...\nZsign.js" as handsigns
+rectangle "<b>src/app</b>\n--\npage.tsx\nstyles.css" as mainpage
+rectangle "<b>gestureDetection</b>\n--\ndetectMotionSigns.tsx\ndetectStaticSigns.tsx" as gestDetect
+
+
+desc -[hidden]-> root
+
+root --> comp
+comp --> fslang
+comp --> handsigns
+root --> mainpage
+mainpage --> gestDetect
+
+@enduml

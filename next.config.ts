@@ -1,22 +1,22 @@
-import type { NextConfig } from "next";
+  import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+  const nextConfig: NextConfig = {
+    /* config options here */
 
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.task$/,
-      type: "asset/resource",
-      generator: {
-        filename: "static/media/[name][ext]",
-      },
-    });
+    webpack(config) {
+      config.module.rules.push({
+        test: /\.task$/,
+        type: "asset/resource",
+        generator: {
+          filename: "static/media/[name][ext]",
+        },
+      });
 
-    return config;
-  },
+      return config;
+    },
 
-  reactStrictMode: false
+    reactStrictMode: false
 
-};
+  };
 
-export default nextConfig;
+  export default nextConfig;
