@@ -282,9 +282,9 @@ const Demo = () => {
           return modeGesture;
         }
 
-        const stableGesture = smoothGesturePrediction(staticLetter.current)
+        const stableGesture: string = smoothGesturePrediction(staticLetter.current)
 
-        
+
         // if (
         //   indexFingerTip.x < middleFingerTip.x &&
         //   staticLetter.current === 'U'
@@ -310,14 +310,14 @@ const Demo = () => {
 
 
         else {
-          setMessageBody((msg) => msg + staticLetter.current);
+          setMessageBody((msg) => msg + stableGesture);
         }
         staticLetter.current = '';
       }
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 400);
+      rafInterval(staticSigns, 500);
 
     }
     // rafInterval(motionSigns,500)
