@@ -22,11 +22,11 @@
       "Pinky": ["VerticalUp"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
   },
   "U0042": {
@@ -91,32 +91,32 @@
   },
   "U0044": {
     "Curls": {
-      "Thumb": "HalfCurl",
+      "Thumb": "NoCurl",
       "Index": "NoCurl",
       "Middle": "FullCurl",
       "Ring": "FullCurl",
       "Pinky": "FullCurl"
     },
     "curlConf": {
-      "Thumb": 0.8,
-      "Index": 1.0,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     },
     "directions": {
-      "Thumb": ["DiagonalUpLeft"],
+      "Thumb": ["VerticalUp"],
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
-      "Pinky": ["DiagonalUpLeft"]
+      "Pinky": ["VerticalUp"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
   },
   "U0045": {
@@ -172,11 +172,11 @@
       "Pinky": ["VerticalUp"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
   },
   "U0047": {

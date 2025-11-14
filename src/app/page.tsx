@@ -282,23 +282,27 @@ const Demo = () => {
           return modeGesture;
         }
 
-        const stableGesture: string = smoothGesturePrediction(staticLetter.current)
+        let stableGesture: string = smoothGesturePrediction(staticLetter.current)
+
+        if (stableGesture === "null") {
+          stableGesture = ''
+        }
 
 
-        // if (
-        //   indexFingerTip.x < middleFingerTip.x &&
-        //   staticLetter.current === 'U'
-        // ) {
-        //   setMessageBody((msg) => msg + 'R');
-        // } 
         if (
+          indexFingerTip.x < middleFingerTip.x &&
+          stableGesture === 'U'
+        ) {
+          setMessageBody((msg) => msg + 'R');
+        } 
+        else if (
           thumbTip.y - middleFingerTip.y < 0.05 &&
-          staticLetter.current === 'E'
+          stableGesture === 'E'
         ) {
           setMessageBody((msg) => msg + 'S');
         } else if (
           indexFingerTip.x - middleFingerTip.x < 0.05 &&
-          staticLetter.current === 'V'
+           stableGesture === 'V'
         ) {
           setMessageBody((msg) => msg + 'U');
         } else if (
@@ -307,8 +311,6 @@ const Demo = () => {
         ) {
           setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
         }
-
-
         else {
           setMessageBody((msg) => msg + stableGesture);
         }
