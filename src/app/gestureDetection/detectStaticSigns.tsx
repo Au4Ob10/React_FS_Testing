@@ -22,7 +22,7 @@ const smoothPrediction = (predictedGesture) => {
 
   if (pixelValsRef.current && pixelValsRef.current.length) {
     const GE = new fp.GestureEstimator(currentLanguage);
-    const est = GE.estimate(pixelValsRef.current, 7.5);
+    const est = GE.estimate(pixelValsRef.current, 5.5);
 
    const stableGesture = smoothPrediction(est.poseData)
   
@@ -32,7 +32,7 @@ const smoothPrediction = (predictedGesture) => {
       });
 
       const currUnicode = result.name;
-     console.log(est.poseData)
+     console.log(stableGesture)
 
       letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
     }
