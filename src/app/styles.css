@@ -1,9 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+button,
+.messageDiv,
+.videoDiv {
+  border-radius: 8px;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
 body {
   background-color: #eeeeee;
-  font-family:
- 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
+}
+
+button {
+  background-color: #5682b1;
+  color: white;
+}
+
+canvas {
+  position: absolute;
+  height: 40%;
+  width: 40%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  transform: scaleX(1);
+  pointer-events: none;
+}
+
+video {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  height: 30%;
+  width: 30%;
+  z-index: 1;
+  transform: scaleX(-1);
+  pointer-events: none;
 }
 
 .toggleButton {
@@ -12,34 +50,29 @@ body {
   column-gap: 0.2rem;
 }
 
-button {
-
-  background-color: #5682b1;
-  color: white;
-}
-
 .messageDiv {
   display: flex;
   justify-content: center;
   align-items: center;
   border: solid;
-
+  word-wrap: break-word; /* wrap long words */
+  overflow-wrap: break-word;
   height: 6rem;
   width: 20rem;
-  word-wrap: break-word;
-  margin: auto;
 
+  margin: auto;
 }
 .messageBody {
   text-align: center;
+  word-break: break-word;
+}
+.messageContainer {
+  display: flex;
+  justify-content: center;
+  word-wrap: break-word;
 }
 
-video {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  overflow: hidden !important;
-}
-
-button, .messageDiv, .videoDiv {
-  border-radius: 8px;
+.videoDiv {
+  display: flex;
+  justify-content: center;
 }

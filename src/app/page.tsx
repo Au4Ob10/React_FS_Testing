@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
-import { MSLGestArray, ASLGestArray } from '../../components/generateSigns';
+import { MSLGestArray, ASLGestArray } from '../../Components/generateSigns'
 import drawLandmarks from './gestureDetection/drawLandmarks';
 import detectStaticSigns from './gestureDetection/detectStaticSigns';
 import { detectMotionSigns } from './gestureDetection/detectMotionSigns';
@@ -22,6 +22,7 @@ const Demo = () => {
   const fingerPoseLetter = useRef(null);
   const motionLetter = useRef(null);
   const animationId = useRef(null);
+  const gestureSmoothArr = useRef([]);
 
   const motionGesturePt = useRef({
     J: null,
@@ -29,7 +30,6 @@ const Demo = () => {
   });
 
   const [ASLMode, setASLMode] = useState(true);
-  const useASL = useRef(true);
   const languageArrayRef = useRef(ASLGestArray);
   const [motionEnabled, setMotionEnabled] = useState(false);
   const motionEnabledRef = useRef(false);
@@ -267,12 +267,31 @@ const Demo = () => {
       const thumbTip = fingerTipsRef.current.thumbTip;
 
       if (landmarksRef.current && staticLetter.current.length === 1) {
+
+        const currentGestureSet = gestureSmoothArr.current
+
+        const smoothGesturePrediction = (predicted) => {
+          currentGestureSet.push(predicted);
+          if (currentGestureSet.length > 8) {
+            gestureSmoothArr.current.shift()
+          }
+
+          const modeGesture = currentGestureSet.sort((a, b) =>
+            currentGestureSet.filter(v => v === a).length - currentGestureSet.filter(v => v === b).length).pop()
+
+          return modeGesture;
+        }
+
+        const stableGesture = smoothGesturePrediction(staticLetter.current)
+
+        
+        // if (
+        //   indexFingerTip.x < middleFingerTip.x &&
+        //   staticLetter.current === 'U'
+        // ) {
+        //   setMessageBody((msg) => msg + 'R');
+        // } 
         if (
-          indexFingerTip.x < middleFingerTip.x &&
-          staticLetter.current === 'U'
-        ) {
-          setMessageBody((msg) => msg + 'R');
-        } else if (
           thumbTip.y - middleFingerTip.y < 0.05 &&
           staticLetter.current === 'E'
         ) {
@@ -289,7 +308,7 @@ const Demo = () => {
           setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
         }
 
-    
+
         else {
           setMessageBody((msg) => msg + staticLetter.current);
         }
@@ -298,7 +317,8 @@ const Demo = () => {
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 200);
+      rafInterval(staticSigns, 400);
+
     }
     // rafInterval(motionSigns,500)
 
@@ -341,14 +361,14 @@ const Demo = () => {
     setMessageBody('');
   };
 
-  
+
   return (
     <>
-      <h1 style={{ textAlign: 'center' }}>{appTitle}</h1>
-      <h2 style={{ textAlign: 'center' }}>
+      <h1>{appTitle}</h1>
+      <h2>
         {subHeading} Gesture Detection Enabled
       </h2>
-      <div className="toggleButton" style={{}}>
+      <div className="toggleButton">
         <button onClick={gestureLanguageToggle}>
           Toggle <br /> Language
         </button>
@@ -367,38 +387,20 @@ const Demo = () => {
 
       <div
         className="videoDiv"
-        style={{ display: 'flex', justifyContent: 'center' }}
       >
         <video
           ref={videoRef}
           autoPlay
           playsInline
-          style={{
-            height: '40%',
-            width: '40%',
-            zIndex: 1,
-            transform: 'scaleX(-1)',
-            pointerEvents: 'none',
-          }}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}></div>
+      <div className='messageContainer'></div>
 
       <div className="messageDiv">
         <p className="messageBody">{messageBody}</p>
       </div>
       <canvas
         ref={canvasRef}
-        style={{
-          position: 'absolute',
-          height: '40%',
-          width: '40%',
-          top: 0,
-          left: 0,
-          zIndex: 2,
-          transform: 'scaleX(-1)',
-          pointerEvents: 'none',
-        }}
       />
     </>
   );

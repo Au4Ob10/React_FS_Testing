@@ -1,0 +1,97 @@
+@startuml
+
+
+title "Fingerpose Module Finger Properties\t\t\t\t"
+skinparam defaultTextAlignment center
+
+skinparam note {
+  BackgroundColor #FFFFF
+}
+
+
+rectangle "<b>ASL/MSL_fingervals.JSON</b>" as fileName
+rectangle "<b>Letter Name</b>\n--\nString: Unicode Value" as letterName
+rectangle "<<enumeration>> FingerName\n--\n\
+            Thumb\t\t\n\
+            Index\t\t\n\
+            Middle\t\t\n\
+            Ring\t\t\n\
+            Pinky\t\t" as fingerEnum
+rectangle "<b>Curls</b>\n--\nMap <Finger,String>" as curls
+rectangle "<<enumeration>> CurlType\n--\n\
+            NoCurl\t\t\t\n\
+            HalfCurl\t\t\n\
+            FullCurl\t\t" as curlEnum
+rectangle "<b>Curl Confidence:</b> \n--\nMap <curlConf, Float>" as curlConf
+rectangle "<<constraint>> curlConf\n--\n\
+             0.0 <= curlConf <= 1.0" as curlConfConstraint
+rectangle "<b>Directions : </b>\n--\nMap <Finger, String>" as directions
+rectangle "<<enumeration>> Directions\n--\n\
+Vertical Up || Vertical Down \n\
+Horizontal Left || Horizontal Right \n\
+Diagonal Up Right || Diagonal Up Left \n\
+Diagonal Down Right || Diagonal Down Left"  as directionsEnum
+rectangle "<b> Direction Confidence: </b>\n--\nMap <directionConf, Float>" as directionsConf
+rectangle "<<constraint>> DirectionConf\n--\n\
+             0.0 <= directionConf <= 1.0" as directionsConfConstraint
+rectangle "<b>generate Signs.js</b>\n--\nuses fp (fingerpose)" as genSigns
+rectangle "<b>gestureArr [ ]</b>\n--\nsigns" as signsJSONArr
+
+
+fileName --> letterName
+letterName --> fingerEnum
+fingerEnum --> curls
+curls --> curlEnum
+fingerEnum --> curlConf
+curlConf --> curlConfConstraint
+fingerEnum --> directions
+directions --> directionsEnum
+fingerEnum --> directionsConf
+directionsConf --> directionsConfConstraint
+curlEnum --> genSigns
+curlConfConstraint --> genSigns
+directionsEnum --> genSigns
+directionsConfConstraint --> genSigns
+genSigns --> signsJSONArr
+
+
+
+
+
+
+
+
+'   "U0041": {
+'     "Curls": {
+'       "Thumb": "NoCurl",
+'       "Index": "FullCurl",
+'       "Middle": "FullCurl",
+'       "Ring": "FullCurl",
+'       "Pinky": "FullCurl"
+'     },
+'     "curlConf": {
+'       "Thumb": 0.8,
+'       "Index": 0.8,
+'       "Middle": 0.8,
+'       "Ring": 0.8,
+'       "Pinky": 0.8
+'     },
+'     "directions": {
+'       "Thumb": ["VerticalUp"],
+'       "Index": ["VerticalUp"],
+'       "Middle": ["VerticalUp"],
+'       "Ring": ["VerticalUp"],
+'       "Pinky": ["VerticalUp"]
+'     },
+'     "directionConf": {
+'       "Thumb": 0.8,
+'       "Index": 0.8,
+'       "Middle": 0.8,
+'       "Ring": 0.8,
+'       "Pinky": 0.8
+'     }
+'   },
+
+
+
+@enduml
