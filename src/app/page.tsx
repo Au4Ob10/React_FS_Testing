@@ -289,7 +289,7 @@ const Demo = () => {
         }
 
 
-       else if (
+        if (
           indexFingerTip.x < middleFingerTip.x &&
           stableGesture === 'U'
         ) {
