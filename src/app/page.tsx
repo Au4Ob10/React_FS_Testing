@@ -272,7 +272,7 @@ const Demo = () => {
 
         const smoothGesturePrediction = (predicted) => {
           currentGestureSet.push(predicted);
-          if (currentGestureSet.length > 8) {
+          if (currentGestureSet.length > 9) {
             gestureSmoothArr.current.shift()
           }
 
@@ -289,7 +289,7 @@ const Demo = () => {
         }
 
 
-        if (
+        else if (
           indexFingerTip.x < middleFingerTip.x &&
           stableGesture === 'U'
         ) {

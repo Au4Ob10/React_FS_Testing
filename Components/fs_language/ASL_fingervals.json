@@ -135,8 +135,8 @@
       "Pinky": 0.8
     },
     "directions": {
-      "Thumb": ["DiagonalUpLeft"],
-      "Index": ["DiagonalUpRight"],
+      "Thumb": ["VerticalUp"],
+      "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
       "Pinky": ["VerticalUp"]
