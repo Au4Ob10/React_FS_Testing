@@ -13,22 +13,24 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
       let currentTime;
       let finalLetter = ''
     
-
-      // if (indexFingerTip) {
-      //   console.log(indexFingerTip)
-      // }
-
-      const gestureTimeOut = () => {
-
-
-        if (gestureTimeoutId) {
-          clearTimeout(gestureTimeoutId)
-        }
-
-        gestureTimeoutId = setTimeout(() => {
-          console.log("gesture expired")
-        })
+    setTimeout(function() {
+      if (indexFingerTip) {
+  console.log("index x: ", indexFingerTip.x, "\n Index y: ", indexFingerTip.y)
       }
+}, 1000);
+    
+
+      // const gestureTimeOut = () => {
+
+
+      //   if (gestureTimeoutId) {
+      //     clearTimeout(gestureTimeoutId)
+      //   }
+
+      //   gestureTimeoutId = setTimeout(() => {
+      //     console.log("gesture expired")
+      //   })
+      // }
    
      
       const coordRange = (val, min, max) => {
@@ -94,25 +96,24 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
 
         if (fingerposeLetter === "Z") {
-  // Stage 1
+
   if (indexFingerTip.x > 0.6 && indexFingerTip.y < 5 && gesturePt.current.Z === null) {
     gesturePt.current.Z = 'gestureStart';
     console.log("Z Start");
   }
 
-  // Stage 2
+
   if (indexFingerTip.x < 0.5 && indexFingerTip.y < 5 && gesturePt.current.Z === 'gestureStart') {
     gesturePt.current.Z = 'firstGesture';
     console.log("first z point");
   }
 
-  // Stage 3
   if (indexFingerTip.x < 0.7 && indexFingerTip.y > 0.7 && gesturePt.current.Z === "firstGesture") {
     gesturePt.current.Z = 'secondGesture';
     console.log("second z point");
   }
 
-  // Stage 4
+
   if (indexFingerTip.x < 0.5 && gesturePt.current.Z === 'secondGesture') {
     gesturePt.current.Z = 'thirdGesture';
     finalLetter = "Z";

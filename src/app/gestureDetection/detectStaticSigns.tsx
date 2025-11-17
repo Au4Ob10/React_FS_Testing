@@ -21,6 +21,12 @@ const smoothPrediction = (predictedGesture) => {
 
 
   if (pixelValsRef.current && pixelValsRef.current.length) {
+
+
+    // Source: A. Potato, “fingerpose — Hand-pose estimation using fingerpose,” GitHub repo.
+// https://github.com/andypotato/fingerpose/blob/master/dist/index.html
+// Accessed: 17 Nov. 2025.
+
     const GE = new fp.GestureEstimator(currentLanguage);
     const est = GE.estimate(pixelValsRef.current, 5.5);
 

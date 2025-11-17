@@ -8,15 +8,14 @@ import detectStaticSigns from './gestureDetection/detectStaticSigns';
 import { detectMotionSigns } from './gestureDetection/detectMotionSigns';
 import motionShapes from '../app/motionShapes.json';
 import './styles.css';
-const Demo = () => {
+
+
+const mainPage = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
 
-  const jPoints = useRef({
-    x: [],
-    y: [],
-  });
+ 
 
   const staticLetter = useRef<string>('');
   const fingerPoseLetter = useRef(null);
@@ -46,10 +45,6 @@ const Demo = () => {
 
   const pixelValsRef = useRef(null);
 
-  // const landmarkTips = useRef({
-  //   indexTip: null,
-  //   pinkyTip: null
-  // })
 
   const [appTitle, setAppTitle] = useState<String | null>(
     'American Sign Language'
@@ -57,8 +52,6 @@ const Demo = () => {
 
   const [subHeading, setSubHeading] = useState('Static');
 
-  // const [messageBody, setMessageBody] = useState('')
-  // const { messageBody, setMessageBody } = useContext(messageContext);
 
   const hand_landmarker_task = '/models/hand_landmarker.task';
 
@@ -81,6 +74,13 @@ const Demo = () => {
     motionEnabledRef.current = motionEnabled;
   }, [motionEnabled]);
 
+
+  // Code adapted from:
+// K. Chaudhari, “Integrating MediaPipe Tasks Vision for Hand Landmark Detection in React,” Medium.
+// https://medium.com/@kiyo07/integrating-mediapipe-tasks-vision-for-hand-landmark-detection-in-react-a2cfb9d543c7
+// Accessed: Nov. 14, 2025.
+
+
   useEffect(() => {
     const initializeHandDetection = async () => {
       try {
@@ -95,12 +95,11 @@ const Demo = () => {
             runningMode: 'VIDEO',
           }
         );
-        // detectHands();
+  
       } catch (error) {
         console.error('Error initializing hand detection:', error);
       }
-      // animationFrameId = requestAnimationFrame(initializeHandDetection);
-      // videoFrameID = video.requestVideoFrameCallback(initializeHandDetection);
+ 
     };
 
     const startWebcam = async () => {
@@ -127,7 +126,7 @@ const Demo = () => {
 
       if (animationFrameId) {
         video.cancelVideoFrameCallback(videoFrameID);
-        // cancelAnimationFrame(animationFrameId);
+
       }
     };
   }, []);
@@ -135,7 +134,6 @@ const Demo = () => {
   const rafInterval = (callback, interval) => {
     let start = performance.now();
     const loop = (now) => {
-      // useASL.current ? setLanguageArray(MSLGestArray) : setLanguageArray(ASLGestArray)
 
       if (!motionEnabledRef.current && now - start >= interval) {
         callback();
@@ -146,7 +144,7 @@ const Demo = () => {
         cancelAnimationFrame(animationRef.current);
         staticLetter.current = '';
 
-        // animationRef.current = null;
+     
       }
 
       animationRef.current = requestAnimationFrame(loop);
@@ -253,7 +251,7 @@ const Demo = () => {
       detectLandmarks();
 
       if (!videoRef.current || !canvasRef.current) {
-        // requestAnimationFrame(staticSigns);
+      
         return;
       }
 
@@ -287,8 +285,6 @@ const Demo = () => {
         if (stableGesture === "null") {
           stableGesture = ''
         }
-
-
         else if (
           indexFingerTip.x < middleFingerTip.x &&
           stableGesture === 'U'
@@ -322,7 +318,7 @@ const Demo = () => {
       rafInterval(staticSigns, 500);
 
     }
-    // rafInterval(motionSigns,500)
+
 
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -408,4 +404,4 @@ const Demo = () => {
   );
 };
 
-export default Demo;
+export default mainPage;
