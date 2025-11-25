@@ -5,6 +5,8 @@ import React, { useEffect, useRef, useState, useContext } from 'react';
 export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
 
+
+
       let indexFingerTip = fingerTipsRef.current['indexTip'];
       let pinkyTip = fingerTipsRef.current['pinkyTip'];
       let gestureTimeoutId = null
@@ -13,11 +15,11 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
       let currentTime;
       let finalLetter = ''
     
-    setTimeout(function() {
+    
       if (indexFingerTip) {
   console.log("index x: ", indexFingerTip.x, "\n Index y: ", indexFingerTip.y)
       }
-}, 1000);
+
     
 
       // const gestureTimeOut = () => {
@@ -97,18 +99,19 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
 
         if (fingerposeLetter === "Z") {
 
-  if (indexFingerTip.x > 0.6 && indexFingerTip.y < 5 && gesturePt.current.Z === null) {
+  
+if (indexFingerTip.x > 0.6 && indexFingerTip.y > 0.19 && gesturePt.current.Z === null) {
     gesturePt.current.Z = 'gestureStart';
     console.log("Z Start");
   }
 
 
-  if (indexFingerTip.x < 0.5 && indexFingerTip.y < 5 && gesturePt.current.Z === 'gestureStart') {
+  if (indexFingerTip.x < 0.4 && indexFingerTip.y < 0.35 && gesturePt.current.Z === 'gestureStart') {
     gesturePt.current.Z = 'firstGesture';
     console.log("first z point");
   }
 
-  if (indexFingerTip.x < 0.7 && indexFingerTip.y > 0.7 && gesturePt.current.Z === "firstGesture") {
+  if (indexFingerTip.x > 0.7 && indexFingerTip.y > 0.4 && gesturePt.current.Z === "firstGesture") {
     gesturePt.current.Z = 'secondGesture';
     console.log("second z point");
   }
@@ -122,6 +125,31 @@ export const detectMotionSigns = (fingerTipsRef, motionLetter, gesturePt) => {
   }
 }
 
+
+
+// if (indexFingerTip.x > 0.6 && indexFingerTip.y < 5 && gesturePt.current.Z === null) {
+//     gesturePt.current.Z = 'gestureStart';
+//     console.log("Z Start");
+//   }
+
+
+//   if (indexFingerTip.x < 0.5 && indexFingerTip.y < 5 && gesturePt.current.Z === 'gestureStart') {
+//     gesturePt.current.Z = 'firstGesture';
+//     console.log("first z point");
+//   }
+
+//   if (indexFingerTip.x < 0.7 && indexFingerTip.y > 0.7 && gesturePt.current.Z === "firstGesture") {
+//     gesturePt.current.Z = 'secondGesture';
+//     console.log("second z point");
+//   }
+
+
+//   if (indexFingerTip.x < 0.5 && gesturePt.current.Z === 'secondGesture') {
+//     gesturePt.current.Z = 'thirdGesture';
+//     finalLetter = "Z";
+//     console.log("third z point");
+//     gesturePt.current.Z = null;
+//   }
       
     // if (fingerposeLetter === "Z") {
 
