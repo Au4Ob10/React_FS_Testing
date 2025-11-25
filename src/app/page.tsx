@@ -264,7 +264,7 @@ const mainPage = () => {
       const middleFingerTip = fingerTipsRef.current.middleFingerTip;
       const thumbTip = fingerTipsRef.current.thumbTip;
 
-      if (landmarksRef.current) {
+      if (landmarksRef.current && staticLetter.current.length === 1) {
 
         const currentGestureSet = gestureSmoothArr.current
 
@@ -282,7 +282,7 @@ const mainPage = () => {
 
         let stableGesture: string = smoothGesturePrediction(staticLetter.current)
 
-        if (stableGesture === "null" || staticLetter.current === "null") {
+        if (stableGesture === "null") {
           stableGesture = ''
         }
         else if (
@@ -315,7 +315,7 @@ const mainPage = () => {
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 300);
+      rafInterval(staticSigns, 500);
 
     }
 
