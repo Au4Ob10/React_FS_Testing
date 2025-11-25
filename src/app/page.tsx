@@ -268,39 +268,37 @@ const mainPage = () => {
 
         const currentGestureSet = gestureSmoothArr.current
 
-        // const smoothGesturePrediction = (predicted) => {
-        //   currentGestureSet.push(predicted);
-        //   if (currentGestureSet.length > 9) {
-        //     gestureSmoothArr.current.shift()
-        //   }
+        const smoothGesturePrediction = (predicted) => {
+          currentGestureSet.push(predicted);
+          if (currentGestureSet.length > 9) {
+            gestureSmoothArr.current.shift()
+          }
 
-        //   const modeGesture = currentGestureSet.sort((a, b) =>
-        //     currentGestureSet.filter(v => v === a).length - currentGestureSet.filter(v => v === b).length).pop()
+          const modeGesture = currentGestureSet.sort((a, b) =>
+            currentGestureSet.filter(v => v === a).length - currentGestureSet.filter(v => v === b).length).pop()
 
-        //   return modeGesture;
-        // }
+          return modeGesture;
+        }
 
-        // let staticLetter.current: string = smoothGesturePrediction(staticLetter.current)
+        let stableGesture: string = smoothGesturePrediction(staticLetter.current)
 
-        if (staticLetter.current === "null") {
-          staticLetter.current = ''
+        if (stableGesture === "null") {
+          stableGesture = ''
         }
         else if (
           indexFingerTip.x < middleFingerTip.x &&
-          staticLetter.current === 'U'
+          stableGesture === 'U'
         ) {
           setMessageBody((msg) => msg + 'R');
         } 
         else if (
           thumbTip.y - middleFingerTip.y < 0.05 &&
-          staticLetter.current === 'E'
+          stableGesture === 'E'
         ) {
           setMessageBody((msg) => msg + 'S');
-        } 
-       
-        else if (
+        } else if (
           indexFingerTip.x - middleFingerTip.x < 0.05 &&
-           staticLetter.current === 'V'
+           stableGesture === 'V'
         ) {
           setMessageBody((msg) => msg + 'U');
         } else if (
@@ -310,14 +308,14 @@ const mainPage = () => {
           setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
         }
         else {
-          setMessageBody((msg) => msg + staticLetter.current);
+          setMessageBody((msg) => msg + stableGesture);
         }
         staticLetter.current = '';
       }
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 600);
+      rafInterval(staticSigns, 500);
 
     }
 

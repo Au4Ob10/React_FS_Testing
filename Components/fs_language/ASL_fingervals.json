@@ -560,10 +560,10 @@
     },
     "directions": {
       "Thumb": ["VerticalUp"],
-      "Index": ["VerticalUp"],
+      "Index": ["DiagonalUpRight"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
-      "Pinky": ["DiagonalUpLeft"]
+      "Pinky": ["VerticalUp"]
     },
     "directionConf": {
       "Thumb": 0.8,
