@@ -202,11 +202,11 @@
       "Pinky": ["DiagonalUpRight"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
   },
   "U0048": {
@@ -499,7 +499,7 @@
       "Pinky": 0.9
     },
     "directions": {
-      "Thumb": ["DiagonalUpLef"],
+      "Thumb": ["DiagonalUpLeft"],
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],

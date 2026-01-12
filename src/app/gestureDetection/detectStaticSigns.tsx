@@ -39,7 +39,7 @@ const smoothPrediction = (predictedGesture) => {
 
       const currUnicode = result.name;
 
-     console.log(est.poseData)
+    //  console.log(est.poseData)
 
       letter = String.fromCharCode(parseInt(currUnicode.slice(1), 16));
     }

@@ -247,6 +247,8 @@ const mainPage = () => {
 
     animationId.current = requestAnimationFrame(motionSigns);
 
+    console.log(fingerTipsRef.current)
+
     const staticSigns = async () => {
       detectLandmarks();
 
@@ -286,7 +288,7 @@ const mainPage = () => {
           stableGesture = ''
         }
         else if (
-          indexFingerTip.x < middleFingerTip.x &&
+          indexFingerTip.x < middleFingerTip.x && indexFingerTip.y > middleFingerTip.y &&
           stableGesture === 'U'
         ) {
           setMessageBody((msg) => msg + 'R');
@@ -296,12 +298,14 @@ const mainPage = () => {
           stableGesture === 'E'
         ) {
           setMessageBody((msg) => msg + 'S');
-        } else if (
-          indexFingerTip.x - middleFingerTip.x < 0.05 &&
-           stableGesture === 'V'
-        ) {
-          setMessageBody((msg) => msg + 'U');
-        } else if (
+        } 
+        // else if (
+        //   indexFingerTip.x - middleFingerTip.x < 0.05 &&
+        //    stableGesture === 'V'
+        // ) {
+        //   setMessageBody((msg) => msg + 'U');
+        // } 
+        else if (
           languageArrayRef.current === MSLGestArray &&
           messageBody.slice(-2) === 'NN'
         ) {
@@ -315,7 +319,7 @@ const mainPage = () => {
     };
 
     if (!motionEnabledRef.current) {
-      rafInterval(staticSigns, 500);
+      rafInterval(staticSigns, 700);
 
     }
 
