@@ -288,10 +288,10 @@ const mainPage = () => {
           stableGesture = ''
         }
         else if (
-          indexFingerTip.x < middleFingerTip.x && indexFingerTip.y > middleFingerTip.y &&
-          stableGesture === 'U'
+          indexFingerTip.x > middleFingerTip.x && indexFingerTip.y > middleFingerTip.y &&
+          stableGesture === 'R'
         ) {
-          setMessageBody((msg) => msg + 'R');
+          setMessageBody((msg) => msg + 'U');
         } 
         else if (
           thumbTip.y - middleFingerTip.y < 0.05 &&
