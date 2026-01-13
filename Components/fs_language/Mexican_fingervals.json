@@ -102,7 +102,7 @@
     },
         "U0044": {
         "Curls": {
-      "Thumb": "NoCurl",
+      "Thumb": "HalfCurl",
       "Index": "NoCurl",
       "Middle": "FullCurl",
       "Ring": "FullCurl",
@@ -116,7 +116,7 @@
       "Pinky": 0.9
     },
     "directions": {
-      "Thumb": ["VerticalUp"],
+      "Thumb": ["DiagonalUpLeft"],
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],

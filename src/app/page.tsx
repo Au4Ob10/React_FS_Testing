@@ -247,7 +247,7 @@ const mainPage = () => {
 
     animationId.current = requestAnimationFrame(motionSigns);
 
-    console.log(fingerTipsRef.current)
+    // console.log(fingerTipsRef.current)
 
     const staticSigns = async () => {
       detectLandmarks();
