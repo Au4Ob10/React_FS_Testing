@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import * as fp from 'fingerpose';
-import { MSLGestArray, ASLGestArray } from '../../Components/generateSigns'
+import { MSLGestArray, ASLGestArray } from '../../components/generateSigns'
 import drawLandmarks from './gestureDetection/drawLandmarks';
 import detectStaticSigns from './gestureDetection/detectStaticSigns';
 import { detectMotionSigns } from './gestureDetection/detectMotionSigns';

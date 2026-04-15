@@ -1,0 +1,32 @@
+@startuml
+
+
+skinparam defaultTextAlignment center
+
+skinparam note {
+  BackgroundColor #FFFFF
+}
+
+
+left to right direction
+
+rectangle "<b>ASL (American Sign Language)</b> \n--\n Contains 24 Stationary \n ASL Gestures" as ASL 
+rectangle "<b>MSL (Mexican Sign Language)</b> \n--\n Contains 25 MSL Gestures \n with most motion gestures \n converted to stationary gestures" as MSL
+rectangle "<b>Motion Gestures</b> \n--\n Contains 'J' & 'Z' motion gestures \n applicable for both languages" as motion
+
+
+rectangle "<b>System</b> \n--\n Detects gestures using \n 21 hand landmarks" as System
+rectangle "<b>Desktop</b> \n--\n Hosts sign language application \n and creates link \n for external access" as desktop
+rectangle "<b>Smartphone</b> \n--\n Accesses sign language application \n in a web browser via a link" as smartphone
+
+
+
+ASL --> System
+MSL --> System
+motion --> System
+System --> desktop
+desktop --> smartphone
+
+
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+
+
+title "Mediapipe Hand Landmark Static Detection Pipeline"
+skinparam defaultTextAlignment center
+
+skinparam note {
+  BackgroundColor #FFFFF
+}
+
+
+
+rectangle "External Camera\n Detects Hands" as root 
+rectangle "21 Hand Landmarks Detected" as lmDetect
+rectangle "ASL Fingerspelling \n Static Gesture Performed" as static
+rectangle "X & Y Coordinates of \n Landmarks Extracted" as lmExtract
+rectangle "X & Y Coordinates are \n De-Normalized" as lmDenorm
+rectangle "X & Y Coordinates \n Passed Through Fingerpose" as fingerpose
+
+
+rectangle "Gesture Letter is Outputted" as gestureOutput
+
+
+root --> lmDetect
+
+lmDetect -> lmExtract
+
+lmExtract --> static
+
+
+static --> lmDenorm
+
+
+lmDenorm --> fingerpose
+
+fingerpose --> gestureOutput
+
+
+
+@enduml
