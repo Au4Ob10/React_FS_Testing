@@ -1,0 +1,39 @@
+@startuml
+
+
+title "React Fingerspelling Project Directory Structure"
+skinparam defaultTextAlignment center
+
+skinparam note {
+  BackgroundColor #FFFFF
+}
+
+rectangle "<b>Directory Name</b>\n--\nFile Names" as desc
+note left of desc
+Tree Diagram Format
+end note
+
+
+rectangle "<b>src/app</b>" as root
+rectangle "page.tsx" as mainPage
+rectangle "<b>signGeneration</b>\n--\ngenerateSigns.js" as signGeneration 
+rectangle "<b>gesture_json</b>\n--\nASL_fingervals.json\nMSL_fingervals.json" as json
+rectangle "<b>separate_handsigns</b>\n--\nAsign.js\n...\nZsign.js" as handsigns
+
+rectangle "<b>signDetection</b>\n--\ndetectMotionSigns.tsx\ndetectStaticSigns.tsx" as gestDetect
+
+
+desc -[hidden]-> root
+
+root --> mainPage
+root --> handsigns
+root --> json
+root --> gestDetect
+root --> signGeneration
+' root --> comp
+' comp --> fslang
+' comp --> handsigns
+' root --> mainpage
+' mainpage --> gestDetect
+
+@enduml
