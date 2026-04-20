@@ -284,7 +284,8 @@ const mainPage = () => {
 
         let stableGesture: string = smoothGesturePrediction(staticLetter.current)
 
-        if (stableGesture === "null") {
+        if (messageBody.length <= 29) {
+        if (stableGesture === "null")  {
           stableGesture = ''
         }
         else if (
@@ -305,15 +306,16 @@ const mainPage = () => {
         // ) {
         //   setMessageBody((msg) => msg + 'U');
         // } 
-        else if (
-          languageArrayRef.current === MSLGestArray &&
-          messageBody.slice(-2) === 'NN'
-        ) {
-          setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
-        }
+        // else if (
+        //   languageArrayRef.current === MSLGestArray &&
+        //   messageBody.slice(-2) === 'NN'
+        // ) {
+        //   setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
+        // }
         else {
           setMessageBody((msg) => msg + stableGesture);
         }
+      }
         staticLetter.current = '';
       }
     };

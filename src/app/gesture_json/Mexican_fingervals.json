@@ -433,25 +433,25 @@
       "Pinky": "HalfCurl"
     },
     "curlConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     },
     "directions": {
-      "Thumb": ["DiagonalUpRight"],
+      "Thumb": ["HorizontalRight"],
       "Index": ["DiagonalUpRight"],
       "Middle": ["DiagonalUpRight"],
       "Ring": ["DiagonalUpRight"],
       "Pinky": ["DiagonalUpRight"]
     },
     "directionConf": {
-      "Thumb": 0.7,
-      "Index": 0.7,
-      "Middle": 0.7,
-      "Ring": 0.7,
-      "Pinky": 0.7
+      "Thumb": 0.8,
+      "Index": 0.8,
+      "Middle": 0.8,
+      "Ring": 0.8,
+      "Pinky": 0.8
     }
 
 },
