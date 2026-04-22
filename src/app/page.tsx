@@ -300,12 +300,12 @@ const mainPage = () => {
         ) {
           setMessageBody((msg) => msg + 'S');
         } 
-        // else if (
-        //   indexFingerTip.x - middleFingerTip.x < 0.05 &&
-        //    stableGesture === 'V'
-        // ) {
-        //   setMessageBody((msg) => msg + 'U');
-        // } 
+        else if (
+          indexFingerTip.x - middleFingerTip.x < 0.05 &&
+           stableGesture === 'U'
+        ) {
+          setMessageBody((msg) => msg + 'V');
+        } 
         // else if (
         //   languageArrayRef.current === MSLGestArray &&
         //   messageBody.slice(-2) === 'NN'
