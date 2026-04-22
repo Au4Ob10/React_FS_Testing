@@ -15,12 +15,11 @@ const mainPage = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
 
- 
 
   const staticLetter = useRef<string>('');
-  const fingerPoseLetter = useRef(null);
-  const motionLetter = useRef(null);
-  const animationId = useRef(null);
+  const fingerPoseLetter = useRef('');
+  const motionLetter = useRef('');
+  const animationId = useRef(0);
   const gestureSmoothArr = useRef([]);
 
   const motionGesturePt = useRef({
@@ -41,8 +40,8 @@ const mainPage = () => {
     pinkyTip: null,
   });
   const [messageBody, setMessageBody] = useState('');
-  const animationRef = useRef(null);
 
+  const animationRef = useRef(null);
   const pixelValsRef = useRef(null);
 
 
@@ -161,12 +160,12 @@ const mainPage = () => {
         landmarkDetect.current
       ) {
         const handLandmarker = landmarkDetect.current;
-        const results = handLandmarker.detectForVideo(
+        const handProps = handLandmarker.detectForVideo(
           videoRef.current,
           performance.now()
         );
-
-        landmarksRef.current = results.landmarks[0];
+        console.log(handProps)
+        landmarksRef.current = handProps.landmarks[0];
 
         if (landmarksRef.current && landmarksRef.current.length > 0) {
           const canvas = canvasRef.current;
@@ -197,12 +196,14 @@ const mainPage = () => {
       }
 
       detectLandmarks();
+
       if (landmarksRef.current && landmarksRef.current.length > 0) {
         const pixelVals = pixelValsRef.current;
 
         const gestureArr = [];
 
         if (pixelVals) {
+
           Object.entries(motionShapes).forEach(([unicodeVal, props]) => {
             const newGesture = new fp.GestureDescription(unicodeVal);
             Object.entries(props.Curls).forEach(([fingerName, curlType]) => {
@@ -247,7 +248,7 @@ const mainPage = () => {
 
     animationId.current = requestAnimationFrame(motionSigns);
 
-    // console.log(fingerTipsRef.current)
+  
 
     const staticSigns = async () => {
       detectLandmarks();
