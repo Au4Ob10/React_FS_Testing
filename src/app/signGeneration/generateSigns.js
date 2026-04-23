@@ -7,7 +7,7 @@ import mslSigns from '../gesture_json/Mexican_fingervals.json'
 
 const signs = (signsJSON) => {
 
-  const gestureArr = [];
+  let gestureArr = [];
 
 
   Object.entries(signsJSON).forEach(([unicodeVal, props]) => {
@@ -22,7 +22,7 @@ const signs = (signsJSON) => {
 
       if (directionProps.length > 0) {
 
-        for (const direction of directionProps) {
+        for (let direction of directionProps) {
 
           newGesture.addDirection(fp.Finger[fingerName], fp.FingerDirection[direction], directionConf);
         }
