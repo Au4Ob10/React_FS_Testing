@@ -7,13 +7,15 @@ import drawLandmarks from './signDetection/drawLandmarks';
 import detectStaticSigns from './signDetection/detectStaticSigns';
 import { detectMotionSigns } from './signDetection/detectMotionSigns';
 import motionShapes from '../app/motionShapes.json';
+import UseVideoStream from './signDetection/useVideoStream';
+import { landmarksRefStore } from './signDetection/landmarkRefStore';
 import './styles.css';
 
 
 const mainPage = () => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  // const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const landmarkDetect = useRef(null);
+  
 
 
   const staticLetter = useRef<string>('');
@@ -22,6 +24,10 @@ const mainPage = () => {
   const animationId = useRef(0);
   const gestureSmoothArr = useRef([]);
 
+  const currentLandmarks = landmarksRefStore.getState().landmarks;
+
+
+  
   const motionGesturePt = useRef({
     J: null,
     Z: null,
@@ -32,7 +38,7 @@ const mainPage = () => {
   const [motionEnabled, setMotionEnabled] = useState(false);
   const motionEnabledRef = useRef(false);
 
-  const landmarksRef = useRef(null);
+ 
   const fingerTipsRef = useRef({
     thumbTip: null,
     indexTip: null,
@@ -56,7 +62,7 @@ const mainPage = () => {
 
   let animationFrameId;
   let videoFrameID;
-  const video = videoRef.current;
+  
 
   useEffect(() => {
     if (ASLMode) {
@@ -73,63 +79,6 @@ const mainPage = () => {
     motionEnabledRef.current = motionEnabled;
   }, [motionEnabled]);
 
-
-  // Code adapted from:
-// K. Chaudhari, “Integrating MediaPipe Tasks Vision for Hand Landmark Detection in React,” Medium.
-// https://medium.com/@kiyo07/integrating-mediapipe-tasks-vision-for-hand-landmark-detection-in-react-a2cfb9d543c7
-// Accessed: Nov. 14, 2025.
-
-
-  useEffect(() => {
-    const initializeHandDetection = async () => {
-      try {
-        const vision = await FilesetResolver.forVisionTasks(
-          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
-        );
-        landmarkDetect.current = await HandLandmarker.createFromOptions(
-          vision,
-          {
-            baseOptions: { modelAssetPath: hand_landmarker_task },
-            numHands: 1,
-            runningMode: 'VIDEO',
-          }
-        );
-  
-      } catch (error) {
-        console.error('Error initializing hand detection:', error);
-      }
- 
-    };
-
-    const startWebcam = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        videoRef.current.srcObject = stream;
-        await initializeHandDetection();
-      } catch (error) {
-        console.error('Error accessing webcam:', error);
-      }
-    };
-
-    startWebcam();
-
-    return () => {
-      if (
-        videoRef.current &&
-        videoRef.current.srcObject instanceof MediaStream
-      ) {
-        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-      }
-
-      if (animationFrameId) {
-        video.cancelVideoFrameCallback(videoFrameID);
-
-      }
-    };
-  }, []);
-
   const rafInterval = (callback, interval) => {
     let start = performance.now();
     const loop = (now) => {
@@ -143,7 +92,6 @@ const mainPage = () => {
         cancelAnimationFrame(animationRef.current);
         staticLetter.current = '';
 
-     
       }
 
       animationRef.current = requestAnimationFrame(loop);
@@ -154,40 +102,27 @@ const mainPage = () => {
 
   useEffect(() => {
     const detectLandmarks = () => {
-      if (
-        videoRef.current &&
-        videoRef.current.readyState === 4 &&
-        landmarkDetect.current
-      ) {
-        const handLandmarker = landmarkDetect.current;
-        const handProps = handLandmarker.detectForVideo(
-          videoRef.current,
-          performance.now()
-        );
-        console.log(handProps)
-        landmarksRef.current = handProps.landmarks[0];
-
-        if (landmarksRef.current && landmarksRef.current.length > 0) {
+        if (currentLandmarks && currentLandmarks.length > 0) {
           const canvas = canvasRef.current;
           const canvasWidth = canvas.clientWidth;
           const canvasHeight = canvas.clientHeight;
 
-          const pixelVals = landmarksRef.current.map(({ x, y, z }) => [
+          const pixelVals = currentLandmarks.map(({x, y}) => [
             x * canvasWidth,
             y * canvasHeight,
-            z,
+         
           ]);
 
           pixelValsRef.current = pixelVals;
 
           fingerTipsRef.current = {
-            thumbTip: landmarksRef.current[4],
-            indexTip: landmarksRef.current[8],
-            middleFingerTip: landmarksRef.current[12],
-            pinkyTip: landmarksRef.current[20],
+            thumbTip: currentLandmarks[4],
+            indexTip: currentLandmarks[8],
+            middleFingerTip: currentLandmarks[12],
+            pinkyTip: currentLandmarks[20],
           };
         }
-      }
+      
     };
 
     const motionSigns = () => {
@@ -197,7 +132,7 @@ const mainPage = () => {
 
       detectLandmarks();
 
-      if (landmarksRef.current && landmarksRef.current.length > 0) {
+      if (currentLandmarks && currentLandmarks.length > 0) {
         const pixelVals = pixelValsRef.current;
 
         const gestureArr = [];
@@ -253,10 +188,10 @@ const mainPage = () => {
     const staticSigns = async () => {
       detectLandmarks();
 
-      if (!videoRef.current || !canvasRef.current) {
+      // if (!videoRef.current || !canvasRef.current) {
       
-        return;
-      }
+      //   return;
+      // }
 
       staticLetter.current = detectStaticSigns(
         languageArrayRef.current,
@@ -267,7 +202,7 @@ const mainPage = () => {
       const middleFingerTip = fingerTipsRef.current.middleFingerTip;
       const thumbTip = fingerTipsRef.current.thumbTip;
 
-      if (landmarksRef.current && staticLetter.current.length === 1) {
+      if (currentLandmarks && staticLetter.current.length === 1) {
 
         const currentGestureSet = gestureSmoothArr.current
 
@@ -368,7 +303,7 @@ const mainPage = () => {
 
 
   return (
-    <>
+    <div>
       <h1>{appTitle}</h1>
       <h2>
         {subHeading} Gesture Detection Enabled
@@ -389,15 +324,11 @@ const mainPage = () => {
           Clear Message
         </button>
       </div>
-
+    <div>
       <div
         className="videoDiv"
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-        />
+       <UseVideoStream/>
       </div>
       <div className='messageContainer'></div>
 
@@ -407,7 +338,8 @@ const mainPage = () => {
       <canvas
         ref={canvasRef}
       />
-    </>
+    </div>
+    </div>
   );
 };
 
