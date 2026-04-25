@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/older_page_files/page_one_useeffect.tsx"
-, "src/app/signGeneration/generateSigns.js", "src/app/signDetection/useMotionSigns.js"  ],
+, "src/app/signGeneration/generateSigns.js", "src/app/signDetection/useMotionSigns.js", "src/app/signDetection/videoRefStore.js"  ],
   "exclude": [
     "node_modules"
   ]

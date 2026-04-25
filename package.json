@@ -15,6 +15,7 @@
     "@mediapipe/hands": "^0.4.1675469240",
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
     "chakra-ui": "^0.3.9",
+    "chii": "^1.15.5",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

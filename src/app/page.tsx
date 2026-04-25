@@ -7,6 +7,7 @@ import drawLandmarks from './signDetection/drawLandmarks';
 import detectStaticSigns from './signDetection/detectStaticSigns';
 import { detectMotionSigns } from './signDetection/detectMotionSigns';
 import motionShapes from '../app/motionShapes.json';
+import ErudaDebugger from './erudaDebugger';
 import './styles.css';
 
 
@@ -220,7 +221,7 @@ const mainPage = () => {
 
         const est = GE.estimate(pixelVals, 8.0);
 
-        console.log(pixelVals)
+        
 
         if (est.gestures.length > 0) {
           const result = est.gestures.reduce((c1, c2) => {
@@ -286,6 +287,8 @@ const mainPage = () => {
 
         let stableGesture: string = smoothGesturePrediction(staticLetter.current)
 
+        if (messageBody.length <= 29) {
+
         if (stableGesture === "null") {
           stableGesture = ''
         }
@@ -307,18 +310,19 @@ const mainPage = () => {
         ) {
           setMessageBody((msg) => msg + 'U');
         } 
-        else if (
-          languageArrayRef.current === MSLGestArray &&
-          messageBody.slice(-2) === 'NN'
-        ) {
-          setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
-        }
+        // else if (
+        //   languageArrayRef.current === MSLGestArray &&
+        //   messageBody.slice(-2) === 'NN'
+        // ) {
+        //   setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
+        // }
         else {
           setMessageBody((msg) => msg + stableGesture);
         }
         staticLetter.current = '';
       }
     };
+  }
 
     if (!motionEnabledRef.current) {
       rafInterval(staticSigns, 700);
@@ -369,6 +373,7 @@ const mainPage = () => {
   return (
     <>
       <h1>{appTitle}</h1>
+     <script src="http://192.168.0.165:8080/target.js"></script>
       <h2>
         {subHeading} Gesture Detection Enabled
       </h2>

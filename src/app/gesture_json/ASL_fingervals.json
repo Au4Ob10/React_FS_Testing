@@ -142,11 +142,11 @@
       "Pinky": ["VerticalUp"]
     },
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
   },
   "U0046": {
@@ -182,7 +182,7 @@
   "U0047": {
     "Curls": {
       "Thumb": "NoCurl",
-      "Index": "NoCurl",
+      "Index": "HalfCurl",
       "Middle": "FullCurl",
       "Ring": "FullCurl",
       "Pinky": "FullCurl"
@@ -195,8 +195,8 @@
       "Pinky": 0.8
     },
     "directions": {
-      "Thumb": ["HorizontalRight"],
-      "Index": ["HorizontalRight"],
+      "Thumb": ["DiagonalUpRight"],
+      "Index": ["DiagonalUpRight"],
       "Middle": ["DiagonalUpRight"],
       "Ring": ["DiagonalUpRight"],
       "Pinky": ["DiagonalUpRight"]
@@ -239,7 +239,7 @@
       "Pinky": 0.8
     }
   },
-"U0049": {
+  "U0049": {
     "Curls": {
       "Thumb": "HalfCurl",
       "Index": "FullCurl",
@@ -268,8 +268,7 @@
       "Ring": 0.8,
       "Pinky": 0.8
     }
-
-},
+  },
 
   "U004b": {
     "Curls": {
@@ -303,12 +302,13 @@
   },
   "U004c": {
     "Curls": {
-      "Thumb": "NoCurl",
+      "Thumb": "HalfCurl",
       "Index": "NoCurl",
       "Middle": "FullCurl",
       "Ring": "FullCurl",
       "Pinky": "FullCurl"
     },
+
     "curlConf": {
       "Thumb": 0.8,
       "Index": 0.8,
@@ -316,23 +316,25 @@
       "Ring": 0.8,
       "Pinky": 0.8
     },
+
     "directions": {
-      "Thumb": ["HorizontalRight"],
+      "Thumb": ["DiagonalUpRight"],
       "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
       "Pinky": ["DiagonalUpLeft"]
     },
+
     "directionConf": {
-      "Thumb": 0.8,
-      "Index": 0.8,
-      "Middle": 0.8,
-      "Ring": 0.8,
-      "Pinky": 0.8
+      "Thumb": 0.9,
+      "Index": 0.9,
+      "Middle": 0.9,
+      "Ring": 0.9,
+      "Pinky": 0.9
     }
   },
 
-    "U004d": {
+  "U004d": {
     "Curls": {
       "Thumb": "NoCurl",
       "Index": "FullCurl",
@@ -431,30 +433,29 @@
       "Pinky": "FullCurl"
     },
     "curlConf": {
-      "Thumb": 0.9,
-      "Index": 0.9,
-      "Middle": 0.9,
-      "Ring": 0.9,
-      "Pinky": 0.9
+      "Thumb": 0.8,
+      "Index": 0.8,
+      "Middle": 0.8,
+      "Ring": 0.8,
+      "Pinky": 0.8
     },
     "directions": {
-      "Thumb": ["DiagonalUpRight"],
+      "Thumb": ["HorizontalRight"],
       "Index": ["HorizontalRight"],
       "Middle": ["DiagonalDownRight"],
       "Ring": ["HorizontalRight"],
       "Pinky": ["DiagonalDownRight"]
     },
     "directionConf": {
-      "Thumb": 0.9,
-      "Index": 0.9,
-      "Middle": 0.9,
-      "Ring": 0.9,
-      "Pinky": 0.9
+      "Thumb": 0.8,
+      "Index": 0.8,
+      "Middle": 0.8,
+      "Ring": 0.8,
+      "Pinky": 0.8
     }
-   
   },
   "U0051": {
-     "Curls": {
+    "Curls": {
       "Thumb": "NoCurl",
       "Index": "NoCurl",
       "Middle": "FullCurl",
@@ -560,10 +561,10 @@
     },
     "directions": {
       "Thumb": ["VerticalUp"],
-      "Index": ["DiagonalUpRight"],
+      "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
-      "Pinky": ["VerticalUp"]
+      "Pinky": ["DiagonalUpLeft"]
     },
     "directionConf": {
       "Thumb": 0.8,
@@ -620,7 +621,7 @@
     },
     "directions": {
       "Thumb": ["DiagonalUpLeft"],
-      "Index": ["DiagonalUpRight"],
+      "Index": ["VerticalUp"],
       "Middle": ["VerticalUp"],
       "Ring": ["VerticalUp"],
       "Pinky": ["DiagonalUpLeft"]
@@ -665,7 +666,7 @@
   },
   "U0058": {
     "Curls": {
-      "Thumb": "NoCurl",
+      "Thumb": "HalfCurl",
       "Index": "HalfCurl",
       "Middle": "FullCurl",
       "Ring": "FullCurl",
@@ -681,9 +682,9 @@
     "directions": {
       "Thumb": ["DiagonalUpRight"],
       "Index": ["DiagonalUpRight"],
-      "Middle": ["DiagonalUpRight"],
-      "Ring": ["DiagonalUpRight"],
-      "Pinky": ["DiagonalUpRight"]
+      "Middle": ["VerticalUp"],
+      "Ring": ["VerticalUp"],
+      "Pinky": ["VerticalUp"]
     },
     "directionConf": {
       "Thumb": 0.8,
@@ -723,5 +724,4 @@
       "Pinky": 0.8
     }
   }
-
 }
