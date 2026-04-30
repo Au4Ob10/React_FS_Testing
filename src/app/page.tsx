@@ -7,7 +7,6 @@ import drawLandmarks from './signDetection/drawLandmarks';
 import detectStaticSigns from './signDetection/detectStaticSigns';
 import { detectMotionSigns } from './signDetection/detectMotionSigns';
 import motionShapes from '../app/motionShapes.json';
-import ErudaDebugger from './erudaDebugger';
 import './styles.css';
 
 
@@ -16,7 +15,7 @@ const mainPage = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const landmarkDetect = useRef(null);
 
- 
+
 
   const staticLetter = useRef<string>('');
   const fingerPoseLetter = useRef(null);
@@ -77,9 +76,9 @@ const mainPage = () => {
 
 
   // Code adapted from:
-// K. Chaudhari, “Integrating MediaPipe Tasks Vision for Hand Landmark Detection in React,” Medium.
-// https://medium.com/@kiyo07/integrating-mediapipe-tasks-vision-for-hand-landmark-detection-in-react-a2cfb9d543c7
-// Accessed: Nov. 14, 2025.
+  // K. Chaudhari, “Integrating MediaPipe Tasks Vision for Hand Landmark Detection in React,” Medium.
+  // https://medium.com/@kiyo07/integrating-mediapipe-tasks-vision-for-hand-landmark-detection-in-react-a2cfb9d543c7
+  // Accessed: Nov. 14, 2025.
 
 
   useEffect(() => {
@@ -96,11 +95,11 @@ const mainPage = () => {
             runningMode: 'VIDEO',
           }
         );
-  
+
       } catch (error) {
         console.error('Error initializing hand detection:', error);
       }
- 
+
     };
 
     const startWebcam = async () => {
@@ -145,7 +144,7 @@ const mainPage = () => {
         cancelAnimationFrame(animationRef.current);
         staticLetter.current = '';
 
-     
+
       }
 
       animationRef.current = requestAnimationFrame(loop);
@@ -175,22 +174,31 @@ const mainPage = () => {
           const canvasHeight = canvas.clientHeight;
 
           const pixelVals = landmarksRef.current.map(({ x, y, z }) => [
-            x * canvasWidth,
+            x * canvasWidth, 
             y * canvasHeight,
-            z,
+            z
+
           ]);
 
           pixelValsRef.current = pixelVals;
 
+
+
+
           fingerTipsRef.current = {
-            thumbTip: landmarksRef.current[4],
-            indexTip: landmarksRef.current[8],
-            middleFingerTip: landmarksRef.current[12],
-            pinkyTip: landmarksRef.current[20],
+            thumbTip: {x: pixelValsRef.current[4][0], y: pixelValsRef.current[4][1]},
+            indexTip: {x: pixelValsRef.current[8][0], y: pixelValsRef.current[8][1]},
+            middleFingerTip: {x: pixelValsRef.current[12][0], y: pixelValsRef.current[12][1]}, 
+            pinkyTip: {x: pixelValsRef.current[20][0], y: pixelValsRef.current[20][1]}
           };
+
+      
+
         }
       }
     };
+
+
 
     const motionSigns = () => {
       if (!motionEnabledRef.current) {
@@ -221,7 +229,7 @@ const mainPage = () => {
 
         const est = GE.estimate(pixelVals, 8.0);
 
-        
+
 
         if (est.gestures.length > 0) {
           const result = est.gestures.reduce((c1, c2) => {
@@ -256,7 +264,7 @@ const mainPage = () => {
       detectLandmarks();
 
       if (!videoRef.current || !canvasRef.current) {
-      
+
         return;
       }
 
@@ -268,6 +276,10 @@ const mainPage = () => {
       const indexFingerTip = fingerTipsRef.current.indexTip;
       const middleFingerTip = fingerTipsRef.current.middleFingerTip;
       const thumbTip = fingerTipsRef.current.thumbTip;
+
+
+
+     console.log(thumbTip.y - middleFingerTip.y)
 
       if (landmarksRef.current && staticLetter.current.length === 1) {
 
@@ -289,40 +301,47 @@ const mainPage = () => {
 
         if (messageBody.length <= 29) {
 
-        if (stableGesture === "null") {
-          stableGesture = ''
+          if (stableGesture === "null") {
+            stableGesture = ''
+          }
+          else if (
+            indexFingerTip.x > middleFingerTip.x && indexFingerTip.y > middleFingerTip.y &&
+            stableGesture === 'R'
+          ) {
+            setMessageBody((msg) => msg + 'U');
+          }
+          else if (
+            thumbTip.y - middleFingerTip.y < 5 &&
+            stableGesture === 'E' && languageArrayRef.current === MSLGestArray) {
+            setMessageBody((msg) => msg + 'S');
+          }
+          else if (
+            indexFingerTip.x - middleFingerTip.x < 20 &&
+            stableGesture === 'V'
+          ) {
+            setMessageBody((msg) => msg + 'U');
+          }
+
+          else if (
+            middleFingerTip.y - thumbTip.y > 0 && stableGesture === "E" && languageArrayRef.current === MSLGestArray
+          )
+          {
+             setMessageBody((msg) => msg + 'S');
+          }
+
+          // else if (
+          //   languageArrayRef.current === MSLGestArray &&
+          //   messageBody.slice(-2) === 'NN'
+          // ) {
+          //   setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
+          // }
+          else {
+            setMessageBody((msg) => msg + stableGesture);
+          }
+          staticLetter.current = '';
         }
-        else if (
-          indexFingerTip.x > middleFingerTip.x && indexFingerTip.y > middleFingerTip.y &&
-          stableGesture === 'R'
-        ) {
-          setMessageBody((msg) => msg + 'U');
-        } 
-        // else if (
-        //   thumbTip.y - middleFingerTip.y < 0.05 &&
-        //   stableGesture === 'E'
-        // ) {
-        //   setMessageBody((msg) => msg + 'S');
-        // } 
-        else if (
-          indexFingerTip.x - middleFingerTip.x < 0.05 &&
-           stableGesture === 'V'
-        ) {
-          setMessageBody((msg) => msg + 'U');
-        } 
-        // else if (
-        //   languageArrayRef.current === MSLGestArray &&
-        //   messageBody.slice(-2) === 'NN'
-        // ) {
-        //   setMessageBody((msg) => msg.slice(0, -2) + 'Ñ');
-        // }
-        else {
-          setMessageBody((msg) => msg + stableGesture);
-        }
-        staticLetter.current = '';
-      }
-    };
-  }
+      };
+    }
 
     if (!motionEnabledRef.current) {
       rafInterval(staticSigns, 700);
@@ -369,11 +388,11 @@ const mainPage = () => {
     setMessageBody('');
   };
 
-
   return (
     <>
       <h1>{appTitle}</h1>
-     <script src="http://192.168.0.165:8080/target.js"></script>
+       <script src="http://192.168.0.165:8080/target.js"></script>
+     
       <h2>
         {subHeading} Gesture Detection Enabled
       </h2>
